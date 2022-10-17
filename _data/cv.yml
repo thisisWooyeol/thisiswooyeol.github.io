@@ -11,8 +11,7 @@
 - title: Academic Interests
   type: nested_list
   contents:
-    - title: Reinforcement Learning
-    - title: Robot Learning
+    - title: Reinforcement Learning, Robot Learning
 
 - title: Education
   type: time_table
@@ -41,17 +40,17 @@
         - Academic Performance Scholarship(20% tuition), SNU
     - year: Dec 2020
       items:
-        - title: Robocon for Jumping Robot, Highest Jump(1st place), Dept of Mechanical Engineering
-        - contents: Awarded at Final Project of Creative Engineering Design(400.018).
+        - Robocon for Jumping Robot, Highest Jump(1st place), Dept of Mechanical Engineering
+        - Awarded at Final Project of Creative Engineering Design(400.018).
     - year: Aug 2020
       items:
         - Academic Performance Scholarship(20% tuition), SNU
     - year: Mar 2019
       items:
-        - title: Hansung Nobel Talent Scholarship, Hansung Sonjaehan Scholarship Foundation
-        - contents: $ 5000 / 1 year until graduate high school. One of 150 awardees in South Korea.
+        - Hansung Nobel Talent Scholarship, Hansung Sonjaehan Scholarship Foundation
+        - $ 5000 / 1 year until graduate high school. One of 150 awardees in South Korea.
 
 - title: Other Interests
   type: list
   contents:
-    - <u>Hobbies</u>: Weight Training, Skiing, Traveling, etc.
+    - <u>Hobbies:</u> Weight Training, Skiing, Traveling, etc.
