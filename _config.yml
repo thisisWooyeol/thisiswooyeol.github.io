@@ -2,7 +2,7 @@
 # Site settings
 # -----------------------------------------------------------------------------
 
-title: Wooyeol Lee's Blog (if blank, full name will be used instead)
+title: Wooyeol Lee
 first_name: Wooyeol
 middle_name:
 last_name: Lee
@@ -110,10 +110,10 @@ bing_site_verification:  # out your bing-site-verification ID (Bing Webmaster)
 # Blog
 # -----------------------------------------------------------------------------
 
-blog_name: Study Notes # blog_name will be displayed in your blog page
-blog_nav_title: notes # your blog must have a title for it to be displayed in the nav bar
-blog_description: My own archive for academic study
-permalink: /notes/:year/:title/
+blog_name: LifeLog # blog_name will be displayed in your blog page
+blog_nav_title: blog # your blog must have a title for it to be displayed in the nav bar
+blog_description: my precious daily memories
+permalink: /blog/:year/:title/
 
 # Pagination
 pagination:
