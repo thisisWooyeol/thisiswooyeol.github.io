@@ -18,8 +18,8 @@ selected_papers: false # includes a list of papers marked as "selected={true}"
 social: true  # includes social icons at the bottom of the page
 ---
 
-Write your biography here. Tell the world about yourself. Link to your favorite [subreddit](http://reddit.com). You can put a picture in, too. The code is already in, just name your picture `prof_pic.jpg` and put it in the `img/` folder.
+Hi there👋 This is Wooyeol Lee!
 
-Put your address / P.O. box / other info right below your picture. You can also disable any these elements by editing `profile` property of the YAML header of your `_pages/about.md`. Edit `_bibliography/papers.bib` and Jekyll will render your [publications page](/al-folio/publications/) automatically.
+👨‍🎓 I am an undergraduate student majoring in Mechanical Engineering at [Seoul National University](https://snu.ac.kr/). My interests are all the technologies that become part of our lives, such as AI, semiconductor, mobility, quantum computing, metaverse, ... whatever!! AI, especially, Deep Reinforcement Learning and Robot Learning are my favorites! ["Can machines think?"](https://www.csee.umbc.edu/courses/471/papers/turing.pdf) What a fancy sentence!! I will post paper reviews, personal projects, etc at [projects](https://thisiswooyeol.github.io/projects) page steadily:D
 
-Link to your social media connections, too. This theme is set up to use [Font Awesome icons](http://fortawesome.github.io/Font-Awesome/) and [Academicons](https://jpswalsh.github.io/academicons/), like the ones below. Add your Facebook, Twitter, LinkedIn, Google Scholar, or just disable all of them.
+🏝 In my freetime, I like to go to the gym and do weight training. I hope I can join 1,000 pounds club in a few years! And I'm a coffee person! The flavor of coffee makes my mind clear and peaceful. I also enjoy experiencing something new! Eating foods from the world and traveling the world always excite me. I'll  post all my personal stories at [blog](https://thisiswooyeol.github.io/blog/) page steadily:D
