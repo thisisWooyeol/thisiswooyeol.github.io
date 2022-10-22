@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Review on "Meta-Learning in Neural Networks: A Survey" (1)
+title: Review on "Meta-Learning in Neural Networks-A Survey" (1)
 description: simple summary on meta-learning survey paper
 img: assets/img/meta-example-from-BAIR-edu.PNG
 importance: 1
