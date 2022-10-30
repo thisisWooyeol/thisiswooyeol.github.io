@@ -72,7 +72,7 @@ J(\pi) \triangleq \sum_t \mathbb E_{(s_t,a_t) \sim \rho_\pi} \left[Q_{soft}^\pi(
 $$
 
 - Check Appendix A.1 Theorem 4. Given a policy $$ \pi $$ , defining a new policy $$ \tilde{\pi} $$ as $$ \tilde{\pi} \propto \mathrm{exp} (Q_{soft}^\pi (s, \cdot), \  \forall s $$ maximize the objective $$ \alpha \mathcal H(\pi(\cdot \mid s)+\mathbb E_{a \sim \pi} \left[ Q_{soft}^\pi (s,a)\right] $$.
-- From theorem 4., by applying policy iteration $$ \pi_{i+1}(\cdot \mid s) \propto \mathrm{exp}(Q_{soft}^{\pi_i}(s,\cdot)) $$ from an arbitrary policy $$ \pi_0 $$ we can get $$ \pi_\infty(a \mid s) \propto_a \mathrm{exp}(Q^{pi_infty}(s,a)) $$.
+- From theorem 4., by applying policy iteration $$ \pi_{i+1}(\cdot \mid s) \propto \mathrm{exp}(Q_{soft}^{\pi_i}(s,\cdot)) $$ from an arbitrary policy $$ \pi_0 $$ we can get $$ \pi_\infty(a \mid s) \propto_a \mathrm{exp}(Q^{pi_{infty}}(s,a)) $$.
 
 <br/>
 
@@ -117,7 +117,7 @@ How to prove thm 3.: check Appendix A.2 that soft Bellman backup operator $$ \ma
 <br/>
 
 ### Soft Q-Learning
-To handle problem 1, this paper express the Bellman backup process as a **stochastic optimization**. For soft value function, expectation via importance sampling is used(Algorithm 1 line 16-17, averaged over $$ \mathrm{K_V} $$ samples).
+To handle problem 1, this paper express the Bellman backup process as a **stochastic optimization**. For soft value function, expectation via importance sampling is used(Algorithm 1 line 16-17, averaged over Kv samples).
 
 $$
 V_{soft}^\theta (s_t)=\alpha \ \mathrm{log} \mathbb E_{q_{a'}} \left[\frac{\mathrm{exp}(\frac{1}{\alpha} Q_{soft}^\theta (s_t,a'))}{q_{a'}(a')} \right].
