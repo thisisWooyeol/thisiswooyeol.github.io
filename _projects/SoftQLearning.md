@@ -195,6 +195,8 @@ Details of updating policy parameters are described in Appendix C.1.
     Figure from Reinforcement Learning with Deep Energy-Based Policies
 </div>
 
+Illustration of 2D multi-goal environment. Left: trajectories from a policy learned with soft Q-learning. Right: Q-values at three selected states and 2D velocity of action samples.
+
 The stochastic policy samples actions closely following the energy landscape, hence **learning diverse trajectories that lead to all four goals**. In comparison, a policy trained with DDPG randomly **commits to a single goal**.
 
 <br/>
