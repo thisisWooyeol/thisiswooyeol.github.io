@@ -81,4 +81,4 @@ $$
 
 is the soft state value function. Use this definition, policy evaluation step can be defined.
 
-> **Lemma 1** (Soft Policy Evaluation). *Consider the soft Bellman backup operator $$ \mathcal T^\pi $$ above and a mapping $$ Q^0: \mathcal{S \times A} \to \mathbb R with \left\vert \mathcal A \right\vert < \infty, and define $$ Q^{k+1}=\mathcal T^\piQ^k $$ . Then the sequence $$ Q^k $$ will converge to the soft Q-value of $$ \pi $$ as $$ k \to \infty $$ .
+> **Lemma 1** (Soft Policy Evaluation). *Consider the soft Bellman backup operator $$ \mathcal T^\pi $$ above and a mapping $$ Q^0: \mathcal{S \times A} \to \mathbb R with \left\vert \mathcal A \right\vert < \infty$$ , and define $$ Q^{k+1}=\mathcal T^\piQ^k $$ . Then the sequence $$ Q^k $$ will converge to the soft Q-value of $$ \pi $$ as $$ k \to \infty $$ .*
