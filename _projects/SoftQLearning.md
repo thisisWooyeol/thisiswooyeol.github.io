@@ -113,7 +113,7 @@ How to prove thm 3.: check Appendix A.2 that soft Bellman backup operator $$ \ma
 <br/>
 
 ### Soft Q-Learning
-To handle problem 1, this paper express the Bellman backup process as a **stochastic optimization**. For soft value function, expectation via importance sampling is used.
+To handle problem 1, this paper express the Bellman backup process as a **stochastic optimization**. For soft value function, expectation via importance sampling is used(Algorithm 1 line 16-17, averaged over $$ \mathrm{K_V} $$ samples).
 
 $$
 V_{soft}^\theta (s_t)=\alpha \ \mathrm{log} \mathbb E_{q_{a'}} \left[\frac{\mathrm{exp}(\frac{1}{\alpha} Q_{soft}^\theta (s_t,a'))}{q_{a'}(a')} \right].
@@ -121,15 +121,41 @@ $$
 
 While $$ q_{a'} $$ can be an arbitrary distribution over the action space, the current policy is used in this paper. More details are in Appendix C.2.
 
-For soft q-iteration, minimizing the following objective is used.:
+For soft q-iteration, minimizing the following objective is used(Algorithm 1 line 18-19).:
 
 $$
 J_Q(\theta)=\mathbb E_{s_t \sim q_{s_t}, a_t \sim q_{a_t}} \left[ \frac{1}{2} \left(\hat Q_{soft}^{\bar{\theta}} (s_t,a_t)-Q_{soft}^\theta(s_t,a_t)\right)^2\right],
 $$
 
-where $$ q_{s_t}, q_{a_t} $$ are positive over $$ \mathcal S $$ and $$ \mathcal A $$ respectively, $$ \hat Q_{soft}^{\bar{\theta}} (s_t,a_t) =r_t+\gamma \mathbb E_{s_{t+1} \sim p_s} \left[ V_{soft}^\bar{\theta} (s_{t+1})\right] $$ is a target Q-value, with $$ V_{soft}^\bar{\theta} (s_{t+1}) $$ given by (10) and $$ \theta $$ being replaced by the target parameters, $$ \bar{\theta} $$. While sampling distributions $$ q_{s_t} $$ and $$ q_{a_t} $$ can be arbitrary, real samples(=replay memories) are used in this paper.
+where $$ q_{s_t}, q_{a_t} $$ are positive over $$ \mathcal S $$ and $$ \mathcal A $$ respectively, $$ \hat Q_{soft}^{\bar{\theta}} (s_t,a_t) =r_t+\gamma \mathbb E_{s_{t+1} \sim p_s} \left[ V_{soft}^\bar{\theta} (s_{t+1})\right] $$ is a target Q-value, with $$ V_{soft}^\bar{\theta} (s_{t+1}) $$ given by (10) and $$ \theta $$ being replaced by the target parameters, $$ \bar{\theta} $$ . While sampling distributions $$ q_{s_t} $$ and $$ q_{a_t} $$ can be arbitrary, real samples(=replay memories) are used in this paper.
 
 <br/>
 <br/>
 
 ### Approximate Sampling and Stein Variational Gradient Descent (SVGD)
+To handle problem 2, this paper used a **sampling network** based on Stein variational gradient descent (SVGD) and amortized SVGD. This sampling network has intriguing properties: **1) extremly fast sample generation, 2) accurate posterior distribution of an EBM** and **3)analogous to actor-critic algorithm(Details in Appendix B)**. State-conditioned stochastic neural network $$ a_t=f^\phi(\xi;s_t) $$ , parametrized py $$ \phi $$ , that maps noise samples $$ \xi $$ is the form of network. The induced distribution of the actions are denoted as $$ \pi^\phi(a_t \mid s_t) $$ , and the objective is to find parameters $$ \phi $$ so that the **induced distribution approximates the energy-based distribution in terms of the KL divergence**
+
+$$
+J_\pi(\phi;s_t)=\mathrm{D_KL}\left(\pi^\phi(\cdot \mid s_t)\ \Vert \ \mathrm{exp} \left(\frac{1}{\alpha}\left(Q_{soft}^\theta(s_t,\cdot)-V_{soft}^\theta \right)\right)\right).
+$$
+
+SVGD provides the optimal direction in the reproducing kernel Hilbert space of $$ \kappa $$ as $$ \delta f^\phi $$ (Algorithm 1. line 21-23, averaged over M sample actions, total K action sets):
+
+$$
+\Delta f^\phi(\cdot;s_t)=\mathbb E_{a_t \sim \pi^\phi} \left[ \kappa(a_t, f^\phi(\cdot;s_t)) \nabla_{a'}\ Q_{soft}^\theta(s_t,a') \mid_{a'=a_t} +\ \alpha \nabla_{a'} \ \kappa(a',f^\phi(\cdot;s_t))\mid_{a'=a_t} \right].
+$$
+
+By the assumtion $$ {\partial J_\pi \over\partial a_t} \propto \Delta f^\phi $$, we can use the chain rule and backpropagate SVGD into policy network according to (Algorithm 1. line 24-25, averaged over K action sets)
+
+$$
+{\partial J_\pi (\phi;s_t) \over \partial \phi} \propto \mathbb E_\xi \left[ \Delta f^\phi(\xi;s_t) {\partial f^\phi(\xi;s_t) \over \partial \phi} \right].
+$$
+
+Details of updating policy parameters are described in Appendix C.1.
+
+### Algorithm Code & Additional Info
+{% include figure.html path="assets/img/SQL-Algorithm.PNG" title="SQL Algorithm" %}
+**Algorithm 1** Soft Q-learning
+
+*IMO, target policy parameters $$ \bar{\phi} $$ are intended to sample an action in line 7.*
+*update_interval in line 27 freezes target parameters to stabilize training.*
