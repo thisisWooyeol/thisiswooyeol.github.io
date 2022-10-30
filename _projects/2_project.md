@@ -13,6 +13,7 @@ category: papers review
 - Used **amortized Sten variational gradient descent** to learn a stochastic sampling network
 - **Improved exploration and compositionality** and connection to **actor-critic methods**
 
+--------
 
 # Preliminaries
 ## Maxmimum Entropy Reinforcement Learning
@@ -24,6 +25,8 @@ $$
 
 where $$ \alpha $$ is a temperature parameter that determines the relative importance of entropy and reward. This objective aims to maximize the entropy of the **entire trajectory distribution for the policy $$ \pi $$**. See more details of objective with discount factor at Appendix A.
 
+
+
 ## Soft Value Functions and Energy-Based Models
 General energy-based policies of the form
 
@@ -32,6 +35,8 @@ $$
 $$
 
 where $$ \mathcal E $$ is an energy function can represent very general class of distributions. There is a close connection between such energy-based models and *soft* versions of value functions and Q-functions, where we set $$ \mathcal E(s_t,a_t) = \frac{1}{\alpha}Q_{soft}(s_t,a_t) $$ and use the following theorem:
+
+
 
 **Theorem 1.** *Let the soft Q-function be defined by*
 
@@ -52,11 +57,11 @@ $$
 $$
 
 How to prove thm 1.:
-1. If one rewrites the maximum entropy objective with soft Q-function, the discounted maximum entropy policy objective can be defined as
+- If one rewrites the maximum entropy objective with soft Q-function, the discounted maximum entropy policy objective can be defined as
 
 $$
 J(\pi) \triangleq \sum_t \mathbb E_{(s_t,a_t) \sim \rho_\pi} \left[Q_{soft}^\pi(s_t,a_t)+\alpha \mathcal H(\pi(\cdot|s_t))\right].
 $$
 
-2. Check Appendix A.1. Given a policy $$ \pi $$ , defining a new policy $$ \tilde{\pi} $$ as $$ \tilde{\pi} \propto \mathrm{exp} (Q_{soft}^\pi (s, \cdot), \quad \forall s $$ maximize the objective $$ \mathcal H(\pi(\cdot|s)+\mathbb E_{a \sim \pi} \left[ Q_{soft}^\pi (s,a)\right] $$.
-3. 
+- Check Appendix A.1 Theorem 4. Given a policy $$ \pi $$ , defining a new policy $$ \tilde{\pi} $$ as $$ \tilde{\pi} \propto \mathrm{exp} (Q_{soft}^\pi (s, \cdot), \quad \forall s $$ maximize the objective $$ \mathcal H(\pi(\cdot \mid s)+\mathbb E_{a \sim \pi} \left[ Q_{soft}^\pi (s,a)\right] $$.
+- From theorem 4., by applying policy iteration $$ \pi_{i+1}(\cdot \mid s) \propto \mathrm{exp}(Q_{soft}^{\pi_i}(s,\cdot)) $$ from an arbitrary policy $$ \pi_0 $$ we can get $$ \pi_\infty(a \mid s) \propto_a mathrm{exp}(Q^{pi_infty}(s,a)) $$.
