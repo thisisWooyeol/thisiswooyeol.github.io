@@ -72,7 +72,7 @@ J(\pi) \triangleq \sum_t \mathbb E_{(s_t,a_t) \sim \rho_\pi} \left[Q_{soft}^\pi(
 $$
 
 - Check Appendix A.1 Theorem 4. Given a policy $$ \pi $$ , defining a new policy $$ \tilde{\pi} $$ as $$ \tilde{\pi} \propto \mathrm{exp} (Q_{soft}^\pi (s, \cdot), \  \forall s $$ maximize the objective $$ \alpha \mathcal H(\pi(\cdot \mid s)+\mathbb E_{a \sim \pi} \left[ Q_{soft}^\pi (s,a)\right] $$.
-- From theorem 4., by applying policy iteration $$ \pi_{i+1}(\cdot \mid s) \propto \mathrm{exp}(Q_{soft}^{\pi_i}(s,\cdot)) $$ from an arbitrary policy $$ \pi_0 $$ we can get $$ \pi_\infty(a \mid s) \propto_a \mathrm{exp}(Q^{pi_{infty}}(s,a)) $$.
+- From theorem 4., by applying policy iteration $$ \pi_{i+1}(\cdot \mid s) \propto \mathrm{exp}(Q_{soft}^{\pi_i}(s,\cdot)) $$ from an arbitrary policy $$ \pi_0 $$ we can get $$ \pi_\infty(a \mid s) \propto_a \mathrm{exp}(Q^{\pi_\infty}(s,a)) $$.
 
 <br/>
 
