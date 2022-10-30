@@ -68,13 +68,7 @@ $$
 J(\pi) \triangleq \sum_t \mathbb E_{(s_t,a_t) \sim \rho_\pi} \left[Q_{soft}^\pi(s_t,a_t)+\alpha \mathcal H(\pi(\cdot|s_t))\right].
 $$
 
-- Check Appendix A.1 Theorem 4. Given a policy $$ \pi $$ , defining a new policy $$ \tilde{\pi} $$ as 
-
-$$ 
-\tilde{\pi} \propto \mathrm{exp} (Q_{soft}^\pi (s, \cdot), \quad \forall s 
-$$
-
-maximize the objective $$ \alpha \mathcal H(\pi(\cdot \mid s)+\mathbb E_{a \sim \pi} \left[ Q_{soft}^\pi (s,a)\right] $$.
+- Check Appendix A.1 Theorem 4. Given a policy $$ \pi $$ , defining a new policy $$ \tilde{\pi} $$ as $$ \tilde{\pi} \propto \mathrm{exp} (Q_{soft}^\pi (s, \cdot), \  \forall s $$ maximize the objective $$ \alpha \mathcal H(\pi(\cdot \mid s)+\mathbb E_{a \sim \pi} \left[ Q_{soft}^\pi (s,a)\right] $$.
 - From theorem 4., by applying policy iteration $$ \pi_{i+1}(\cdot \mid s) \propto \mathrm{exp}(Q_{soft}^{\pi_i}(s,\cdot)) $$ from an arbitrary policy $$ \pi_0 $$ we can get $$ \pi_\infty(a \mid s) \propto_a \mathrm{exp}(Q^{pi_infty}(s,a)) $$.
 
 <br/>
@@ -96,7 +90,7 @@ How to prove thm 2.: check Appendix A.2.
 -------
 # Training Expressive Energy-Based Models via Soft Q-Learning
 ### Soft Q-Iteration
-**Theorem 3.** *Soft Q-iteration. Let $$ Q_{soft}(\cdot \mid \cdot) $$ and $$ V_{soft}(\cdot) $$ be bounded and assume that $$ \int_\mathcal{A} \mathrm{exp}\left(\frac{1}{\alpha}Q_{soft}(\cdot,a')\, da' < \infty $$ and that* $$ Q_{soft}^* < \infty $$ *exists. Then the fixed-point iteration*
+**Theorem 3.** *Soft Q-iteration. Let $$ Q_{soft}(\cdot \mid \cdot) $$ and $$ V_{soft}(\cdot) $$ be bounded and assume that $$ \int_\mathcal{A} \mathrm{exp}\left(\frac{1}{\alpha}Q_{soft}(\cdot,a')\right)\, da' < \infty $$ and that* $$ Q_{soft}^* < \infty $$ *exists. Then the fixed-point iteration*
 
 $$
 \begin{matrix}
@@ -119,7 +113,7 @@ How to prove thm 3.: check Appendix A.2 that soft Bellman backup operator $$ \ma
 <br/>
 
 ### Soft Q-Learning
-To handle problem 1, this paper express the Bellman backup process as a stochastic optimization. For soft value function, expectation via importance sampling is used.
+To handle problem 1, this paper express the Bellman backup process as a **stochastic optimization**. For soft value function, expectation via importance sampling is used.
 
 $$
 V_{soft}^\theta (s_t)=\alpha \ \mathrm{log} \mathbb E_{q_{a'}} \left[\frac{\mathrm{exp}(\frac{1}{\alpha} Q_{soft}^\theta (s_t,a'))}{q_{a'}(a')} \right].
@@ -133,9 +127,7 @@ $$
 J_Q(\theta)=\mathbb E_{s_t \sim q_{s_t}, a_t \sim q_{a_t}} \left[ \frac{1}{2} \left(\hat Q_{soft}^{\bar{\theta}} (s_t,a_t)-Q_{soft}^\theta(s_t,a_t)\right)^2\right],
 $$
 
-where $$ q_{s_t}, q_{a_t} $$ are positive over $$ \mathcal S $$ and $$ \mathcal A $$ respectively, $$ \hat Q_{soft}^{\bar{\theta}} (s_t,a_t) =r_t+\gamma \mathbb E_{s_{t+1} \sim p_s} \left[ V_{soft}^\bar{\theta} (s_{t+1})\right] $$ is a target Q-value, with $$ V_{soft}^\bar{\theta} (s_{t+1}) $$ given by (10) and $$ \theta $$ being replaced by the target parameters, $$ \bar{\theta} $$.
-
-While ampling distributions $$ q_{s_t} $$ and $$ q_{a_t} $$ can be arbitrary, real samples(=replay memories) are used in this paper.
+where $$ q_{s_t}, q_{a_t} $$ are positive over $$ \mathcal S $$ and $$ \mathcal A $$ respectively, $$ \hat Q_{soft}^{\bar{\theta}} (s_t,a_t) =r_t+\gamma \mathbb E_{s_{t+1} \sim p_s} \left[ V_{soft}^\bar{\theta} (s_{t+1})\right] $$ is a target Q-value, with $$ V_{soft}^\bar{\theta} (s_{t+1}) $$ given by (10) and $$ \theta $$ being replaced by the target parameters, $$ \bar{\theta} $$. While sampling distributions $$ q_{s_t} $$ and $$ q_{a_t} $$ can be arbitrary, real samples(=replay memories) are used in this paper.
 
 <br/>
 <br/>
