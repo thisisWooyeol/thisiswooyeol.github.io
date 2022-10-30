@@ -22,8 +22,8 @@ category: papers review
 --------
 
 # Preliminaries
-
 <br/>
+
 ### Maxmimum Entropy Reinforcement Learning
 Maximum Entropy RL objective is
 
@@ -93,8 +93,8 @@ How to prove thm 2.: check Appendix A.2.
 
 -------
 # Training Expressive Energy-Based Models via Soft Q-Learning
-
 <br/>
+
 ### Soft Q-Iteration
 **Theorem 3.** *Soft Q-iteration. Let $$ Q_{soft}(\cdot \mid \cdot) $$ and $$ V_{soft}(\cdot) $$ be bounded and assume that $$ \int_\mathcal{A} \mathrm{exp}\left(\frac{1}{\alpha}Q_{soft}(\cdot,a')\right)\, da' < \infty $$ and that* $$ Q_{soft}^* < \infty $$ *exists. Then the fixed-point iteration*
 
