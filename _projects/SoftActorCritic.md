@@ -1,0 +1,84 @@
+---
+layout: page
+title: Soft Actor-Critic
+description: Review on "Soft Actor-Critic; Off-Policy Maximum Entropy Deep RL with a Stochastic Actor"
+img: assets/img/SAC/background-SAC.PNG
+importance: 2
+category: papers review
+---
+
+# TL;DR:
+- Soft Actor-Critic; **an off-policy actor-critic deep RL algorithm** based on the **maximum entropy reinforcement learning framework**
+- SAC achieves SOTA performance on a range of continuous control benchmark tests, outperforming prior on-policy and off-policy method.
+- SAC is very **stable** in contrast to other off-policy algorithms.
+<br/>
+<br/>
+<br/>
+
+--------
+
+# Introduction
+<br/>
+
+### Challenges on Model-free deep reinforcement learning (RL) algorithms
+1. Model-free deep RL methods are notoriously expensive in terms of their **sample complexity**.
+2. Model-free deep RL methods are often **brittle with respect to their hyperparameters**.
+
+One cause for the poor sample efficiency is **on-policy learning** such as TRPO, PPO or A3C. In contrast to on-policy learning, **off-policy algorithms** aim to reuse past experience. Unfortunately, the combination of **off-policy learning** and **high dimensional, nonlinear function approximation with neural networks** presents a major challenge for **stability and convergence**(so-called deadly triad). This challenge is further exacerbated in continuous state and action spaces, where DDPG is in such settings. DDPG provides for **sample-efficient learning** but is notoriously challenging to use due to its **extreme brittleness and hyperparameter sensitivity.**
+
+<br/>
+<br/>
+
+### Maximum Entropy Framework
+To solve these problems, the maximum entropy framework is used in this paper. The maximum entropy formulation provides a **substantial improvement in exploration and robustness** with a *stochastic* actor. Prior work has proposed off-policy algorithms based on [soft Q-learning](https://thisiswooyeol.github.io/projects/SoftQLearning/) and its variants. However, the off-policy variants require **complex approximate inference procedures in continuous action spaces**(sampling network in Soft Q-Learning). In this paper, off-policy maximum entropy actor-critic algorithm (SAC) is devised. SAC avoids the complexity and potential instability associated with **approximate inference in prior off-policy maximum entropy algorithms based on soft Q-learning.**
+
+<br/>
+<br/>
+
+### Is Soft Q-learning is true actor-critic algorithm?
+Although the soft Q-learning algorithm has a value function and actor network, **it is not a true actor-critic algorithm**: the Q-function is estimating the optimal Q-function, and **the actor does not directly affect the Q-function except through the data distribution.** Hence, soft Q-learning motivates the actor network as an **approximate sampler** rather than the actor in an actor-critic algorithm. While convergence of soft Q-learning depends on **how well this sampler approximates the true posterior**, SAC converges to the optimal policy **from a given policy class, regardless of the policy parameterization.** 
+
+<br/>
+<br/>
+<br/>
+
+-------
+# Preliminaries
+<br/>
+
+### Maximum Entropy Reinforcement Learning
+
+Maximum entropy objective with the expected entropy of the policy over $$ \rho_\pi(s-t) $$ :
+
+$$
+J(\pi) =\sum_{t=0}^\infty \mathbb E_{(s_t,a_t) \sim \rho_\pi} \left[\sum_{l=t}^\infty \gamma^{l-t} \mathbb E_{s_l \sim p,a_l \sim \pi} \left[r(s_t,a_t)+\alpha \mathcal H(\pi(\cdot|s_t)) \right]\right].
+$$
+
+The temperature parameter $$ \alpha $$ determines the relative importance of the entropy term against the reward, and thus controls the stochasticity of the optimal policy. By adapting maximum entropy framework, the policy is **incentivized to explore more widely, while giving up on clearly unpromising avenues**. Also, the policy can **capture multiple modes of near optimal behavior** and **improve learning speed over state-of-art methods.**
+
+<br/>
+<br/>
+<br/>
+
+-------
+# From Soft Policy Iteration to Soft Actor-Critic
+<br/>
+
+### Derivation of Soft Policy Iteration
+Derivation of sof policy iteration is based on a **tabular setting**, to enable theoretical analysis and convergence guarantees, and this method will extends into the general continuous setting in the next section. This paper shows that soft policy iteration converges to the optimal policy **within a set of policies** which might correspond, for instance, to a set of parameterized densities.
+
+Let's begin with defining the **soft Bellman backup operator** $$ \mathcal T^\pi $$ as
+
+$$
+\mathcal T^\pi Q(s_t,a_t) \triangleq r(s_t,a_t)+ \gamma \mathbb E_{s_{t+1} \sim p} \left[ V(s_{t+1})\right] ,
+$$
+
+where
+
+$$
+V(s_t)=\mathbb E_{a_t \sim \pi} \left[ Q(s_t,a_t)-\alpha \mathrm{log} \pi (a_t \mid s_t)\right]
+$$
+
+is the soft state value function. Use this definition, policy evaluation step can be defined.
+
+> **Lemma 1** (Soft Policy Evaluation). *Consider the soft Bellman backup operator $$ \mathcal T^\pi $$ above and a mapping $$ Q^0: \mathcal{S \times A} \to \mathbb R with \left\vert \mathcal A \right\vert < \infty, and define $$ Q^{k+1}=\mathcal T^\piQ^k $$ . Then the sequence $$ Q^k $$ will converge to the soft Q-value of $$ \pi $$ as $$ k \to \infty $$ .
