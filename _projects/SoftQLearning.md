@@ -94,6 +94,7 @@ How to prove thm 2.: check Appendix A.2.
 -------
 # Training Expressive Energy-Based Models via Soft Q-Learning
 
+<br/>
 ### Soft Q-Iteration
 **Theorem 3.** *Soft Q-iteration. Let $$ Q_{soft}(\cdot \mid \cdot) $$ and $$ V_{soft}(\cdot) $$ be bounded and assume that $$ \int_\mathcal{A} \mathrm{exp}\left(\frac{1}{\alpha}Q_{soft}(\cdot,a')\right)\, da' < \infty $$ and that* $$ Q_{soft}^* < \infty $$ *exists. Then the fixed-point iteration*
 
@@ -186,7 +187,6 @@ Details of updating policy parameters are described in Appendix C.1.
 2. Can soft Q-learning with energy-based policies **aid exploration for complex tasks that require tracking multiple modes?**
 3. Can a maximum entropy policy serve as **a good initialization for fine-tuning on different tasks, when compared to pretraining with a standard deterministic objective?**
 
-<br/>
 ### Didactidc Example: Multi-Goal Environment
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
