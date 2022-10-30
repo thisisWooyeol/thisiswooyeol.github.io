@@ -47,23 +47,23 @@ where $$ \mathcal E $$ is an energy function can represent very general class of
 
 <br/>
 
-**Theorem 1.** *Let the soft Q-function be defined by*
-
-$$
-Q_{soft}^* (s_t,a_t)=r_t+\mathbb E_{(s_{t+1},...) \sim \rho_\pi} \left[\sum_{l=1}^\infty \gamma^l(r_{t+l}+\alpha \mathcal H(\pi_\mathrm{MaxEnt}^* (\cdot|s_{t+l})))\right],
-$$
-
-*and soft value function by*
-
-$$
-V_{soft}^* (s_t)=\alpha \ \mathrm{log}\int_{\mathcal{A}} \mathrm{exp} \left( \frac{1}{\alpha} Q_{soft}^* (s_t,a') \right)\, da'.
-$$
-
-*Then the optimal policy for (2) is given by*
-
-$$ 
-\pi_\mathrm{MaxEnt}^* (a_t|s_t) = \mathrm{exp} \left(\frac{1}{\alpha} \left( Q_{soft}^* (s_t,a_t) - V_{soft}^* (s_t) \right) \right).
-$$
+> **Theorem 1.** *Let the soft Q-function be defined by*
+>
+>$$
+>Q_{soft}^* (s_t,a_t)=r_t+\mathbb E_{(s_{t+1},...) \sim \rho_\pi} \left[\sum_{l=1}^\infty \gamma^l(r_{t+l}+\alpha \mathcal H(\pi_\mathrm{MaxEnt}^* (\cdot|s_{t+l})))\right],
+>$$
+>
+>*and soft value function by*
+>
+>$$
+>V_{soft}^* (s_t)=\alpha \ \mathrm{log}\int_{\mathcal{A}} \mathrm{exp} \left( \frac{1}{\alpha} Q_{soft}^* (s_t,a') \right)\, da'.
+>$$
+>
+>*Then the optimal policy for (2) is given by*
+>
+>$$ 
+>\pi_\mathrm{MaxEnt}^* (a_t|s_t) = \mathrm{exp} \left(\frac{1}{\alpha} \left( Q_{soft}^* (s_t,a_t) - V_{soft}^* (s_t) \right) \right).
+>$$
 
 How to prove thm 1.:
 - If one rewrites the maximum entropy objective with soft Q-function, the discounted maximum entropy policy objective can be defined as
@@ -77,13 +77,13 @@ $$
 
 <br/>
 
-**Theorem 2.** *The soft Q-function in (4) satisfies the soft bellman equation*
-
-$$
-Q_{soft}^* (s_t,a_t)=r_t+\gamma \mathbb E_{s_{t+1} \sim p_s} \left[ V_{soft}^* (s_{t+1}) \right],
-$$
-
-*where the soft value function* $$ V_{soft}^* $$ *is given by (5).*
+>**Theorem 2.** *The soft Q-function in (4) satisfies the soft bellman equation*
+>
+>$$
+>Q_{soft}^* (s_t,a_t)=r_t+\gamma \mathbb E_{s_{t+1} \sim p_s} \left[ V_{soft}^* (s_{t+1}) \right],
+>$$
+>
+>*where the soft value function* $$ V_{soft}^* $$ *is given by (5).*
 
 How to prove thm 2.: check Appendix A.2.
 
@@ -96,16 +96,16 @@ How to prove thm 2.: check Appendix A.2.
 <br/>
 
 ### Soft Q-Iteration
-**Theorem 3.** *Soft Q-iteration. Let $$ Q_{soft}(\cdot \mid \cdot) $$ and $$ V_{soft}(\cdot) $$ be bounded and assume that $$ \int_\mathcal{A} \mathrm{exp}\left(\frac{1}{\alpha}Q_{soft}(\cdot,a')\right)\, da' < \infty $$ and that* $$ Q_{soft}^* < \infty $$ *exists. Then the fixed-point iteration*
-
-$$
-\begin{matrix}
-Q_{soft}(s_t,a_t) \gets r_t+\gamma \mathbb E_{s_{t+1} \sim p_s} \left[ V_{soft}(s_{t+1})\right], \quad \forall s_t, a_t \\
-V_{soft}(s_t) \gets \alpha \ \mathrm{log} \int_\mathcal{A} \mathrm{exp}\left(\frac{1}{\alpha} Q_{soft}(s_t, a')\right)da', \quad \forall s_t
-\end{matrix}
-$$
-
-*converges to* $$ Q_{soft}^* $$ *and* $$ V_{soft}^* $$ *, respectively.*
+>**Theorem 3.** *Soft Q-iteration. Let $$ Q_{soft}(\cdot \mid \cdot) $$ and $$ V_{soft}(\cdot) $$ be bounded and assume that $$ \int_\mathcal{A} \mathrm{exp}\left(\frac{1}{\alpha}Q_{soft}(\cdot,a')\right)\, da' < \infty $$ and that* $$ Q_{soft}^* < \infty $$ *exists. Then the fixed-point iteration*
+>
+>$$
+>\begin{matrix}
+>Q_{soft}(s_t,a_t) \gets r_t+\gamma \mathbb E_{s_{t+1} \sim p_s} \left[ V_{soft}(s_{t+1})\right], \quad \forall s_t, a_t \\
+>V_{soft}(s_t) \gets \alpha \ \mathrm{log} \int_\mathcal{A} \mathrm{exp}\left(\frac{1}{\alpha} Q_{soft}(s_t, a')\right)da', \quad \forall s_t
+>\end{matrix}
+>$$
+>
+>*converges to* $$ Q_{soft}^* $$ *and* $$ V_{soft}^* $$ *, respectively.*
 
 How to prove thm 3.: check Appendix A.2 that soft Bellman backup operator $$ \mathcal T $$ is a contraction.
 
