@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Soft Q-Learning
-description: Reinforcement Learning with Deep Energy-Based Policies
+description: Review on "Reinforcement Learning with Deep Energy-Based Policies"
 img: assets/img/softqlearning.PNG
 importance: 1
 category: papers review
@@ -10,8 +10,10 @@ category: papers review
 # TL;DR:
 - A method for **learning expressive energy-based policies for continuous states and actions**
 - Apply the method to learning **maximum entropy policies**
-- Used **amortized Sten variational gradient descent** to learn a stochastic sampling network
-- **Improved exploration and compositionality** and connection to **actor-critic methods**
+- Used **amortized Sten variational gradient descent** to obtain complex multimodal policies
+- **Improved exploration** in the case of multimodal objectives
+- **compositionality** via pretraining general-purpose stochastic policies 
+- There is a connection to **actor-critic methods**
 
 <br/>
 <br/>
@@ -20,6 +22,7 @@ category: papers review
 --------
 
 # Preliminaries
+
 ### Maxmimum Entropy Reinforcement Learning
 Maximum Entropy RL objective is
 
@@ -89,6 +92,7 @@ How to prove thm 2.: check Appendix A.2.
 
 -------
 # Training Expressive Energy-Based Models via Soft Q-Learning
+
 ### Soft Q-Iteration
 **Theorem 3.** *Soft Q-iteration. Let $$ Q_{soft}(\cdot \mid \cdot) $$ and $$ V_{soft}(\cdot) $$ be bounded and assume that $$ \int_\mathcal{A} \mathrm{exp}\left(\frac{1}{\alpha}Q_{soft}(\cdot,a')\right)\, da' < \infty $$ and that* $$ Q_{soft}^* < \infty $$ *exists. Then the fixed-point iteration*
 
@@ -153,9 +157,61 @@ $$
 
 Details of updating policy parameters are described in Appendix C.1.
 
+<br/>
+<br/>
+
 ### Algorithm Code & Additional Info
 {% include figure.html path="assets/img/SQL-Algorithm.PNG" title="SQL Algorithm" %}
-**Algorithm 1** Soft Q-learning
+<div class="caption">
+    figure from [Reinforcement Learning with Deep Energy-Based Policies](https://arxiv.org/pdf/1702.08165.pdf)
+</div>
 
 *IMO, target policy parameters $$ \bar{\phi} $$ are intended to sample an action in line 7.*
+
 *update_interval in line 27 freezes target parameters to stabilize training.*
+
+<br/>
+<br/>
+<br/>
+
+-------
+# Experiments
+**What to Figure Out ?**
+1. Does their soft Q-learning method **accurately capture a multi-modal policy distribution?**
+2. Can soft Q-learning with energy-based policies **aid exploration for complex tasks that require tracking multiple modes?**
+3. Can a maximum entropy policy serve as **a good initialization for fine-tuning on different tasks, when compared to pretraining with a standard deterministic objective?**
+
+### Didactidc Example: Multi-Goal Environment
+{% include figure.html path="assets/img/multi-goal-env.PNG" title="multi-goal-env" %}
+<div class="caption">
+    figure from [Reinforcement Learning with Deep Energy-Based Policies](https://arxiv.org/pdf/1702.08165.pdf)
+</div>
+
+The stochastic policy samples actions closely following the energy landscape, hence **learning diverse trajectories that lead to all four goals**. In comparison, a policy trained with DDPG randomly **commits to a single goal**.
+
+<br/>
+<br/>
+
+### Learning Multi-Modal Policies for Exploration
+{% include figure.html path="assets/img/multi-modal-exp.PNG" title="multi-modal-exp" %}
+<div class="caption">
+    figure from [Reinforcement Learning with Deep Energy-Based Policies](https://arxiv.org/pdf/1702.08165.pdf)
+</div>
+
+During the learning process, it is often best **to keep trying multiple available options until the agent is confident that one of them is the best.**
+The results on swimmer snake task and the quadrupedal robot maze task show that all runs of Soft Q-Learning method cross the threshold line, **acquiring the more optimal strategy**, while some runs of DDPG do not.
+
+<br/>
+<br/>
+
+### Accelerating Training on Complex Tasks with Pretrained Maximum Entropy Policies
+Aims to find out how energy based policies can be trained with **fairly broad objectives to produce an initializer** for more quickly learning more specific tasks.
+
+The pretraining phase involves learning to locomote in an arbitrary direction, with a reward that simply equals the speed of the center of mass. Details of the pretraining are described in Figure 7 in Appendix D.3.
+
+{% include figure.html path="assets/img/pretrain-SQL.PNG" title="pretrain-SQL" %}
+<div class="caption">
+    figure from [Reinforcement Learning with Deep Energy-Based Policies](https://arxiv.org/pdf/1702.08165.pdf)
+</div>
+
+As the plots show, the pretrained policy gives a good initialization to learn the behaviors in the test environments more quickly than training a policy with DDPG from a random initialization.
