@@ -9,8 +9,7 @@ profile:
   image: prof_pic.jpg
   image_circular: false # crops the image to make it circular
   address: >
-    <p>1 Gwanak-ro, Gwanak-gu</p>
-    <p>Seoul, South Korea 08826</p>
+    <p> wooyeol0519 at snu dot ac dot kr <p>
 
 news: true  # includes a list of news items
 selected_papers: false # includes a list of papers marked as "selected={true}"
