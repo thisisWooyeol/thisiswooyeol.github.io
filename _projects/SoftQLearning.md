@@ -161,9 +161,13 @@ Details of updating policy parameters are described in Appendix C.1.
 <br/>
 
 ### Algorithm Code & Additional Info
-{% include figure.html path="assets/img/SQL-Algorithm.PNG" title="SQL Algorithm" %}
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/SQL-Algorithm.PNG" title="SQL Algorithm" %}
+    </div>
+</div>
 <div class="caption">
-    figure from [Reinforcement Learning with Deep Energy-Based Policies](https://arxiv.org/pdf/1702.08165.pdf)
+    figure from Reinforcement Learning with Deep Energy-Based Policies
 </div>
 
 *IMO, target policy parameters $$ \bar{\phi} $$ are intended to sample an action in line 7.*
@@ -182,9 +186,13 @@ Details of updating policy parameters are described in Appendix C.1.
 3. Can a maximum entropy policy serve as **a good initialization for fine-tuning on different tasks, when compared to pretraining with a standard deterministic objective?**
 
 ### Didactidc Example: Multi-Goal Environment
-{% include figure.html path="assets/img/multi-goal-env.PNG" title="multi-goal-env" %}
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/multi-goal-env.PNG" title="multi-goal-env" %}
+    </div>
+</div>
 <div class="caption">
-    figure from [Reinforcement Learning with Deep Energy-Based Policies](https://arxiv.org/pdf/1702.08165.pdf)
+    figure from Reinforcement Learning with Deep Energy-Based Policies
 </div>
 
 The stochastic policy samples actions closely following the energy landscape, hence **learning diverse trajectories that lead to all four goals**. In comparison, a policy trained with DDPG randomly **commits to a single goal**.
@@ -193,9 +201,13 @@ The stochastic policy samples actions closely following the energy landscape, he
 <br/>
 
 ### Learning Multi-Modal Policies for Exploration
-{% include figure.html path="assets/img/multi-modal-exp.PNG" title="multi-modal-exp" %}
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/multi-modal-exp.PNG" title="multi-modal-exp" %}
+    </div>
+</div>
 <div class="caption">
-    figure from [Reinforcement Learning with Deep Energy-Based Policies](https://arxiv.org/pdf/1702.08165.pdf)
+    figure from Reinforcement Learning with Deep Energy-Based Policies
 </div>
 
 During the learning process, it is often best **to keep trying multiple available options until the agent is confident that one of them is the best.**
@@ -209,9 +221,13 @@ Aims to find out how energy based policies can be trained with **fairly broad ob
 
 The pretraining phase involves learning to locomote in an arbitrary direction, with a reward that simply equals the speed of the center of mass. Details of the pretraining are described in Figure 7 in Appendix D.3.
 
-{% include figure.html path="assets/img/pretrain-SQL.PNG" title="pretrain-SQL" %}
+<div class="row">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.html path="assets/img/pretrain-SQL.PNG" title="pretrain-SQL" %}
+    </div>
+</div>
 <div class="caption">
-    figure from [Reinforcement Learning with Deep Energy-Based Policies](https://arxiv.org/pdf/1702.08165.pdf)
+    figure from Reinforcement Learning with Deep Energy-Based Policies
 </div>
 
 As the plots show, the pretrained policy gives a good initialization to learn the behaviors in the test environments more quickly than training a policy with DDPG from a random initialization.
