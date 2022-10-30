@@ -167,7 +167,7 @@ Details of updating policy parameters are described in Appendix C.1.
     </div>
 </div>
 <div class="caption">
-    figure from Reinforcement Learning with Deep Energy-Based Policies
+    Figure from Reinforcement Learning with Deep Energy-Based Policies
 </div>
 
 *IMO, target policy parameters $$ \bar{\phi} $$ are intended to sample an action in line 7.*
@@ -188,11 +188,11 @@ Details of updating policy parameters are described in Appendix C.1.
 ### Didactidc Example: Multi-Goal Environment
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/multi-goal-env.PNG" title="multi-goal-env" %}
+        {% include figure.html path="assets/img/multi-goal-env.PNG" title="multi-goal-env" class="img-fluid" %}
     </div>
 </div>
 <div class="caption">
-    figure from Reinforcement Learning with Deep Energy-Based Policies
+    Figure from Reinforcement Learning with Deep Energy-Based Policies
 </div>
 
 The stochastic policy samples actions closely following the energy landscape, hence **learning diverse trajectories that lead to all four goals**. In comparison, a policy trained with DDPG randomly **commits to a single goal**.
@@ -207,7 +207,7 @@ The stochastic policy samples actions closely following the energy landscape, he
     </div>
 </div>
 <div class="caption">
-    figure from Reinforcement Learning with Deep Energy-Based Policies
+    Figure from Reinforcement Learning with Deep Energy-Based Policies
 </div>
 
 During the learning process, it is often best **to keep trying multiple available options until the agent is confident that one of them is the best.**
