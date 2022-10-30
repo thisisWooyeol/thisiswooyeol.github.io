@@ -197,9 +197,7 @@ Details of updating policy parameters are described in Appendix C.1.
     Figure from Reinforcement Learning with Deep Energy-Based Policies
 </div>
 
-Illustration of 2D multi-goal environment. Left: trajectories from a policy learned with soft Q-learning. Right: Q-values at three selected states and 2D velocity of action samples.
-
-The stochastic policy samples actions closely following the energy landscape, hence **learning diverse trajectories that lead to all four goals**. In comparison, a policy trained with DDPG randomly **commits to a single goal**.
+Illustration of 2D multi-goal environment. Left: trajectories from a policy learned with soft Q-learning. Right: Q-values at three selected states and 2D velocity of action samples. The stochastic policy samples actions closely following the energy landscape, hence **learning diverse trajectories that lead to all four goals**. In comparison, a policy trained with DDPG randomly **commits to a single goal**.
 
 <br/>
 <br/>
@@ -222,7 +220,6 @@ The results on swimmer snake task and the quadrupedal robot maze task show that 
 
 ### Accelerating Training on Complex Tasks with Pretrained Maximum Entropy Policies
 Aims to find out how energy based policies can be trained with **fairly broad objectives to produce an initializer** for more quickly learning more specific tasks.
-
 The pretraining phase involves learning to locomote in an arbitrary direction, with a reward that simply equals the speed of the center of mass. Details of the pretraining are described in Figure 7 in Appendix D.3.
 
 <div class="row">
