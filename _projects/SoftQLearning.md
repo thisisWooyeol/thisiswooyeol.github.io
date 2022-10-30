@@ -163,7 +163,7 @@ Details of updating policy parameters are described in Appendix C.1.
 ### Algorithm Code & Additional Info
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/SQL-Algorithm.PNG" title="SQL Algorithm" %}
+        {% include figure.html path="assets/img/SQL-Algorithm.PNG" title="SQL Algorithm" class="img-fluid" %}
     </div>
 </div>
 <div class="caption">
@@ -223,7 +223,7 @@ The pretraining phase involves learning to locomote in an arbitrary direction, w
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/pretrain-SQL.PNG" title="pretrain-SQL" %}
+        {% include figure.html path="assets/img/pretrain-SQL.PNG" title="pretrain-SQL" class="img-fluid" %}
     </div>
 </div>
 <div class="caption">
