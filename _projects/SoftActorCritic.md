@@ -92,7 +92,7 @@ How to prove Lemma 1:
 In the policy improvement step, SAC updates the policy towards the exponential of the new Q-function. In contrast to SQL, SAC **restrict the policy to some set of policies $$ \Pi $$ that is tractable** such as a parameterized family of Gaussians. By using the information projection, policy is updated according to
 
 $$
-\pi_\mathrm{new} =\underset{\pi' \in \Pi}{\mathrm{argmin}} \mathrm{D_{KL}} \left( \pi'(\cdot|s_t) \parallel \frac{\mathrm{exp} (Q^{\pi_{\mathrm{old}}(s_t, \cdot))}{Z^{\pi_{\mathrm{old}}(s_t)} \right).
+\pi_\mathrm{new} = \underset{\pi ' \in \Pi}{\mathrm{argmin}} \mathrm{D_{KL}} \left( \pi' (\cdot|s_t) \parallel \frac{\mathrm{exp} (Q^{\pi_{\mathrm{old}}} (s_t, \cdot))}{Z^{\pi_{\mathrm{old}}} (s_t)} \right).
 $$
 
 For this projection, we can show that the new, projected policy has a higher value than the old policy with respect to the objective (Lemma 2).
