@@ -101,3 +101,9 @@ For this projection, we can show that the new, projected policy has a higher val
 
 How to prove Lemma 2: Check Appendix B.2
 
+<br/>
+Alternating the soft policy evaluation and the soft policy improvement steps will converge to the optimal maximum entropy policy among the policies in $$ \Pi $$.
+
+> **Theorem 1** (Soft Policy Iteration). *Repeated application of soft policy evaluation and soft policy improvement from any $$ \pi \in \Pi $$ converges to a policy* $$ \pi* $$ *such that* $$ Q^{\pi*}(s_t,a_t) \geq Q^\pi(s_t,a_t) $$ *for all $$ \pi \in \Pi $$ and $$ (s_t,a_t) \in \mathcal{S \times A} $$ , assuming $$ \left\vert \mathcal A \right\vert < \infty $$.
+
+How to prove Theorem 1: Check Appendix B.3
