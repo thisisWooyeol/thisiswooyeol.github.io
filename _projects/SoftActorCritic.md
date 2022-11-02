@@ -81,4 +81,23 @@ $$
 
 is the soft state value function. Use this definition, policy evaluation step can be defined.
 
-> **Lemma 1** (Soft Policy Evaluation). *Consider the soft Bellman backup operator $$ \mathcal T^\pi $$ above and a mapping $$ Q^0: \mathcal{S \times A} \to \mathbb R with \left\vert \mathcal A \right\vert < \infty$$ , and define $$ Q^{k+1}=\mathcal T^\piQ^k $$ . Then the sequence $$ Q^k $$ will converge to the soft Q-value of $$ \pi $$ as $$ k \to \infty $$ .*
+> **Lemma 1** (Soft Policy Evaluation). *Consider the soft Bellman backup operator $$ \mathcal T^\pi $$ above and a mapping $$ Q^0: \mathcal{S \times A} \to \mathbb R $$ with $$ \left\vert \mathcal A \right\vert < \infty $$ , and define $$ Q^{k+1}= \mathcal T^\pi Q^k $$ . Then the sequence $$ Q^k $$ will converge to the soft Q-value of $$ \pi $$ as $$ k \to \infty $$ .*
+
+How to prove Lemma 1:
+
+- Check Appendix B.1
+- The assumption $$ \left\vert \mathcal A \right\vert < \infty $$ is required to guarantee the entropy augmented reward is bounded. (Actually I'm wondering why it is needed...)
+
+<br/>
+In the policy improvement step, SAC updates the policy towards the exponential of the new Q-function. In contrast to SQL, SAC **restrict the policy to some set of policies $$ \Pi $$ that is tractable** such as a parameterized family of Gaussians. By using the information projection, policy is updated according to
+
+$$
+\pi_\mathrm{new} =\underset{\pi' \in \Pi}{\mathrm{argmin}} \mathrm{D_{KL}} \left( \pi'(\cdot|s_t) \parallel \frac{\mathrm{exp} (Q^{\pi_{\mathrm{old}}(s_t, \cdot))}{Z^{\pi_{\mathrm{old}}(s_t)} \right).
+$$
+
+For this projection, we can show that the new, projected policy has a higher value than the old policy with respect to the objective (Lemma 2).
+
+> **Lemma 2** (Soft Policy Improvement). *Let $$ \pi_\mathrm{old} \in \Pi $$ and let $$ \pi_\mathrm{new} $$ be the optimizer of the minimization problem defined above. Then $$ Q^{\pi_\mathrm{new}}(s_t,a_t) \geq Q^{\pi_\mathrm{old}}(s_t,a_t) $$ for all $$ (s_t,a_t) \in \mathcal{S \times A} $$ with $$ \left\vert \mathcal A \right\vert < \infty $$.
+
+How to prove Lemma 2: Check Appendix B.2
+
