@@ -113,7 +113,7 @@ How to prove Theorem 1: Check Appendix B.3
 
 ### Soft Actor-Critic
 
-Soft Actor-Critic algorithm alternates between optimizing the Q-function and the policy networks with stochastic gradient descent instead of running evaluation and improvement to converge. Parameterized networks $$ V_\psi (s_t), Q_\theta (s_t,a_t), (**a tractable policy**) \pi_\phi (a_t \mid s_t) $$ are used.
+Soft Actor-Critic algorithm alternates between optimizing the Q-function and the policy networks with stochastic gradient descent instead of running evaluation and improvement to converge. Parameterized networks $$ V_\psi (s_t), Q_\theta (s_t,a_t) $$ , (**a tractable policy**) $$ \pi_\phi (a_t \mid s_t) $$ are used.
 
 The soft value function which is included to stabilize training is trained to minimize the squared residual error
 
