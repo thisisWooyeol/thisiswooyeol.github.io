@@ -48,7 +48,7 @@ Although the soft Q-learning algorithm has a value function and actor network, *
 
 ### Maximum Entropy Reinforcement Learning
 
-Maximum entropy objective with the expected entropy of the policy over $$ \rho_\pi(s-t) $$ :
+Maximum entropy objective with the expected entropy of the policy over $$ \rho_\pi(s_t) $$ :
 
 $$
 J(\pi) =\sum_{t=0}^\infty \mathbb E_{(s_t,a_t) \sim \rho_\pi} \left[\sum_{l=t}^\infty \gamma^{l-t} \mathbb E_{s_l \sim p,a_l \sim \pi} \left[r(s_t,a_t)+\alpha \mathcal H(\pi(\cdot|s_t)) \right]\right].
@@ -97,13 +97,52 @@ $$
 
 For this projection, we can show that the new, projected policy has a higher value than the old policy with respect to the objective (Lemma 2).
 
-> **Lemma 2** (Soft Policy Improvement). *Let $$ \pi_\mathrm{old} \in \Pi $$ and let $$ \pi_\mathrm{new} $$ be the optimizer of the minimization problem defined above. Then $$ Q^{\pi_\mathrm{new}}(s_t,a_t) \geq Q^{\pi_\mathrm{old}}(s_t,a_t) $$ for all $$ (s_t,a_t) \in \mathcal{S \times A} $$ with $$ \left\vert \mathcal A \right\vert < \infty $$.
+> **Lemma 2** (Soft Policy Improvement). *Let $$ \pi_\mathrm{old} \in \Pi $$ and let $$ \pi_\mathrm{new} $$ be the optimizer of the minimization problem defined above. Then $$ Q^{\pi_\mathrm{new}}(s_t,a_t) \geq Q^{\pi_\mathrm{old}}(s_t,a_t) $$ for all $$ (s_t,a_t) \in \mathcal{S \times A} $$ with $$ \left\vert \mathcal A \right\vert < \infty $$ .*
 
 How to prove Lemma 2: Check Appendix B.2
 
 <br/>
 Alternating the soft policy evaluation and the soft policy improvement steps will converge to the optimal maximum entropy policy among the policies in $$ \Pi $$.
 
-> **Theorem 1** (Soft Policy Iteration). *Repeated application of soft policy evaluation and soft policy improvement from any $$ \pi \in \Pi $$ converges to a policy* $$ \pi* $$ *such that* $$ Q^{\pi*}(s_t,a_t) \geq Q^\pi(s_t,a_t) $$ *for all $$ \pi \in \Pi $$ and $$ (s_t,a_t) \in \mathcal{S \times A} $$ , assuming $$ \left\vert \mathcal A \right\vert < \infty $$.
+> **Theorem 1** (Soft Policy Iteration). *Repeated application of soft policy evaluation and soft policy improvement from any $$ \pi \in \Pi $$ converges to a policy* $$ \pi^* $$ *such that* $$ Q^{\pi^*}(s_t,a_t) \geq Q^\pi(s_t,a_t) $$ *for all $$ \pi \in \Pi $$ and $$ (s_t,a_t) \in \mathcal{S \times A} $$ , assuming $$ \left\vert \mathcal A \right\vert < \infty $$ .*
 
 How to prove Theorem 1: Check Appendix B.3
+
+<br/>
+<br/>
+
+### Soft Actor-Critic
+
+Soft Actor-Critic algorithm alternates between optimizing the Q-function and the policy networks with stochastic gradient descent instead of running evaluation and improvement to converge. Parameterized networks $$ V_\psi (s_t), Q_\theta (s_t,a_t), \pi_\phi (a_t \mid s_t) $$ (**a tractable policy**) are used.
+
+The soft value function which is included to stabilize training is trained to minimize the squared residual error
+
+$$
+J_V(\psi) = \mathbb E_{s_t \sim \mathcal D} \left[ \frac{1}{2} \left( V_\psi (s_t) - \mathbb E_{a_t \sim \pi_\phi} \left[ Q_\theta (s_t,a_t) - \mathrm{log} \ \pi_\phi (a_t \mid s_t) \right] \right)^2 \right].
+$$
+
+The gradient of value error can be estimated with an unbiased estimator
+
+$$
+\hat{\nabla}_ \psi J_V(\psi) = \nabla_\psi V_\psi (s_t) V_\psi (s_t) - Q_\theta (s_t,a_t) + \mathrm{log} \ \pi_\phi (a_t \mid s_t).
+$$
+
+Note that the actions are sampled from the current policy. (To measure the entropy of the current policy.) The soft Q-function is trained to minimize the soft Bellman residual
+
+$$
+J_Q (\theta) = \mathbb E_{(s_t,a_t) \sim \mathcal D} \left[ \frac{1}{2} \left( Q_\theta (s_t,a_t) - \left(r(s_t,a_t) + \gamma \mathbb E_{s_{t+1} \sim p} \left[ V_\bar{\psi} (s_{t+1}) \right] \right) \right)^2 \right],
+$$
+
+which again can be optimized with stochastic gradients
+
+$$
+\hat{\nabla}_ \theta J_Q(\theta) = \nabla_\theta Q_\theta(s_t,a_t) \left( Q_\theta (s_t,a_t) - r(s_t,a_t) - \gamma V_\bar{\psi} (s_{t+1}) \right).
+$$
+
+$$ V_\bar{\psi} $$ is a target value network that $$ \bar{\psi} $$ can be an exponential moving average of $$ \psi $$ (in Algorithm 1) or can be a periodically updated parameters of $$ \psi $$ (as in Appendix E). Finally, the policy parameters can be learned by directly minimizing the expected KL-divergence in soft policy iteration:
+
+$$
+J_\pi (\phi) = \mathbb E_{s_t \sim \mathcal D} \left[ \mathrm{D_{KL}} \left( \pi' (\cdot|s_t) \parallel \frac{\mathrm{exp} (Q^{\pi_{\mathrm{old}}} (s_t, \cdot))}{Z^{\pi_{\mathrm{old}}} (s_t)} \right) \right].
+$$
+
+*Need to Add figure to explain why reparameterzation trick is needed with computational graph*
