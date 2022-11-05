@@ -159,7 +159,7 @@ where $$ \epsilon_t $$ is an **input noise vector**, sampled from some fixed dis
     </div>
 </div>
 <div class="caption">
-    Comparison on computational graph of the policy network with and without reparameterization trick. <br/>
+    Comparison on computational graph of the policy network with and without reparameterization trick.
     Left graph is the policy network without reparameterization trick. It samples an action directly from the state conditioned distribution. Right graph is the policy network with reparameterization trick. It samples an action from standard normal distribution and rescales it to fit into the actual distribution.
 </div>
 
