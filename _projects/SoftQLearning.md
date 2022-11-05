@@ -2,7 +2,7 @@
 layout: page
 title: Soft Q-Learning
 description: Review on "Reinforcement Learning with Deep Energy-Based Policies"
-img: assets/img/softqlearning.PNG
+img: assets/img/SoftQLearning/softqlearning.PNG
 importance: 1
 category: papers review
 ---
@@ -165,7 +165,7 @@ Details of updating policy parameters are described in Appendix C.1.
 ### Algorithm Code & Additional Info
 <div class="row justify-content-sm-center">
     <div class="col mt-md-0">
-        {% include figure.html path="assets/img/SQL-Algorithm.PNG" title="SQL Algorithm" class="img-fluid" %}
+        {% include figure.html path="assets/img/SoftQLearning/SQL-algorithm.PNG" title="SQL Algorithm" class="img-fluid" %}
     </div>
 </div>
 <div class="caption">
@@ -190,7 +190,7 @@ Details of updating policy parameters are described in Appendix C.1.
 ### Didactidc Example: Multi-Goal Environment
 <div class="row justify-content-sm-center">
     <div class="col mt-md-0">
-        {% include figure.html path="assets/img/multi-goal-env.PNG" title="multi-goal-env" class="img-fluid" %}
+        {% include figure.html path="assets/img/SoftQLearning/multi-goal-env.PNG" title="multi-goal-env" class="img-fluid" %}
     </div>
 </div>
 <div class="caption">
@@ -205,7 +205,7 @@ Illustration of 2D multi-goal environment. Left: trajectories from a policy lear
 ### Learning Multi-Modal Policies for Exploration
 <div class="row justify-content-sm-center">
     <div class="col mt-md-0">
-        {% include figure.html path="assets/img/multi-modal-exp.PNG" title="multi-modal-exp" %}
+        {% include figure.html path="assets/img/SoftQLearning/multi-modal-exp.PNG" title="multi-modal-exp" %}
     </div>
 </div>
 <div class="caption">
@@ -224,7 +224,7 @@ The pretraining phase involves learning to locomote in an arbitrary direction, w
 
 <div class="row justify-content-sm-center">
     <div class="col mt-md-0">
-        {% include figure.html path="assets/img/pretrain-SQL.PNG" title="pretrain-SQL" class="img-fluid" %}
+        {% include figure.html path="assets/img/SoftQLearning/pretrain-SQL.PNG" title="pretrain-SQL" class="img-fluid" %}
     </div>
 </div>
 <div class="caption">
