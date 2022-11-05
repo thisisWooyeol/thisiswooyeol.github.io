@@ -30,7 +30,7 @@ One cause for the poor sample efficiency is **on-policy learning** such as TRPO,
 <br/>
 
 ### Maximum Entropy Framework
-To solve these problems, the maximum entropy framework is used in this paper. The maximum entropy formulation provides a **substantial improvement in exploration and robustness** with a *stochastic* actor. Prior work has proposed off-policy algorithms based on [soft Q-learning](https://thisiswooyeol.github.io/projects/SoftQLearning/) and its variants. However, the off-policy variants require **complex approximate inference procedures in continuous action spaces**(sampling network in Soft Q-Learning). In this paper, off-policy maximum entropy actor-critic algorithm (SAC) is devised. SAC avoids the complexity and potential instability associated with **approximate inference in prior off-policy maximum entropy algorithms based on soft Q-learning.**
+To solve these problems, the maximum entropy framework is used in this paper. The maximum entropy formulation provides a **substantial improvement in exploration and robustness** with a *stochastic* actor. Prior work has proposed off-policy algorithms based on [`soft Q-learning`](https://thisiswooyeol.github.io/projects/SoftQLearning/) and its variants. However, the off-policy variants require **complex approximate inference procedures in continuous action spaces**(sampling network in Soft Q-Learning). In this paper, off-policy maximum entropy actor-critic algorithm (SAC) is devised. SAC avoids the complexity and potential instability associated with **approximate inference in prior off-policy maximum entropy algorithms based on soft Q-learning.**
 
 <br/>
 <br/>
@@ -248,7 +248,7 @@ Soft actor-critic is particularly **sensitive to the scaling of the reward signa
 
 <br/>
 
-They found that **reward scale  to be the only hyperparameter that requires tuning**. The need of manual hyperparameter tuning leads to the follow up study of `Automating Entropy Adjustment for Maximum Entropy RL`.
+They found that **reward scale  to be the only hyperparameter that requires tuning**. The need of manual hyperparameter tuning leads to the follow up study of [`Automating Entropy Adjustment for Maximum Entropy RL`](https://thisiswooyeol.github.io/projects/SoftActorCritic-autoHO/).
 <br/>
 
 **4. Target network update**
