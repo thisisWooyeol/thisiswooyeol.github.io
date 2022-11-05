@@ -1,81 +1,78 @@
 ---
 layout: page
-title: project 3
-description: a project that redirects to another website
-img: assets/img/7.jpg
-redirect: https://unsplash.com
+title: Soft actor-critic with auto HO
+description: Review on "Soft Actor-Critic Algorithms and Applications"
+img: assets/img/SoftActorCritic-ver2/SAC2-background.PNG
 importance: 3
-category: work
+category: papers review
 ---
 
-Every project has a beautiful feature showcase page.
-It's easy to include images in a flexible 3-column grid format.
-Make your photos 1/3, 2/3, or full width.
+# TL;DR:
+- Based on the idea of [`Soft Actor-Critic`](https://thisiswooyeol.github.io/projects/SoftActorCritic/), this paper includes a constrained formulation that **automatically tunes the temperature hyperparameter.**
+- Revised version of soft actor-critic also shows **state-of-the-art performance in sample-efficiency and asymptotic performance** while retaining the benefits of entropy maximization and stability **without any environment specific hyperparameter tuning.**
+- Soft actor-critic is **robust and sample efficient enough for robotic tasks learned directly in the real world**, such as locomotion and dexterous manipulation.
+<br/>
+<br/>
+<br/>
 
-To give your project a background in the portfolio page, just add the img tag to the front matter like so:
+This review only deals with automating entropy adjustment part of the paper. If you want to know basic idea of soft actor-critic, please see [`Soft Actor-Critic`](https://thisiswooyeol.github.io/projects/SoftActorCritic/) post.
 
-    ---
-    layout: page
-    title: project
-    description: a project with a background image
-    img: /assets/img/12.jpg
-    ---
+<br/>
+<br/>
+<br/>
 
-<div class="row">
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/1.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/3.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/5.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-</div>
-<div class="caption">
-    Caption photos easily. On the left, a road goes through a tunnel. Middle, leaves artistically fall in a hipster photoshoot. Right, in another hipster photoshoot, a lumberjack grasps a handful of pine needles.
-</div>
-<div class="row">
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/5.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-</div>
-<div class="caption">
-    This image can also have a caption. It's like magic.
-</div>
+--------
 
-You can also put regular text between your rows of images.
-Say you wanted to write a little bit about your project before you posted the rest of the images.
-You describe how you toiled, sweated, *bled* for your project, and then... you reveal its glory in the next row of images.
+# Automating Entropy Adjustment for Maximum Entropy RL
+<br/>
 
+Previous soft actor-critic learns maximum entropy policies of a given temperature. Instead of requiring the user to set the temperature manually, we can **automate** this process by **a constrained optimization problem** where the average entropy of the policy is constrained, while the entropy at different states can vary. The **dual** to this constrained optimization leads to the soft actor-critic updates, along with an additional update for the **dual variable**, which plays the role of the temperature. At first, this paper derive the update for finite horizon case, and then derive an approximation for stationary policies by dropping the time dependencies from the policy, soft Q-function, and the temperature.
 
-<div class="row justify-content-sm-center">
-    <div class="col-sm-8 mt-3 mt-md-0">
-        {% include figure.html path="assets/img/6.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm-4 mt-3 mt-md-0">
-        {% include figure.html path="assets/img/11.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-</div>
-<div class="caption">
-    You can also have artistically styled 2/3 + 1/3 images, like these.
-</div>
+<br/>
+<br/>
 
+### Constrained optimization problem in finite horizon
 
-The code is simple.
-Just wrap your images with `<div class="col-sm">` and place them inside `<div class="row">` (read more about the <a href="https://getbootstrap.com/docs/4.4/layout/grid/">Bootstrap Grid</a> system).
-To make images responsive, add `img-fluid` class to each; for rounded corners and shadows use `rounded` and `z-depth-1` classes.
-Here's the code for the last row of images above:
+The goal is to find a stochastic policy with maximal expected return that satisfies a minimum expected entropy constraint. The constrained optimization problem is
 
-{% raw %}
-```html
-<div class="row justify-content-sm-center">
-    <div class="col-sm-8 mt-3 mt-md-0">
-        {% include figure.html path="assets/img/6.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm-4 mt-3 mt-md-0">
-        {% include figure.html path="assets/img/11.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-</div>
-```
-{% endraw %}
+$$
+\underset{\pi_{0:T}}{\mathrm{max}} \ \mathbb E_{\rho_\pi} \left[ \sum_{t=0}^T r(s_t,a_t) \right] \quad \mathrm{s.t.} \ \mathbb E_{(s_t,a_t) \sim \rho_\pi} \left[ -\mathrm{log}(\pi_t(a_t \mid s_t)) \right] \geq \mathcal H \quad \forall t
+$$
+
+where $$ \mathcal H $$ is a desired minimum expected entropy (equals to minus of entropy target in the Table 1 from Appendix D). Since the policy at time $$ t $$ can only affect the future objective value, we rewrite the objective as an iterative maximization
+
+$$
+\underset{\pi_0}{\mathrm{max}} \left( \mathbb E \left[ r(s_0,a_0) \right] + \underset{\pi_1}{\mathrm{max}} \left( \mathbb E\left[...\right] + \underset{\pi_T}{\mathrm{max}}\ \mathbb E \left[r(s_T,a_T)\right] \right) \right),
+$$
+
+subject to the constraint on entropy. Starting from the last time step, we change the constrained maximization to the **dual problem**. Subject to $$ \mathbb E_{(s_t,a_t) \sim \rho_\pi} \left[ -\mathrm{log} (\pi_T(a_T \mid s_T)) \right] \geq \mathcal H $$,
+
+$$
+\underset{\pi_T}{\mathrm{max}}\ \mathbb E_{(s_T,a_T) \sim \rho_\pi} \left[r(s_T,a_T)\right] = \underset{\alpha_T \geq 0}{\mathrm{min}}\ \underset{\pi_T}{\mathrm{max}}\ \mathbb E \left[r(s_T,a_T) - \alpha_T\ \mathrm{log}\ \pi(a_T \mid s_T)\right] - \alpha_T \mathcal H,
+$$
+
+where $$ \alpha_T $$ is the dual variable. Since the objective is linear and the entropy constraint is convex function in $$ \pi_T $$ , strong duality holds. This dual objective is closely related to the maximum entropy objective with respect to the policy, and the optimal policy is the maximum entropy policy coresponding to the temperature $$ \alpha_T : \pi_T^* (a_T \mid s_T;\alpha_T) $$ . We can solve for the optimal dual variable $$ \alpha_T^* $$ as
+
+$$
+\underset{\alpha_T}{\mathrm{argmin}}\ \mathbb E_{(s_t,a_t) \sim \pi_t^* } \left[ -\alpha_T \mathrm{log}\ \pi_T^* (a_T \mid s_T;\alpha_T) - \alpha_T \mathcal H \right].
+$$
+
+To simplify notation, we make use of the recursive definition of the soft Q-function
+
+$$
+Q_t^* (s_t,a_t; \pi_{t+1:T}^* , \alpha_{t+1:T}^* = \mathbb E \left[r(s_t,a_t)\right] + \mathbb E_{\rho_\pi} \left[Q_{t+1}^* (s_{t+1},a_{t+1}) - \alpha_{t+1}^* \ \mathrm{log}\ \pi_{t+1}^* (a_{t+1} \mid s_{t|1}) \right],
+$$
+
+with $$ Q_T^* (s_T, a_T) = \mathbb E \left[ r(s_T, a_T) \right] $$ . Now, subject to the entropy constraints and again using the dual problem, we have
+
+$$
+\begin{matrix}
+\underset{\pi_{T-1}}{\mathrm{max} & \left( \mathbb E \left[ r(s_{T-1},a_{T-1}) \right] + \underset{\pi_T}{\mathrm{max}\ \mathbb E \left[ r(s_T,a_T) \right] \right) \\
+ & = \underset{\pi_{T-1}}{\mathrm{max}\ \left( \mathbb E \left[ r(s_{T-1},a_{T-1}) \right] + \underset{\alpha_T \geq 0}{\mathrm{min}}\ \underset{\pi_T}{\mathrm{max}\ \mathbb E \left[ r(s_T,a_T) - \alpha_T\ \mathrm{log}\ \pi_T(a_T \mid s_T) \right] - \alpha_T \mathcal H \right) \\
+ & = \underset{\pi_{T-1}}{\mathrm{max}\ \left( \mathbb E \left[ r(s_{T-1},a_{T-1}) \right] + Q_T^* (s_T,a_T) \right) \\
+ & = \underset{\pi_{T-1}}{\mathrm{max}\ \left( \mathbb E \left[ r(s_{T-1},a_{T-1}) \right] + \mathbb E_{\rho_\pi} \left[ Q_T^* (s_T,a_T) - \alpha_T^* \ \mathrm{log}\ \pi_T^* (a_T \mid s_T) \right] - \alpha_T^* \mathcal H \right) \\
+ & = \underset{\pi_{T-1}}{\mathrm{max}\ \left( Q_{T-1}^* (s_{T-1}, a_{T-1}) - \alpha_T^* \mathcal H \right) \\
+ & = \underset{\alpha_{T-1} \geq 0}{\mathrm{min}}\ \underset{\pi_{T-1}}{\mathrm{max}\ \mathbb E \left[ Q_{T-1}^* (s_{T-1},a_{T-1}) \right] - \mathbb E \left[ \alpha_{T-1}\ \mathrm{log}\ \pi_{T-1}(a_{T-1} \mid s_{T-1}) \right] - \alpha_{T-1} \mathcal H \right) - \alpha_T^* \mathcal H
+\end{matrix}
+$$
+ 
