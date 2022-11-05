@@ -163,8 +163,8 @@ Details of updating policy parameters are described in Appendix C.1.
 <br/>
 
 ### Algorithm Code & Additional Info
-<div class="row justify-content-sm-center">
-    <div class="col mt-md-0">
+<div class="row justify-content-center">
+    <div class="col">
         {% include figure.html path="assets/img/SoftQLearning/SQL-algorithm.PNG" title="SQL Algorithm" class="img-fluid" %}
     </div>
 </div>
@@ -188,8 +188,8 @@ Details of updating policy parameters are described in Appendix C.1.
 3. Can a maximum entropy policy serve as **a good initialization for fine-tuning on different tasks, when compared to pretraining with a standard deterministic objective?**
 
 ### Didactidc Example: Multi-Goal Environment
-<div class="row justify-content-sm-center">
-    <div class="col mt-md-0">
+<div class="row justify-content-center">
+    <div class="col">
         {% include figure.html path="assets/img/SoftQLearning/multi-goal-env.PNG" title="multi-goal-env" class="img-fluid" %}
     </div>
 </div>
@@ -203,8 +203,8 @@ Illustration of 2D multi-goal environment. Left: trajectories from a policy lear
 <br/>
 
 ### Learning Multi-Modal Policies for Exploration
-<div class="row justify-content-sm-center">
-    <div class="col mt-md-0">
+<div class="row justify-content-center">
+    <div class="col">
         {% include figure.html path="assets/img/SoftQLearning/multi-modal-exp.PNG" title="multi-modal-exp" %}
     </div>
 </div>
@@ -222,8 +222,8 @@ The results on swimmer snake task and the quadrupedal robot maze task show that 
 Aims to find out how energy based policies can be trained with **fairly broad objectives to produce an initializer** for more quickly learning more specific tasks.
 The pretraining phase involves learning to locomote in an arbitrary direction, with a reward that simply equals the speed of the center of mass. Details of the pretraining are described in Figure 7 in Appendix D.3.
 
-<div class="row justify-content-sm-center">
-    <div class="col mt-md-0">
+<div class="row justify-content-center">
+    <div class="col">
         {% include figure.html path="assets/img/SoftQLearning/pretrain-SQL.PNG" title="pretrain-SQL" class="img-fluid" %}
     </div>
 </div>
