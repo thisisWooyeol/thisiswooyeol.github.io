@@ -172,7 +172,7 @@ where $$ a_t $$ is evaluated at $$ f_\phi(\epsilon_t;s_t) $$.
 The complete algorithm is described in Algorithm 1.
 
 <div class="row justify-content-center">
-    <div class="col-4">
+    <div class="col-8">
         {% include figure.html path="assets/img/SoftActorCritic/SAC-algorithm.PNG" title="SAC-algorithm" class="img-fluid" %}
     </div>
 </div>
@@ -193,7 +193,7 @@ The goal of experimental evaluation is comparing the **sample complexity** and *
 ### Comparative Evaluation
 
 <div class="row justify-content-xl-center">
-    <div class="col-xl-4 mt-3 mt-md-0">
+    <div class="col-8">
         {% include figure.html path="assets/img/SoftActorCritic/SAC-comparative-eval.PNG" title="SAC-Eval1" class="img-fluid" %}
     </div>
 </div>
@@ -213,7 +213,7 @@ To check which particular components of SAC are important for good performance a
 **1. Stochastic vs. deterministic policy**
 
 <div class="row justify-content-xl-center">
-    <div class="col-xl-4 mt-3 mt-md-0">
+    <div class="col-xl-8 mt-3 mt-md-0">
         {% include figure.html path="assets/img/SoftActorCritic/SAC-deterministic-vs-stochastic.PNG" title="SAC-Eval2" class="img-fluid" %}
     </div>
 </div>
@@ -233,10 +233,12 @@ Deterministic evaluation (choosing the mean of the policy distribution at evalua
 
 Soft actor-critic is particularly **sensitive to the scaling of the reward signal**, because it serves the role of the temperature of the energy-based optimal policy ($$ \propto 1/\alpha $$) and thus **controls its stochasticity**.
 
-| Reward magnitudes |   Policy                  |   Problem                             |
-|   ------------    |   -----                   |   -----                               |
-|   Small           |   nearly uniform          |   fail to exploit the reward signal   |
-|   Large           |   nearly deterministic    |   lack of adequate exploration        |
+| Reward magnitudes         |   Policy                      |   Problem                                 |
+|   ------------            |   -----                       |   -----                                   |
+|   Small                   |   nearly uniform              |   fail to exploit the reward signal       |
+|   Large                   |   nearly deterministic        |   lack of adequate exploration            |
+
+<br/>
 
 They found that **reward scale  to be the only hyperparameter that requires tuning**. The need of manual hyperparameter tuning leads to the follow up study of `Automating Entropy Adjustment for Maximum Entropy RL`.
 <br/>
@@ -249,7 +251,7 @@ Using a **separate target value network** that slowly tracks the actual value fu
 The results of experiment 2 - 4 are described below.
 
 <div class="row justify-content-xl-center">
-    <div class="col-xl-4 mt-3 mt-md-0">
+    <div class="col-xl-8 mt-3 mt-md-0">
         {% include figure.html path="assets/img/SoftActorCritic/SAC-hyperparams-eval.PNG" title="SAC-Eval3" class="img-fluid" %}
     </div>
 </div>
