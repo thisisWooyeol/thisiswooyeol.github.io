@@ -89,7 +89,7 @@ How to prove Lemma 1:
 - The assumption $$ \left\vert \mathcal A \right\vert < \infty $$ is required to guarantee the entropy augmented reward is bounded. (Actually I'm wondering why it is needed...)
 
 <br/>
-In the policy improvement step, SAC updates the policy towards the exponential of the new Q-function. In contrast to SQL, SAC **restrict the policy to some set of policies $$ \Pi $$ that is tractable** such as a parameterized family of Gaussians. By using the information projection, policy is updated according to
+In the policy improvement step, SAC updates the policy towards the exponential of the new Q-function. In contrast to SQL, SAC **restrict the policy to some set of parameterizable policies $$ \Pi $$ that is tractable** such as a parameterized family of Gaussians. By using the information projection, policy is updated according to
 
 $$
 \pi_\mathrm{new} = \underset{\pi ' \in \Pi}{\mathrm{argmin}} \mathrm{D_{KL}} \left( \pi' (\cdot|s_t) \parallel \frac{\mathrm{exp} (Q^{\pi_{\mathrm{old}}} (s_t, \cdot))}{Z^{\pi_{\mathrm{old}}} (s_t)} \right).
@@ -113,36 +113,60 @@ How to prove Theorem 1: Check Appendix B.3
 
 ### Soft Actor-Critic
 
-Soft Actor-Critic algorithm alternates between optimizing the Q-function and the policy networks with stochastic gradient descent instead of running evaluation and improvement to converge. Parameterized networks $$ V_\psi (s_t), Q_\theta (s_t,a_t) $$ , (**a tractable policy**) $$ \pi_\phi (a_t \mid s_t) $$ are used.
+Soft Actor-Critic algorithm alternates between optimizing the Q-function and the policy networks with stochastic gradient descent instead of running evaluation and improvement to converge. Parameterized networks $$ V_\psi (s_t), Q_\theta (s_t,a_t) $$ , (**a tractable policy**) $$ \pi_\phi (a_t \mid s_t) $$ are used. For Q-function, SAC makes use of two Q-functions $$ Q_{\theta_1} (s_t,a_t), Q_{\theta_2} (s_t,a_t) $$ to mitigate positive bias, which is found to speed up training. In particular, minimum of the Q-functions is used for the value gradient and policy gradient. 
 
 The soft value function which is included to stabilize training is trained to minimize the squared residual error
 
 $$
-J_V(\psi) = \mathbb E_{s_t \sim \mathcal D} \left[ \frac{1}{2} \left( V_\psi (s_t) - \mathbb E_{a_t \sim \pi_\phi} \left[ Q_\theta (s_t,a_t) - \mathrm{log} \ \pi_\phi (a_t \mid s_t) \right] \right)^2 \right].
+J_V(\psi) = \mathbb E_{s_t \sim \mathcal D} \left[ \frac{1}{2} \left( V_\psi (s_t) - \mathbb E_{a_t \sim \pi_\phi} \left[ \underset{ i \in \left\lbrace 1,2 \right\rbrace }{\mathrm{min}} \ Q_{\theta_i}(s_t,a_t) - \mathrm{log} \ \pi_\phi (a_t \mid s_t) \right] \right)^2 \right].
 $$
 
 The gradient of value error can be estimated with an unbiased estimator
 
 $$
-\hat{\nabla}_ \psi J_V(\psi) = \nabla_\psi V_\psi (s_t) V_\psi (s_t) - Q_\theta (s_t,a_t) + \mathrm{log} \ \pi_\phi (a_t \mid s_t).
+\hat{\nabla}_ \psi J_V(\psi) = \nabla_\psi V_\psi (s_t) \left( V_\psi (s_t) - \underset{ i \in \left\lbrace 1,2 \right\rbrace }{\mathrm{min}} \ Q_{\theta_i}(s_t,a_t) + \mathrm{log} \ \pi_\phi (a_t \mid s_t) \right).
 $$
 
-Note that the actions are sampled from the current policy. (To measure the entropy of the current policy.) The soft Q-function is trained to minimize the soft Bellman residual
+Note that **the actions are sampled from the current policy.** (To measure the entropy of the current policy.) The soft Q-function is trained to minimize the soft Bellman residual
 
 $$
-J_Q (\theta) = \mathbb E_{(s_t,a_t) \sim \mathcal D} \left[ \frac{1}{2} \left( Q_\theta (s_t,a_t) - \left(r(s_t,a_t) + \gamma \mathbb E_{s_{t+1} \sim p} \left[ V_\bar{\psi} (s_{t+1}) \right] \right) \right)^2 \right],
+J_Q (\theta_i) = \mathbb E_{(s_t,a_t) \sim \mathcal D} \left[ \frac{1}{2} \left( Q_{\theta_i} (s_t,a_t) - \left(r(s_t,a_t) + \gamma \mathbb E_{s_{t+1} \sim p} \left[ V_\bar{\psi} (s_{t+1}) \right] \right) \right)^2 \right],
 $$
 
 which again can be optimized with stochastic gradients
 
 $$
-\hat{\nabla}_ \theta J_Q(\theta) = \nabla_\theta Q_\theta(s_t,a_t) \left( Q_\theta (s_t,a_t) - r(s_t,a_t) - \gamma V_\bar{\psi} (s_{t+1}) \right).
+\hat{\nabla}_ {\theta_i} J_Q(\theta_i) = \nabla_{\theta_i} Q_{\theta_i}(s_t,a_t) \left( Q_{\theta_i} (s_t,a_t) - r(s_t,a_t) - \gamma V_\bar{\psi} (s_{t+1}) \right).
 $$
 
 $$ V_\bar{\psi} $$ is a target value network that $$ \bar{\psi} $$ can be an exponential moving average of $$ \psi $$ (in Algorithm 1) or can be a periodically updated parameters of $$ \psi $$ (as in Appendix E). Finally, the policy parameters can be learned by directly minimizing the expected KL-divergence in soft policy iteration:
 
 $$
-J_\pi (\phi) = \mathbb E_{s_t \sim \mathcal D} \left[ \mathrm{D_{KL}} \left( \pi' (\cdot|s_t) \parallel \frac{\mathrm{exp} (Q^{\pi_{\mathrm{old}}} (s_t, \cdot))}{Z^{\pi_{\mathrm{old}}} (s_t)} \right) \right].
+J_\pi (\phi) = \mathbb E_{s_t \sim \mathcal D} \left[ \mathrm{D_{KL}} \left( \pi' (\cdot|s_t) \parallel \frac{\mathrm{exp} (Q_\theta (s_t, \cdot))}{Z_\theta (s_t)} \right) \right].
 $$
 
+To minimize $$ J_\pi $$ with gradient descent, SAC **reparameterize the policy using a neural network transformation**
+
+$$
+a_t = f_\phi(\epsilon_t;s_t),
+$$
+
+where $$ \epsilon_t $$ is an **input noise vector**, sampled from some fixed distribution, such as spherical Gaussian. How and why policy network is reparameterized can be described as below.
+
 *Need to Add figure to explain why reparameterzation trick is needed with computational graph*
+
+Now, we can rewrite the objective of policy as
+
+$$
+J_\pi(\phi) = \mathbb E_{s_t \sim \mathcal D, \epsilon \sim \mathcal N} \left[ \mathrm{log} \ \pi_\phi(f_\phi(\epsilon_t;s_t) \mid s_t) - \underset{ i \in \left\lbrace 1,2 \right\rbrace }{\mathrm{min}} \ Q_{\theta_i}(s_t,f_\phi(\epsilon_t;s_t)) \right],
+$$
+
+which can be optimized with unbiased gradient estimator
+
+$$
+\hat{\nabla}_ \phi J_\pi(\phi) = \nabla_ \phi \mathrm{log} \ \pi_\phi(a_t \mid s_t) + \left( \nabla_ {a_t} \mathrm{log} \ \pi_\phi (a_t \mid s_t) - \nabla_ {a_t} \underset{ i \in \left\lbrace 1,2 \right\rbrace }{\mathrm{min}} \ Q_{\theta_i}(s_t,a_t) \right) \nabla_ \phi f_\phi(\epsilon_t;s_t),
+$$
+
+where $$ a_t $$ is evaluated at $$ f_\phi(\epsilon_t;s_t) $$.
+
+
