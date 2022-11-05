@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Soft actor-critic with auto HO
+title: Soft actor-critic with auto H.O.
 description: Review on "Soft Actor-Critic Algorithms and Applications"
 img: assets/img/SoftActorCritic-ver2/SAC2-background.PNG
 importance: 3
