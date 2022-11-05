@@ -164,8 +164,8 @@ Details of updating policy parameters are described in Appendix C.1.
 
 ### Algorithm Code & Additional Info
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-12">
+    <div class="row justify-content-xl-center">
+        <div class="col-8">
             {% include figure.html path="assets/img/SoftQLearning/SQL-algorithm.PNG" title="SQL Algorithm" class="img-fluid" %}
         </div>
     </div>
@@ -191,8 +191,8 @@ Details of updating policy parameters are described in Appendix C.1.
 
 ### Didactidc Example: Multi-Goal Environment
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-12">
+    <div class="row justify-content-xl-center">
+        <div class="col-8">
             {% include figure.html path="assets/img/SoftQLearning/multi-goal-env.PNG" title="multi-goal-env" class="img-fluid" %}
         </div>
     </div>
@@ -208,8 +208,8 @@ Illustration of 2D multi-goal environment. Left: trajectories from a policy lear
 
 ### Learning Multi-Modal Policies for Exploration
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-12">
+    <div class="row justify-content-xl-center">
+        <div class="col-8">
             {% include figure.html path="assets/img/SoftQLearning/multi-modal-exp.PNG" title="multi-modal-exp" %}
         </div>
     </div>
@@ -229,8 +229,8 @@ Aims to find out how energy based policies can be trained with **fairly broad ob
 The pretraining phase involves learning to locomote in an arbitrary direction, with a reward that simply equals the speed of the center of mass. Details of the pretraining are described in Figure 7 in Appendix D.3.
 
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-12">
+    <div class="row justify-content-xl-center">
+        <div class="col-8">
             {% include figure.html path="assets/img/SoftQLearning/pretrain-SQL.PNG" title="pretrain-SQL" class="img-fluid" %}
         </div>
     </div>
