@@ -165,7 +165,7 @@ Details of updating policy parameters are described in Appendix C.1.
 ### Algorithm Code & Additional Info
 <div class="container">
     <div class="row justify-content-xl-center">
-        <div class="col-8">
+        <div class="col-6">
             {% include figure.html path="assets/img/SoftQLearning/SQL-algorithm.PNG" title="SQL Algorithm" class="img-fluid" %}
         </div>
     </div>
@@ -209,7 +209,7 @@ Illustration of 2D multi-goal environment. Left: trajectories from a policy lear
 ### Learning Multi-Modal Policies for Exploration
 <div class="container">
     <div class="row justify-content-xl-center">
-        <div class="col-8">
+        <div class="col-6">
             {% include figure.html path="assets/img/SoftQLearning/multi-modal-exp.PNG" title="multi-modal-exp" %}
         </div>
     </div>
