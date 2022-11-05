@@ -67,12 +67,12 @@ with $$ Q_T^* (s_T, a_T) = \mathbb E \left[ r(s_T, a_T) \right] $$ . Now, subjec
 
 $$
 \begin{matrix}
-\underset{\pi_{T-1}}{\mathrm{max} & \left( \mathbb E \left[ r(s_{T-1},a_{T-1}) \right] + \underset{\pi_T}{\mathrm{max}\ \mathbb E \left[ r(s_T,a_T) \right] \right) \\
- & = \underset{\pi_{T-1}}{\mathrm{max}\ \left( \mathbb E \left[ r(s_{T-1},a_{T-1}) \right] + \underset{\alpha_T \geq 0}{\mathrm{min}}\ \underset{\pi_T}{\mathrm{max}\ \mathbb E \left[ r(s_T,a_T) - \alpha_T\ \mathrm{log}\ \pi_T(a_T \mid s_T) \right] - \alpha_T \mathcal H \right) \\
- & = \underset{\pi_{T-1}}{\mathrm{max}\ \left( \mathbb E \left[ r(s_{T-1},a_{T-1}) \right] + Q_T^* (s_T,a_T) \right) \\
- & = \underset{\pi_{T-1}}{\mathrm{max}\ \left( \mathbb E \left[ r(s_{T-1},a_{T-1}) \right] + \mathbb E_{\rho_\pi} \left[ Q_T^* (s_T,a_T) - \alpha_T^* \ \mathrm{log}\ \pi_T^* (a_T \mid s_T) \right] - \alpha_T^* \mathcal H \right) \\
- & = \underset{\pi_{T-1}}{\mathrm{max}\ \left( Q_{T-1}^* (s_{T-1}, a_{T-1}) - \alpha_T^* \mathcal H \right) \\
- & = \underset{\alpha_{T-1} \geq 0}{\mathrm{min}}\ \underset{\pi_{T-1}}{\mathrm{max}\ \mathbb E \left[ Q_{T-1}^* (s_{T-1},a_{T-1}) \right] - \mathbb E \left[ \alpha_{T-1}\ \mathrm{log}\ \pi_{T-1}(a_{T-1} \mid s_{T-1}) \right] - \alpha_{T-1} \mathcal H \right) - \alpha_T^* \mathcal H
+\underset{\pi_{T-1}}{\mathrm{max}} & \left( \mathbb E \left[ r(s_{T-1},a_{T-1}) \right] + \underset{\pi_T}{\mathrm{max}}\ \mathbb E \left[ r(s_T,a_T) \right] \right) \\
+ & = \underset{\pi_{T-1}}{\mathrm{max}}\ \left( \mathbb E \left[ r(s_{T-1},a_{T-1}) \right] + \underset{\alpha_T \geq 0}{\mathrm{min}}\ \underset{\pi_T}{\mathrm{max}}\ \mathbb E \left[ r(s_T,a_T) - \alpha_T\ \mathrm{log}\ \pi_T(a_T \mid s_T) \right] - \alpha_T \mathcal H \right) \\
+ & = \underset{\pi_{T-1}}{\mathrm{max}}\ \left( \mathbb E \left[ r(s_{T-1},a_{T-1}) \right] + Q_T^* (s_T,a_T) \right) \\
+ & = \underset{\pi_{T-1}}{\mathrm{max}}\ \left( \mathbb E \left[ r(s_{T-1},a_{T-1}) \right] + \mathbb E_{\rho_\pi} \left[ Q_T^* (s_T,a_T) - \alpha_T^* \ \mathrm{log}\ \pi_T^* (a_T \mid s_T) \right] - \alpha_T^* \mathcal H \right) \\
+ & = \underset{\pi_{T-1}}{\mathrm{max}}\ \left( Q_{T-1}^* (s_{T-1}, a_{T-1}) - \alpha_T^* \mathcal H \right) \\
+ & = \underset{\alpha_{T-1} \geq 0}{\mathrm{min}}\ \underset{\pi_{T-1}}{\mathrm{max}}\ \left( \mathbb E \left[ Q_{T-1}^* (s_{T-1},a_{T-1}) \right] - \mathbb E \left[ \alpha_{T-1}\ \mathrm{log}\ \pi_{T-1}(a_{T-1} \mid s_{T-1}) \right] - \alpha_{T-1} \mathcal H \right) - \alpha_T^* \mathcal H
 \end{matrix}
 $$
  
