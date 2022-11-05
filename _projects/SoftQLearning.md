@@ -163,13 +163,15 @@ Details of updating policy parameters are described in Appendix C.1.
 <br/>
 
 ### Algorithm Code & Additional Info
-<div class="row justify-content-center">
-    <div class="col">
-        {% include figure.html path="assets/img/SoftQLearning/SQL-algorithm.PNG" title="SQL Algorithm" class="img-fluid" %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col">
+            {% include figure.html path="assets/img/SoftQLearning/SQL-algorithm.PNG" title="SQL Algorithm" class="img-fluid" %}
+        </div>
     </div>
-</div>
-<div class="caption">
-    Figure from Reinforcement Learning with Deep Energy-Based Policies
+    <div class="caption">
+        Figure from Reinforcement Learning with Deep Energy-Based Policies
+    </div>
 </div>
 
 *IMO, target policy parameters $$ \bar{\phi} $$ are intended to sample an action in line 7.*
@@ -188,13 +190,15 @@ Details of updating policy parameters are described in Appendix C.1.
 3. Can a maximum entropy policy serve as **a good initialization for fine-tuning on different tasks, when compared to pretraining with a standard deterministic objective?**
 
 ### Didactidc Example: Multi-Goal Environment
-<div class="row justify-content-center">
-    <div class="col">
-        {% include figure.html path="assets/img/SoftQLearning/multi-goal-env.PNG" title="multi-goal-env" class="img-fluid" %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col">
+            {% include figure.html path="assets/img/SoftQLearning/multi-goal-env.PNG" title="multi-goal-env" class="img-fluid" %}
+        </div>
     </div>
-</div>
-<div class="caption">
-    Figure from Reinforcement Learning with Deep Energy-Based Policies
+    <div class="caption">
+        Figure from Reinforcement Learning with Deep Energy-Based Policies
+    </div>
 </div>
 
 Illustration of 2D multi-goal environment. Left: trajectories from a policy learned with soft Q-learning. Right: Q-values at three selected states and 2D velocity of action samples. The stochastic policy samples actions closely following the energy landscape, hence **learning diverse trajectories that lead to all four goals**. In comparison, a policy trained with DDPG randomly **commits to a single goal**.
@@ -203,13 +207,15 @@ Illustration of 2D multi-goal environment. Left: trajectories from a policy lear
 <br/>
 
 ### Learning Multi-Modal Policies for Exploration
-<div class="row justify-content-center">
-    <div class="col">
-        {% include figure.html path="assets/img/SoftQLearning/multi-modal-exp.PNG" title="multi-modal-exp" %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col">
+            {% include figure.html path="assets/img/SoftQLearning/multi-modal-exp.PNG" title="multi-modal-exp" %}
+        </div>
     </div>
-</div>
-<div class="caption">
-    Figure from Reinforcement Learning with Deep Energy-Based Policies
+    <div class="caption">
+        Figure from Reinforcement Learning with Deep Energy-Based Policies
+    </div>
 </div>
 
 During the learning process, it is often best **to keep trying multiple available options until the agent is confident that one of them is the best.**
@@ -222,13 +228,15 @@ The results on swimmer snake task and the quadrupedal robot maze task show that 
 Aims to find out how energy based policies can be trained with **fairly broad objectives to produce an initializer** for more quickly learning more specific tasks.
 The pretraining phase involves learning to locomote in an arbitrary direction, with a reward that simply equals the speed of the center of mass. Details of the pretraining are described in Figure 7 in Appendix D.3.
 
-<div class="row justify-content-center">
-    <div class="col">
-        {% include figure.html path="assets/img/SoftQLearning/pretrain-SQL.PNG" title="pretrain-SQL" class="img-fluid" %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col">
+            {% include figure.html path="assets/img/SoftQLearning/pretrain-SQL.PNG" title="pretrain-SQL" class="img-fluid" %}
+        </div>
     </div>
-</div>
-<div class="caption">
-    figure from Reinforcement Learning with Deep Energy-Based Policies
+    <div class="caption">
+        figure from Reinforcement Learning with Deep Energy-Based Policies
+    </div>
 </div>
 
 As the plots show, the pretrained policy gives a good initialization to learn the behaviors in the test environments more quickly than training a policy with DDPG from a random initialization.
