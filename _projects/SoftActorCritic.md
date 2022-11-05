@@ -169,4 +169,13 @@ $$
 
 where $$ a_t $$ is evaluated at $$ f_\phi(\epsilon_t;s_t) $$.
 
+The complete algorithm is described in Algorithm 1.
 
+<div class="row justify-content-sm-center">
+    <div class="col mt-md-0">
+        {% include figure.html path="assets/img/SoftActorCritic/SAC-algorithm.PNG" title="SAC-algorithm" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from Soft Actor-Critic: Off-Policy Maximum Entropy Deep RL with a Stochastic Actor
+</div>
