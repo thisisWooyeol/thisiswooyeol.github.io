@@ -153,9 +153,16 @@ $$
 
 where $$ \epsilon_t $$ is an **input noise vector**, sampled from some fixed distribution, such as spherical Gaussian. How and why policy network is reparameterized can be described as below.
 
-*Need to Add figure to explain why reparameterzation trick is needed with computational graph*
+<div class="row justify-content-center">
+    <div class="col-10">
+        {% include figure.html path="assets/img/SoftActorCritic/SAC-comp-graph.PNG" title="SAC-comp-graph" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Computational graph of the policy network without reparameterization trick which samples an action directly from the state conditioned distribution (left), and the policy network with reparameterization trick which samples an action from standard normal distribution (right).
+</div>
 
-Now, we can rewrite the objective of policy as
+If we sample actions as the left graph does, the backpropagation of the objective will be stopped at the sampling node. Therefore, by separating the sampling node as the right graph does, we can use backpropagation to update the policy parameters $$ \phi $$. Now, we can rewrite the objective of policy as
 
 $$
 J_\pi(\phi) = \mathbb E_{s_t \sim \mathcal D, \epsilon \sim \mathcal N} \left[ \mathrm{log} \ \pi_\phi(f_\phi(\epsilon_t;s_t) \mid s_t) - \underset{ i \in \left\lbrace 1,2 \right\rbrace }{\mathrm{min}} \ Q_{\theta_i}(s_t,f_\phi(\epsilon_t;s_t)) \right],
@@ -172,7 +179,7 @@ where $$ a_t $$ is evaluated at $$ f_\phi(\epsilon_t;s_t) $$.
 The complete algorithm is described in Algorithm 1.
 
 <div class="row justify-content-center">
-    <div class="col-8">
+    <div class="col-6">
         {% include figure.html path="assets/img/SoftActorCritic/SAC-algorithm.PNG" title="SAC-algorithm" class="img-fluid" %}
     </div>
 </div>
@@ -193,7 +200,7 @@ The goal of experimental evaluation is comparing the **sample complexity** and *
 ### Comparative Evaluation
 
 <div class="row justify-content-xl-center">
-    <div class="col-8">
+    <div class="col-10">
         {% include figure.html path="assets/img/SoftActorCritic/SAC-comparative-eval.PNG" title="SAC-Eval1" class="img-fluid" %}
     </div>
 </div>
@@ -213,7 +220,7 @@ To check which particular components of SAC are important for good performance a
 **1. Stochastic vs. deterministic policy**
 
 <div class="row justify-content-xl-center">
-    <div class="col-xl-8 mt-3 mt-md-0">
+    <div class="col-xl-4">
         {% include figure.html path="assets/img/SoftActorCritic/SAC-deterministic-vs-stochastic.PNG" title="SAC-Eval2" class="img-fluid" %}
     </div>
 </div>
@@ -251,7 +258,7 @@ Using a **separate target value network** that slowly tracks the actual value fu
 The results of experiment 2 - 4 are described below.
 
 <div class="row justify-content-xl-center">
-    <div class="col-xl-8 mt-3 mt-md-0">
+    <div class="col-xl-10">
         {% include figure.html path="assets/img/SoftActorCritic/SAC-hyperparams-eval.PNG" title="SAC-Eval3" class="img-fluid" %}
     </div>
 </div>
