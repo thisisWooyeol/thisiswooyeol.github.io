@@ -60,7 +60,7 @@ $$
 To simplify notation, we make use of the recursive definition of the soft Q-function
 
 $$
-Q_t^* (s_t,a_t; \pi_{t+1:T}^* , \alpha_{t+1:T}^* = \mathbb E \left[r(s_t,a_t)\right] + \mathbb E_{\rho_\pi} \left[Q_{t+1}^* (s_{t+1},a_{t+1}) - \alpha_{t+1}^* \ \mathrm{log}\ \pi_{t+1}^* (a_{t+1} \mid s_{t|1}) \right],
+Q_t^* (s_t,a_t; \pi_{t+1:T}^* , \alpha_{t+1:T}^* ) = \mathbb E \left[r(s_t,a_t)\right] + \mathbb E_{\rho_\pi} \left[Q_{t+1}^* (s_{t+1},a_{t+1}) - \alpha_{t+1}^* \ \mathrm{log}\ \pi_{t+1}^* (a_{t+1} \mid s_{t|1}) \right],
 $$
 
 with $$ Q_T^* (s_T, a_T) = \mathbb E \left[ r(s_T, a_T) \right] $$ . Now, subject to the entropy constraints and again using the dual problem, we have
