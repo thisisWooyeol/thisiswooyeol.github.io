@@ -2,7 +2,7 @@
 layout: page
 title: Soft Actor-Critic
 description: Review on "Soft Actor-Critic; Off-Policy Maximum Entropy Deep RL with a Stochastic Actor"
-img: assets/img/SAC/background-SAC.PNG
+img: assets/img/SoftActorCritic/SAC-comparative-eval.PNG
 importance: 2
 category: papers review
 ---
