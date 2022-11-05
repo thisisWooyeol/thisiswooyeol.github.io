@@ -171,9 +171,86 @@ where $$ a_t $$ is evaluated at $$ f_\phi(\epsilon_t;s_t) $$.
 
 The complete algorithm is described in Algorithm 1.
 
-<div class="row justify-content-sm-center">
-    <div class="col mt-md-0">
+<div class="row justify-content-center">
+    <div class="col-4">
         {% include figure.html path="assets/img/SoftActorCritic/SAC-algorithm.PNG" title="SAC-algorithm" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from Soft Actor-Critic: Off-Policy Maximum Entropy Deep RL with a Stochastic Actor
+</div>
+
+<br/>
+<br/>
+<br/>
+
+-------
+# Experiments
+The goal of experimental evaluation is comparing the **sample complexity** and **stability** of SAC with prior on/off-policy deep RL algorithms on continuous control tasks. DDPG, PPO, SQL, and TD3 are used for comparison, where exploration noise of DDPG and PPO is turned off and only the mean action for SAC is used in evaluation rollouts. (remove any stochasticity and noise of algorithm in order for the algorithms can fully exploit theirs knowledge)
+
+<br/>
+
+### Comparative Evaluation
+
+<div class="row justify-content-xl-center">
+    <div class="col-xl-4 mt-3 mt-md-0">
+        {% include figure.html path="assets/img/SoftActorCritic/SAC-comparative-eval.PNG" title="SAC-Eval1" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from Soft Actor-Critic: Off-Policy Maximum Entropy Deep RL with a Stochastic Actor
+</div>
+
+SAC performs comparably to the baseline methods on the easier tasks and outperforms them on the harder tasks with a large margin, both in terms of learning speed(vs. PPO, SQL especially) and the final performance(vs. DDPG, SQL especially).
+
+<br/>
+<br/>
+
+### Ablation study
+To check which particular components of SAC are important for good performance and how sensitive SAC is to some of the most important hyperparameters.
+<br/>
+
+**1. Stochastic vs. deterministic policy**
+
+<div class="row justify-content-xl-center">
+    <div class="col-xl-4 mt-3 mt-md-0">
+        {% include figure.html path="assets/img/SoftActorCritic/SAC-deterministic-vs-stochastic.PNG" title="SAC-Eval2" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from Soft Actor-Critic: Off-Policy Maximum Entropy Deep RL with a Stochastic Actor
+</div>
+
+Comparison of SAC and a deterministic variant of SAC (closely resembles DDPG, with the exception of 2 Q-func., hard target updates, no target actor, fixed exploration noise) shows that **learning a stochastic policy with entropy maximization can drastically stabilize training**.
+<br/>
+
+**2. Policy evaluation**
+
+Deterministic evaluation (choosing the mean of the policy distribution at evaluation rollouts) can yield better performance than stochastic evaluation.
+<br/>
+
+**3. Reward scale**
+
+Soft actor-critic is particularly **sensitive to the scaling of the reward signal**, because it serves the role of the temperature of the energy-based optimal policy ($$ \propto 1/\alpha $$) and thus **controls its stochasticity**.
+
+| Reward magnitudes |   Policy                  |   Problem                             |
+|   ------------    |   -----                   |   -----                               |
+|   Small           |   nearly uniform          |   fail to exploit the reward signal   |
+|   Large           |   nearly deterministic    |   lack of adequate exploration        |
+
+They found that **reward scale  to be the only hyperparameter that requires tuning**. The need of manual hyperparameter tuning leads to the follow up study of `Automating Entropy Adjustment for Maximum Entropy RL`.
+<br/>
+
+**4. Target network update**
+
+Using a **separate target value network** that slowly tracks the actual value function **improves stability**. They found that the range of suitable values of $$ \tau $$ to be relatively wide.
+
+<br/>
+The results of experiment 2 - 4 are described below.
+
+<div class="row justify-content-xl-center">
+    <div class="col-xl-4 mt-3 mt-md-0">
+        {% include figure.html path="assets/img/SoftActorCritic/SAC-hyperparams-eval.PNG" title="SAC-Eval3" class="img-fluid" %}
     </div>
 </div>
 <div class="caption">
