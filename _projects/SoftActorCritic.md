@@ -159,7 +159,8 @@ where $$ \epsilon_t $$ is an **input noise vector**, sampled from some fixed dis
     </div>
 </div>
 <div class="caption">
-    Computational graph of the policy network without reparameterization trick which samples an action directly from the state conditioned distribution (left), and the policy network with reparameterization trick which samples an action from standard normal distribution (right).
+    Comparison on computational graph of the policy network with and without reparameterization trick. <br/>
+    Left graph is the policy network without reparameterization trick. It samples an action directly from the state conditioned distribution. Right graph is the policy network with reparameterization trick. It samples an action from standard normal distribution and rescales it to fit into the actual distribution.
 </div>
 
 If we sample actions as the left graph does, the backpropagation of the objective will be stopped at the sampling node. Therefore, by separating the sampling node as the right graph does, we can use backpropagation to update the policy parameters $$ \phi $$. Now, we can rewrite the objective of policy as
@@ -220,7 +221,7 @@ To check which particular components of SAC are important for good performance a
 **1. Stochastic vs. deterministic policy**
 
 <div class="row justify-content-xl-center">
-    <div class="col-xl-4">
+    <div class="col-xl-6">
         {% include figure.html path="assets/img/SoftActorCritic/SAC-deterministic-vs-stochastic.PNG" title="SAC-Eval2" class="img-fluid" %}
     </div>
 </div>
