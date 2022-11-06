@@ -36,7 +36,7 @@ Previous soft actor-critic learns maximum entropy policies of a given temperatur
 The goal is to find a stochastic policy with maximal expected return that satisfies a minimum expected entropy constraint. The constrained optimization problem is
 
 $$
-\begin{equation} \label{eqn: const-prob}
+\begin{equation}\label{eqn:const-prob}
 \underset{\pi_{0:T}}{\mathrm{max}} \ \mathbb E_{\rho_\pi} \left[ \sum_{t=0}^T r(s_t,a_t) \right] \quad \mathrm{s.t.} \ \mathbb E_{(s_t,a_t) \sim \rho_\pi} \left[ -\mathrm{log}(\pi_t(a_t \mid s_t)) \right] \geq \mathcal H \quad \forall t
 \end{equation}
 $$
@@ -76,7 +76,7 @@ $$
 with $$ Q_T^* (s_T, a_T) = \mathbb E \left[ r(s_T, a_T) \right] $$ . Now, subject to the entropy constraints and again using the dual problem, we have
 
 $$
-\begin{align} \label{eqn: deploy-eqn}
+\begin{align}\label{eqn:deploy-eqn}
 \begin{split}
 \underset{\pi_{T-1}}{\mathrm{max}} & \left( \mathbb E \left[ r(s_{T-1},a_{T-1}) \right] + \underset{\pi_T}{\mathrm{max}}\ \mathbb E \left[ r(s_T,a_T) \right] \right) \\
  & = \underset{\pi_{T-1}}{\mathrm{max}}\ \left( \mathbb E \left[ r(s_{T-1},a_{T-1}) \right] + \underset{\alpha_T \geq 0}{\mathrm{min}}\ \underset{\pi_T}{\mathrm{max}}\ \mathbb E \left[ r(s_T,a_T) - \alpha_T\ \mathrm{log}\ \pi_T(a_T \mid s_T) \right] - \alpha_T \mathcal H \right) \\
@@ -99,7 +99,7 @@ $$
 The summation term: $$ -\sum_{t=0}^T \alpha_t^* \mathcal H \ $$ is minus of the total entropy equals to the sum of entropy target weighted by $$ \alpha_t^* $$ for each time step. We can also include discount factor $$ \gamma $$ as usual. After solving for $$ Q_t^* $$ and $$ \pi_t^* $$ , we can solve the optimal dual variable $$ \alpha_t^* $$ as
 
 $$
-\begin{equation} \label{eqn: alpha-opt}
+\begin{equation}\label{eqn:alpha-opt}
 \alpha_t^* = \underset{\alpha_t}{\mathrm{argmin}}\ \mathbb E_{a_t \sim \pi_t^* } \left[ -\alpha_t\ \mathrm{log}\ \pi_t^* (a_t \mid s_t;\alpha_t) - \alpha_t \bar{\mathcal H} \right].
 \end{equation}
 $$
