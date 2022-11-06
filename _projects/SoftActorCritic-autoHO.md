@@ -185,7 +185,7 @@ The manipulation task requires a 3-finger dexterous robotic hand(9-DOF) to rotat
 
 <div class="row justify-content-center">
     <div class="col-8">
-        {% include figure.html path="assets/img/SoftActorCritic-HO/SAC-hand-maniputation.PNG" title="SAC-task3" class="img-fluid" %}
+        {% include figure.html path="assets/img/SoftActorCritic-HO/SAC-hand-manipulation.PNG" title="SAC-task3" class="img-fluid" %}
     </div>
 </div>
 <div class="caption">
