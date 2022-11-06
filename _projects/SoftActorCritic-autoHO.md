@@ -36,7 +36,9 @@ Previous soft actor-critic learns maximum entropy policies of a given temperatur
 The goal is to find a stochastic policy with maximal expected return that satisfies a minimum expected entropy constraint. The constrained optimization problem is
 
 $$
+\begin{equation}
 \underset{\pi_{0:T}}{\mathrm{max}} \ \mathbb E_{\rho_\pi} \left[ \sum_{t=0}^T r(s_t,a_t) \right] \quad \mathrm{s.t.} \ \mathbb E_{(s_t,a_t) \sim \rho_\pi} \left[ -\mathrm{log}(\pi_t(a_t \mid s_t)) \right] \geq \mathcal H \quad \forall t
+\end{equation}
 $$
 
 where $$ \mathcal H $$ is a desired minimum expected entropy (equals to minus of entropy target in the Table 1 from Appendix D). Since the policy at time $$ t $$ can only affect the future objective value, we rewrite the objective as an iterative maximization
