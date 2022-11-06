@@ -194,7 +194,7 @@ The complete algorithm is described in Algorithm 1.
 
 -------
 # Experiments
-The goal of experimental evaluation is comparing the **sample complexity** and **stability** of SAC with prior on/off-policy deep RL algorithms on continuous control tasks. DDPG, PPO, SQL, and TD3 are used for comparison, where exploration noise of DDPG and PPO is turned off and only the mean action for SAC is used in evaluation rollouts. (remove any stochasticity and noise of algorithm in order for the algorithms can fully exploit theirs knowledge)
+The goal of experimental evaluation is comparing the **sample complexity** and **stability** of SAC with prior on/off-policy deep RL algorithms on continuous control tasks. DDPG, PPO, SQL, and TD3 are used for comparison, where exploration noise of DDPG and PPO is turned off and only the mean action for SAC is used in evaluation rollouts. (remove any stochasticity and noise of algorithm in order for the algorithms can fully exploit their knowledge)
 
 <br/>
 
