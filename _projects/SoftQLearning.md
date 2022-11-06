@@ -54,7 +54,7 @@ where $$ \mathcal E $$ is an energy function can represent very general class of
 > **Theorem 1.** *Let the soft Q-function be defined by*
 >
 >$$
->\begin{equation}
+>\begin{equation}\label{eqn:soft-q}
 >Q_{soft}^* (s_t,a_t)=r_t+\mathbb E_{(s_{t+1},...) \sim \rho_\pi} \left[\sum_{l=1}^\infty \gamma^l(r_{t+l}+\alpha \mathcal H(\pi_\mathrm{MaxEnt}^* (\cdot|s_{t+l})))\right],
 >\end{equation}
 >$$
@@ -62,7 +62,7 @@ where $$ \mathcal E $$ is an energy function can represent very general class of
 >*and soft value function by*
 >
 >$$
->\begin{equation}
+>\begin{equation}\label{eqn:soft-value}
 >V_{soft}^* (s_t)=\alpha \ \mathrm{log}\int_{\mathcal{A}} \mathrm{exp} \left( \frac{1}{\alpha} Q_{soft}^* (s_t,a') \right)\, da'.
 >\end{equation}
 >$$
@@ -70,7 +70,7 @@ where $$ \mathcal E $$ is an energy function can represent very general class of
 >*Then the optimal policy for (2) is given by*
 >
 >$$ 
->\begin{equation}
+>\begin{equation}\label{eqn:opt-policy}
 >\pi_\mathrm{MaxEnt}^* (a_t|s_t) = \mathrm{exp} \left(\frac{1}{\alpha} \left( Q_{soft}^* (s_t,a_t) - V_{soft}^* (s_t) \right) \right).
 >\end{equation}
 >$$
@@ -89,7 +89,7 @@ $$
 
 <br/>
 
->**Theorem 2.** *The soft Q-function in (3) satisfies the soft bellman equation*
+>**Theorem 2.** *The soft Q-function in (\ref{eqn:soft-q}) satisfies the soft bellman equation*
 >
 >$$
 >\begin{equation}
@@ -97,7 +97,7 @@ $$
 >\end{equation}
 >$$
 >
->*where the soft value function* $$ V_{soft}^* $$ *is given by (4).*
+>*where the soft value function* $$ V_{soft}^* $$ *is given by (\ref{eqn:soft-val}).*
 
 How to prove thm 2.: check Appendix A.2.
 
@@ -127,7 +127,7 @@ How to prove thm 3.: check Appendix A.2 that soft Bellman backup operator $$ \ma
 
 **PROBLEM**
 1. Soft Bellman backup cannot be performed exactly in **continuous or large state and action spaces**.
-2. **Sampling from the energy-based model in (5) is intractable** in general.
+2. **Sampling from the energy-based model in (\ref{eqn:opt-policy}) is intractable** in general.
 
 <br/>
 <br/>
@@ -136,7 +136,7 @@ How to prove thm 3.: check Appendix A.2 that soft Bellman backup operator $$ \ma
 To handle problem 1, this paper express the Bellman backup process as a **stochastic optimization**. For soft value function, expectation via importance sampling is used(Algorithm 1 line 16-17, averaged over Kv samples).
 
 $$
-\begin{equation}
+\begin{equation}\label{eqn:prac-value}
 V_{soft}^\theta (s_t)=\alpha \ \mathrm{log} \mathbb E_{q_{a'}} \left[\frac{\mathrm{exp}(\frac{1}{\alpha} Q_{soft}^\theta (s_t,a'))}{q_{a'}(a')} \right].
 \end{equation}
 $$
@@ -151,7 +151,7 @@ J_Q(\theta)=\mathbb E_{s_t \sim q_{s_t}, a_t \sim q_{a_t}} \left[ \frac{1}{2} \l
 \end{equation}
 $$
 
-where $$ q_{s_t}, q_{a_t} $$ are positive over $$ \mathcal S $$ and $$ \mathcal A $$ respectively, $$ \hat Q_{soft}^{\bar{\theta}} (s_t,a_t) =r_t+\gamma \mathbb E_{s_{t+1} \sim p_s} \left[ V_{soft}^\bar{\theta} (s_{t+1})\right] $$ is a target Q-value, with $$ V_{soft}^\bar{\theta} (s_{t+1}) $$ given by (9) and $$ \theta $$ being replaced by the target parameters, $$ \bar{\theta} $$ . While sampling distributions $$ q_{s_t} $$ and $$ q_{a_t} $$ can be arbitrary, real samples(=replay memories) are used in this paper.
+where $$ q_{s_t}, q_{a_t} $$ are positive over $$ \mathcal S $$ and $$ \mathcal A $$ respectively, $$ \hat Q_{soft}^{\bar{\theta}} (s_t,a_t) =r_t+\gamma \mathbb E_{s_{t+1} \sim p_s} \left[ V_{soft}^\bar{\theta} (s_{t+1})\right] $$ is a target Q-value, with $$ V_{soft}^\bar{\theta} (s_{t+1}) $$ given by (\ref{eqn:prac-value}) and $$ \theta $$ being replaced by the target parameters, $$ \bar{\theta} $$ . While sampling distributions $$ q_{s_t} $$ and $$ q_{a_t} $$ can be arbitrary, real samples(=replay memories) are used in this paper.
 
 <br/>
 <br/>
