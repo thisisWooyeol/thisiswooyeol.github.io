@@ -51,7 +51,9 @@ Although the soft Q-learning algorithm has a value function and actor network, *
 Maximum entropy objective with the expected entropy of the policy over $$ \rho_\pi(s_t) $$ :
 
 $$
+\begin{equation}
 J(\pi) =\sum_{t=0}^\infty \mathbb E_{(s_t,a_t) \sim \rho_\pi} \left[\sum_{l=t}^\infty \gamma^{l-t} \mathbb E_{s_l \sim p,a_l \sim \pi} \left[r(s_t,a_t)+\alpha \mathcal H(\pi(\cdot|s_t)) \right]\right].
+\end{equation}
 $$
 
 The temperature parameter $$ \alpha $$ determines the relative importance of the entropy term against the reward, and thus controls the stochasticity of the optimal policy. By adapting maximum entropy framework, the policy is **incentivized to explore more widely, while giving up on clearly unpromising avenues**. Also, the policy can **capture multiple modes of near optimal behavior** and **improve learning speed over state-of-art methods.**
@@ -70,18 +72,22 @@ Derivation of sof policy iteration is based on a **tabular setting**, to enable 
 Let's begin with defining the **soft Bellman backup operator** $$ \mathcal T^\pi $$ as
 
 $$
+\begin{equation}\label{eqn:soft-bell-op}
 \mathcal T^\pi Q(s_t,a_t) \triangleq r(s_t,a_t)+ \gamma \mathbb E_{s_{t+1} \sim p} \left[ V(s_{t+1})\right] ,
+\end{equation}
 $$
 
 where
 
 $$
+\begin{equation}
 V(s_t)=\mathbb E_{a_t \sim \pi} \left[ Q(s_t,a_t)-\alpha \mathrm{log} \pi (a_t \mid s_t)\right]
+\end{equation}
 $$
 
 is the soft state value function. Use this definition, policy evaluation step can be defined.
 
-> **Lemma 1** (Soft Policy Evaluation). *Consider the soft Bellman backup operator $$ \mathcal T^\pi $$ above and a mapping $$ Q^0: \mathcal{S \times A} \to \mathbb R $$ with $$ \left\vert \mathcal A \right\vert < \infty $$ , and define $$ Q^{k+1}= \mathcal T^\pi Q^k $$ . Then the sequence $$ Q^k $$ will converge to the soft Q-value of $$ \pi $$ as $$ k \to \infty $$ .*
+> **Lemma 1** (Soft Policy Evaluation). *Consider the soft Bellman backup operator $$ \mathcal T^\pi $$ in Equation \ref{eqn:soft-bell-op} and a mapping $$ Q^0: \mathcal{S \times A} \to \mathbb R $$ with $$ \left\vert \mathcal A \right\vert < \infty $$ , and define $$ Q^{k+1}= \mathcal T^\pi Q^k $$ . Then the sequence $$ Q^k $$ will converge to the soft Q-value of $$ \pi $$ as $$ k \to \infty $$ .*
 
 How to prove Lemma 1:
 
@@ -92,12 +98,14 @@ How to prove Lemma 1:
 In the policy improvement step, SAC updates the policy towards the exponential of the new Q-function. In contrast to SQL, SAC **restrict the policy to some set of parameterizable policies $$ \Pi $$ that is tractable** such as a parameterized family of Gaussians. By using the information projection, policy is updated according to
 
 $$
+\begin{equation}\label{eqn:policy-proj}
 \pi_\mathrm{new} = \underset{\pi ' \in \Pi}{\mathrm{argmin}} \mathrm{D_{KL}} \left( \pi' (\cdot|s_t) \parallel \frac{\mathrm{exp} (Q^{\pi_{\mathrm{old}}} (s_t, \cdot))}{Z^{\pi_{\mathrm{old}}} (s_t)} \right).
+\end{equation}
 $$
 
 For this projection, we can show that the new, projected policy has a higher value than the old policy with respect to the objective (Lemma 2).
 
-> **Lemma 2** (Soft Policy Improvement). *Let $$ \pi_\mathrm{old} \in \Pi $$ and let $$ \pi_\mathrm{new} $$ be the optimizer of the minimization problem defined above. Then $$ Q^{\pi_\mathrm{new}}(s_t,a_t) \geq Q^{\pi_\mathrm{old}}(s_t,a_t) $$ for all $$ (s_t,a_t) \in \mathcal{S \times A} $$ with $$ \left\vert \mathcal A \right\vert < \infty $$ .*
+> **Lemma 2** (Soft Policy Improvement). *Let $$ \pi_\mathrm{old} \in \Pi $$ and let $$ \pi_\mathrm{new} $$ be the optimizer of the minimization problem defined in Equation \ref{eqn:policy-proj}. Then $$ Q^{\pi_\mathrm{new}}(s_t,a_t) \geq Q^{\pi_\mathrm{old}}(s_t,a_t) $$ for all $$ (s_t,a_t) \in \mathcal{S \times A} $$ with $$ \left\vert \mathcal A \right\vert < \infty $$ .*
 
 How to prove Lemma 2: Check Appendix B.2
 
@@ -118,37 +126,49 @@ Soft Actor-Critic algorithm alternates between optimizing the Q-function and the
 The soft value function which is included to stabilize training is trained to minimize the squared residual error
 
 $$
+\begin{equation}\label{eqn:val-err}
 J_V(\psi) = \mathbb E_{s_t \sim \mathcal D} \left[ \frac{1}{2} \left( V_\psi (s_t) - \mathbb E_{a_t \sim \pi_\phi} \left[ \underset{ i \in \left\lbrace 1,2 \right\rbrace }{\mathrm{min}} \ Q_{\theta_i}(s_t,a_t) - \mathrm{log} \ \pi_\phi (a_t \mid s_t) \right] \right)^2 \right].
+\end{equation}
 $$
 
-The gradient of value error can be estimated with an unbiased estimator
+The gradient of Equation \ref{eqn:val-err} can be estimated with an unbiased estimator
 
 $$
+\begin{equation}
 \hat{\nabla}_ \psi J_V(\psi) = \nabla_\psi V_\psi (s_t) \left( V_\psi (s_t) - \underset{ i \in \left\lbrace 1,2 \right\rbrace }{\mathrm{min}} \ Q_{\theta_i}(s_t,a_t) + \mathrm{log} \ \pi_\phi (a_t \mid s_t) \right).
+\end{equation}
 $$
 
 Note that **the actions are sampled from the current policy.** (To measure the entropy of the current policy.) The soft Q-function is trained to minimize the soft Bellman residual
 
 $$
+\begin{equation}
 J_Q (\theta_i) = \mathbb E_{(s_t,a_t) \sim \mathcal D} \left[ \frac{1}{2} \left( Q_{\theta_i} (s_t,a_t) - \left(r(s_t,a_t) + \gamma \mathbb E_{s_{t+1} \sim p} \left[ V_\bar{\psi} (s_{t+1}) \right] \right) \right)^2 \right],
+\end{equation}
 $$
 
 which again can be optimized with stochastic gradients
 
 $$
+\begin{equation}
 \hat{\nabla}_ {\theta_i} J_Q(\theta_i) = \nabla_{\theta_i} Q_{\theta_i}(s_t,a_t) \left( Q_{\theta_i} (s_t,a_t) - r(s_t,a_t) - \gamma V_\bar{\psi} (s_{t+1}) \right).
+\end{equation}
 $$
 
-$$ V_\bar{\psi} $$ is a target value network that $$ \bar{\psi} $$ can be an exponential moving average of $$ \psi $$ (in Algorithm 1) or can be a periodically updated parameters of $$ \psi $$ (as in Appendix E). Finally, the policy parameters can be learned by directly minimizing the expected KL-divergence in soft policy iteration:
+$$ V_\bar{\psi} $$ is a target value network that $$ \bar{\psi} $$ can be an exponential moving average of $$ \psi $$ (in Algorithm 1) or can be a periodically updated parameters of $$ \psi $$ (as in Appendix E). Finally, the policy parameters can be learned by directly minimizing the expected KL-divergence in Equation \ref{eqn:policy-proj}:
 
 $$
+\begin{equation}\label{eqn:policy-obj}
 J_\pi (\phi) = \mathbb E_{s_t \sim \mathcal D} \left[ \mathrm{D_{KL}} \left( \pi' (\cdot|s_t) \parallel \frac{\mathrm{exp} (Q_\theta (s_t, \cdot))}{Z_\theta (s_t)} \right) \right].
+\end{equation}
 $$
 
 To minimize $$ J_\pi $$ with gradient descent, SAC **reparameterize the policy using a neural network transformation**
 
 $$
+\begin{equation}
 a_t = f_\phi(\epsilon_t;s_t),
+\end{equation}
 $$
 
 where $$ \epsilon_t $$ is an **input noise vector**, sampled from some fixed distribution, such as spherical Gaussian. How and why policy network is reparameterized can be described as below.
@@ -163,16 +183,20 @@ where $$ \epsilon_t $$ is an **input noise vector**, sampled from some fixed dis
     Left graph is the policy network without reparameterization trick. It samples an action directly from the state conditioned distribution. Right graph is the policy network with reparameterization trick. It samples an action from standard normal distribution and rescales it to fit into the actual distribution.
 </div>
 
-If we sample actions as the left graph does, the backpropagation of the objective will be stopped at the sampling node. Therefore, by separating the sampling node as the right graph does, we can use backpropagation to update the policy parameters $$ \phi $$. Now, we can rewrite the objective of policy as
+If we sample actions as the left graph does, the backpropagation of the objective will be stopped at the sampling node. Therefore, by separating the sampling node as the right graph does, we can use backpropagation to update the policy parameters $$ \phi $$. Now, we can rewrite the objective in Equation \ref{eqn:policy-obj} as
 
 $$
+\begin{equation}
 J_\pi(\phi) = \mathbb E_{s_t \sim \mathcal D, \epsilon \sim \mathcal N} \left[ \mathrm{log} \ \pi_\phi(f_\phi(\epsilon_t;s_t) \mid s_t) - \underset{ i \in \left\lbrace 1,2 \right\rbrace }{\mathrm{min}} \ Q_{\theta_i}(s_t,f_\phi(\epsilon_t;s_t)) \right],
+\end{equation}
 $$
 
 which can be optimized with unbiased gradient estimator
 
 $$
+\begin{equation}
 \hat{\nabla}_ \phi J_\pi(\phi) = \nabla_ \phi \mathrm{log} \ \pi_\phi(a_t \mid s_t) + \left( \nabla_ {a_t} \mathrm{log} \ \pi_\phi (a_t \mid s_t) - \nabla_ {a_t} \underset{ i \in \left\lbrace 1,2 \right\rbrace }{\mathrm{min}} \ Q_{\theta_i}(s_t,a_t) \right) \nabla_ \phi f_\phi(\epsilon_t;s_t),
+\end{equation}
 $$
 
 where $$ a_t $$ is evaluated at $$ f_\phi(\epsilon_t;s_t) $$.
