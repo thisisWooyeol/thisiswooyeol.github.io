@@ -108,4 +108,18 @@ The complete algorithm is described in Algorithm 1.
     Figure from Soft Actor-Critic Algorithms and Applications
 </div>
 
-In the previous version of [`soft actor-critic`](https://thisiswooyeol.github.io/projects/SoftActorCritic/) algorithm, they used an additional function approximator for the value function. But as it is found to be unnecessary, this algorithm only used two soft Q-function networks, their respective target networks and policy network parameters. In addition to the soft Q-function and the policy, **learning $$ \alpha $$ by minimizing the dual objective in Equation 17** (as numbered in the paper). This can be done by approximating **dual gradient descent**. Dual gradient descent alternates between optimizing the Largrangian with respect to the primal variables to convergence, and then taking a gradient step on the dual variables.
+In the previous version of [`soft actor-critic`](https://thisiswooyeol.github.io/projects/SoftActorCritic/) algorithm, they used an additional function approximator for the value function. But as it is found to be unnecessary, this algorithm only used two soft Q-function networks, their respective target networks and policy network parameters. In addition to the soft Q-function and the policy, **learning $$ \alpha $$ by minimizing the dual objective in Equation 17** (as numbered in the paper). This can be done by approximating **dual gradient descent**. Dual gradient descent alternates between optimizing the Largrangian with respect to the primal variables to convergence(solving for $$ Q_t^* , \pi_t^* $$ ), and then taking a gradient step on the dual variables(solving for $$ \alpha_t^* $$ with $$ Q_t^* , \pi_t^* $$ ). As optimizing with respect to the primal variables fully is impractical, a truncated approach that performs incomplete optimization (even for a single gradient step) still works in practice. Thus, $$ \alpha $$ is updated with the following objective:
+
+$$
+J(\alpha) = \mathbb E_{a_t \sim \pi_t} \left[ -\alpha\ \mathrm{log}\ \pi_t(a_t \mid s_t) - \alpha \bar{\mathcal H} \right].
+$$
+
+<br/>
+<br/>
+<br/>
+
+--------
+
+# Experiment
+<br/>
+
