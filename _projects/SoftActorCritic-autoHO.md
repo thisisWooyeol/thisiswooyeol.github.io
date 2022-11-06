@@ -2,7 +2,7 @@
 layout: page
 title: Soft actor-critic with auto H.O.
 description: Review on "Soft Actor-Critic Algorithms and Applications"
-img: assets/img/SoftActorCritic-ver2/SAC-ver2-background.PNG
+img: assets/img/SoftActorCritic-HO/SAC-ver2-background.PNG
 importance: 3
 category: papers review
 ---
