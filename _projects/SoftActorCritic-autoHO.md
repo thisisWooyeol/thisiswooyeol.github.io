@@ -66,13 +66,46 @@ $$
 with $$ Q_T^* (s_T, a_T) = \mathbb E \left[ r(s_T, a_T) \right] $$ . Now, subject to the entropy constraints and again using the dual problem, we have
 
 $$
-\begin{matrix}
+\begin{align}
 \underset{\pi_{T-1}}{\mathrm{max}} & \left( \mathbb E \left[ r(s_{T-1},a_{T-1}) \right] + \underset{\pi_T}{\mathrm{max}}\ \mathbb E \left[ r(s_T,a_T) \right] \right) \\
  & = \underset{\pi_{T-1}}{\mathrm{max}}\ \left( \mathbb E \left[ r(s_{T-1},a_{T-1}) \right] + \underset{\alpha_T \geq 0}{\mathrm{min}}\ \underset{\pi_T}{\mathrm{max}}\ \mathbb E \left[ r(s_T,a_T) - \alpha_T\ \mathrm{log}\ \pi_T(a_T \mid s_T) \right] - \alpha_T \mathcal H \right) \\
  & = \underset{\pi_{T-1}}{\mathrm{max}}\ \left( \mathbb E \left[ r(s_{T-1},a_{T-1}) \right] + Q_T^* (s_T,a_T) \right) \\
  & = \underset{\pi_{T-1}}{\mathrm{max}}\ \left( \mathbb E \left[ r(s_{T-1},a_{T-1}) \right] + \mathbb E_{\rho_\pi} \left[ Q_T^* (s_T,a_T) - \alpha_T^* \ \mathrm{log}\ \pi_T^* (a_T \mid s_T) \right] - \alpha_T^* \mathcal H \right) \\
  & = \underset{\pi_{T-1}}{\mathrm{max}}\ \left( Q_{T-1}^* (s_{T-1}, a_{T-1}) - \alpha_T^* \mathcal H \right) \\
  & = \underset{\alpha_{T-1} \geq 0}{\mathrm{min}}\ \underset{\pi_{T-1}}{\mathrm{max}}\ \left( \mathbb E \left[ Q_{T-1}^* (s_{T-1},a_{T-1}) \right] - \mathbb E \left[ \alpha_{T-1}\ \mathrm{log}\ \pi_{T-1}(a_{T-1} \mid s_{T-1}) \right] - \alpha_{T-1} \mathcal H \right) - \alpha_T^* \mathcal H
-\end{matrix}
+\end{align}
 $$
- 
+
+By applying this procedure to the constrained optimization problem recursively, we get
+
+$$
+\underset{\pi_{0:T}}{\mathrm{max}} \ \mathbb E_{\rho_\pi} \left[ \sum_{t=0}^T r(s_t,a_t) \right] \quad \mathrm{s.t.} \ \mathbb E_{(s_t,a_t) \sim \rho_\pi} \left[ -\mathrm{log}(\pi_t(a_t \mid s_t)) \right] \geq \mathcal H \quad \forall t \ \ = \mathbb E_{a_0 \sim \pi_0^* } \left[ Q_0^* (s_0,a_0)\right] - \sum_{t=0}^T \alpha_t^* \mathcal H.
+$$
+
+The summation term $$ -\sum_{t=0}^T \alpha_t^* \mathcal H $$ is minus of the total entropy equals to the sum of entropy target weighted by $$ \alpha_t^* $$ for each time step. We can also include discount factor $$ \gamma $$ as usual. After solving for $$ Q_t^* $$ and $$ \pi_t^* $$ , we can solve the optimal dual variable $$ \alpha_t^* $$ as
+
+$$
+\alpha_t^* = \underset{\alpha_t}{\mathrm{argmin}}\ \mathbb E_{a_t \sim \pi_t^* } \left[ -\alpha_t\ \mathrm{log}\ \pi_t^* (a_t \mid s_t;\alpha_t) - \alpha_t \bar{\mathcal H} \right].
+$$
+
+<br/>
+<br/>
+<br/>
+
+--------
+
+# Practical Algorithm
+<br/>
+
+The complete algorithm is described in Algorithm 1.
+
+<div class="row justify-content-center">
+    <div class="col-6">
+        {% include figure.html path="assets/img/SoftActorCritic-HO/SAC-algorithm-ver2.PNG" title="SAC-algorithm" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from Soft Actor-Critic Algorithms and Applications
+</div>
+
+In the previous version of [`soft actor-critic`](https://thisiswooyeol.github.io/projects/SoftActorCritic/) algorithm, they used an additional function approximator for the value function. But as it is found to be unnecessary, this algorithm only used two soft Q-function networks, their respective target networks and policy network parameters. In addition to the soft Q-function and the policy, **learning $$ \alpha $$ by minimizing the dual objective in Equation 17** (as numbered in the paper). This can be done by approximating **dual gradient descent**. Dual gradient descent alternates between optimizing the Largrangian with respect to the primal variables to convergence, and then taking a gradient step on the dual variables.
