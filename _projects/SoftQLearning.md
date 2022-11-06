@@ -28,7 +28,9 @@ category: papers review
 Maximum Entropy RL objective is
 
 $$
+\begin{equation}
 \pi_\mathrm{MaxEnt}^* =\underset{\pi}{\mathrm{argmax}}\sum_t \mathbb E_{(s_t,a_t) \sim \rho_\pi} \left[\sum_{l=t}^\infty \gamma^{l-t} \mathbb E_{(s_l,a_l)} \left[r(s_t,a_t)+\alpha \mathcal H(\pi(\cdot|s_t)) \right]\right]
+\end{equation}
 $$
 
 where $$ \alpha $$ is a temperature parameter that determines the relative importance of entropy and reward. This objective aims to maximize the entropy of the **entire trajectory distribution for the policy $$ \pi $$**. See more details of objective with discount factor in Appendix A.
@@ -40,7 +42,9 @@ where $$ \alpha $$ is a temperature parameter that determines the relative impor
 General energy-based policies of the form
 
 $$
+\begin{equation}
 \pi(a_t|s_t) \propto \mathrm{exp}(-\mathcal E(s_t,a_t)),
+\end{equation}
 $$
 
 where $$ \mathcal E $$ is an energy function can represent very general class of distributions. There is a close connection between such energy-based models and *soft* versions of value functions and Q-functions, where we set $$ \mathcal E(s_t,a_t) = \frac{1}{\alpha}Q_{soft}(s_t,a_t) $$ and use the following theorem:
@@ -50,26 +54,34 @@ where $$ \mathcal E $$ is an energy function can represent very general class of
 > **Theorem 1.** *Let the soft Q-function be defined by*
 >
 >$$
+>\begin{equation}
 >Q_{soft}^* (s_t,a_t)=r_t+\mathbb E_{(s_{t+1},...) \sim \rho_\pi} \left[\sum_{l=1}^\infty \gamma^l(r_{t+l}+\alpha \mathcal H(\pi_\mathrm{MaxEnt}^* (\cdot|s_{t+l})))\right],
+>\end{equation}
 >$$
 >
 >*and soft value function by*
 >
 >$$
+>\begin{equation}
 >V_{soft}^* (s_t)=\alpha \ \mathrm{log}\int_{\mathcal{A}} \mathrm{exp} \left( \frac{1}{\alpha} Q_{soft}^* (s_t,a') \right)\, da'.
+>\end{equation}
 >$$
 >
 >*Then the optimal policy for (2) is given by*
 >
 >$$ 
+>\begin{equation}
 >\pi_\mathrm{MaxEnt}^* (a_t|s_t) = \mathrm{exp} \left(\frac{1}{\alpha} \left( Q_{soft}^* (s_t,a_t) - V_{soft}^* (s_t) \right) \right).
+>\end{equation}
 >$$
 
 How to prove thm 1.:
 - If one rewrites the maximum entropy objective with soft Q-function, the discounted maximum entropy policy objective can be defined as
 
 $$
+\begin{equation*}
 J(\pi) \triangleq \sum_t \mathbb E_{(s_t,a_t) \sim \rho_\pi} \left[Q_{soft}^\pi(s_t,a_t)+\alpha \mathcal H(\pi(\cdot|s_t))\right].
+\end{equation*}
 $$
 
 - Check Appendix A.1 Theorem 4. Given a policy $$ \pi $$ , defining a new policy $$ \tilde{\pi} $$ as $$ \tilde{\pi} \propto \mathrm{exp} (Q_{soft}^\pi (s, \cdot), \  \forall s $$ maximize the objective $$ \alpha \mathcal H(\pi(\cdot \mid s)+\mathbb E_{a \sim \pi} \left[ Q_{soft}^\pi (s,a)\right] $$.
@@ -77,13 +89,15 @@ $$
 
 <br/>
 
->**Theorem 2.** *The soft Q-function in (4) satisfies the soft bellman equation*
+>**Theorem 2.** *The soft Q-function in (3) satisfies the soft bellman equation*
 >
 >$$
+>\begin{equation}
 >Q_{soft}^* (s_t,a_t)=r_t+\gamma \mathbb E_{s_{t+1} \sim p_s} \left[ V_{soft}^* (s_{t+1}) \right],
+>\end{equation}
 >$$
 >
->*where the soft value function* $$ V_{soft}^* $$ *is given by (5).*
+>*where the soft value function* $$ V_{soft}^* $$ *is given by (4).*
 
 How to prove thm 2.: check Appendix A.2.
 
@@ -99,10 +113,10 @@ How to prove thm 2.: check Appendix A.2.
 >**Theorem 3.** *Soft Q-iteration. Let $$ Q_{soft}(\cdot \mid \cdot) $$ and $$ V_{soft}(\cdot) $$ be bounded and assume that $$ \int_\mathcal{A} \mathrm{exp}\left(\frac{1}{\alpha}Q_{soft}(\cdot,a')\right)\, da' < \infty $$ and that* $$ Q_{soft}^* < \infty $$ *exists. Then the fixed-point iteration*
 >
 >$$
->\begin{matrix}
+>\begin{align}
 >Q_{soft}(s_t,a_t) \gets r_t+\gamma \mathbb E_{s_{t+1} \sim p_s} \left[ V_{soft}(s_{t+1})\right], \quad \forall s_t, a_t \\
 >V_{soft}(s_t) \gets \alpha \ \mathrm{log} \int_\mathcal{A} \mathrm{exp}\left(\frac{1}{\alpha} Q_{soft}(s_t, a')\right)da', \quad \forall s_t
->\end{matrix}
+>\end{align}
 >$$
 >
 >*converges to* $$ Q_{soft}^* $$ *and* $$ V_{soft}^* $$ *, respectively.*
@@ -113,7 +127,7 @@ How to prove thm 3.: check Appendix A.2 that soft Bellman backup operator $$ \ma
 
 **PROBLEM**
 1. Soft Bellman backup cannot be performed exactly in **continuous or large state and action spaces**.
-2. **Sampling from the energy-based model in (6) is intractable** in general.
+2. **Sampling from the energy-based model in (5) is intractable** in general.
 
 <br/>
 <br/>
@@ -122,7 +136,9 @@ How to prove thm 3.: check Appendix A.2 that soft Bellman backup operator $$ \ma
 To handle problem 1, this paper express the Bellman backup process as a **stochastic optimization**. For soft value function, expectation via importance sampling is used(Algorithm 1 line 16-17, averaged over Kv samples).
 
 $$
+\begin{equation}
 V_{soft}^\theta (s_t)=\alpha \ \mathrm{log} \mathbb E_{q_{a'}} \left[\frac{\mathrm{exp}(\frac{1}{\alpha} Q_{soft}^\theta (s_t,a'))}{q_{a'}(a')} \right].
+\end{equation}
 $$
 
 While $$ q_{a'} $$ can be an arbitrary distribution over the action space, the current policy is used in this paper. More details are in Appendix C.2.
@@ -130,10 +146,12 @@ While $$ q_{a'} $$ can be an arbitrary distribution over the action space, the c
 For soft q-iteration, minimizing the following objective is used(Algorithm 1 line 18-19).:
 
 $$
+\begin{equation}
 J_Q(\theta)=\mathbb E_{s_t \sim q_{s_t}, a_t \sim q_{a_t}} \left[ \frac{1}{2} \left(\hat Q_{soft}^{\bar{\theta}} (s_t,a_t)-Q_{soft}^\theta(s_t,a_t)\right)^2\right],
+\end{equation}
 $$
 
-where $$ q_{s_t}, q_{a_t} $$ are positive over $$ \mathcal S $$ and $$ \mathcal A $$ respectively, $$ \hat Q_{soft}^{\bar{\theta}} (s_t,a_t) =r_t+\gamma \mathbb E_{s_{t+1} \sim p_s} \left[ V_{soft}^\bar{\theta} (s_{t+1})\right] $$ is a target Q-value, with $$ V_{soft}^\bar{\theta} (s_{t+1}) $$ given by (10) and $$ \theta $$ being replaced by the target parameters, $$ \bar{\theta} $$ . While sampling distributions $$ q_{s_t} $$ and $$ q_{a_t} $$ can be arbitrary, real samples(=replay memories) are used in this paper.
+where $$ q_{s_t}, q_{a_t} $$ are positive over $$ \mathcal S $$ and $$ \mathcal A $$ respectively, $$ \hat Q_{soft}^{\bar{\theta}} (s_t,a_t) =r_t+\gamma \mathbb E_{s_{t+1} \sim p_s} \left[ V_{soft}^\bar{\theta} (s_{t+1})\right] $$ is a target Q-value, with $$ V_{soft}^\bar{\theta} (s_{t+1}) $$ given by (9) and $$ \theta $$ being replaced by the target parameters, $$ \bar{\theta} $$ . While sampling distributions $$ q_{s_t} $$ and $$ q_{a_t} $$ can be arbitrary, real samples(=replay memories) are used in this paper.
 
 <br/>
 <br/>
@@ -142,19 +160,25 @@ where $$ q_{s_t}, q_{a_t} $$ are positive over $$ \mathcal S $$ and $$ \mathcal 
 To handle problem 2, this paper used a **sampling network** based on Stein variational gradient descent (SVGD) and amortized SVGD. This sampling network has intriguing properties: **1) extremly fast sample generation, 2) accurate posterior distribution of an EBM** and **3)analogous to actor-critic algorithm(Details in Appendix B)**. State-conditioned stochastic neural network $$ a_t=f^\phi(\xi;s_t) $$ , parametrized py $$ \phi $$ , that maps noise samples $$ \xi $$ is the form of network. The induced distribution of the actions are denoted as $$ \pi^\phi(a_t \mid s_t) $$ , and the objective is to find parameters $$ \phi $$ so that the **induced distribution approximates the energy-based distribution in terms of the KL divergence**
 
 $$
+\begin{equation}
 J_\pi(\phi;s_t)=\mathrm{D_KL}\left(\pi^\phi(\cdot \mid s_t)\ \Vert \ \mathrm{exp} \left(\frac{1}{\alpha}\left(Q_{soft}^\theta(s_t,\cdot)-V_{soft}^\theta \right)\right)\right).
+\end{equation}
 $$
 
 SVGD provides the optimal direction in the reproducing kernel Hilbert space of $$ \kappa $$ as $$ \delta f^\phi $$ (Algorithm 1. line 21-23, averaged over M sample actions, total K action sets):
 
 $$
+\begin{equation}
 \Delta f^\phi(\cdot;s_t)=\mathbb E_{a_t \sim \pi^\phi} \left[ \kappa(a_t, f^\phi(\cdot;s_t)) \nabla_{a'}\ Q_{soft}^\theta(s_t,a') \mid_{a'=a_t} +\ \alpha \nabla_{a'} \ \kappa(a',f^\phi(\cdot;s_t))\mid_{a'=a_t} \right].
+\end{equation}
 $$
 
 By the assumtion $$ {\partial J_\pi \over\partial a_t} \propto \Delta f^\phi $$, we can use the chain rule and backpropagate SVGD into policy network according to (Algorithm 1. line 24-25, averaged over K action sets)
 
 $$
+\begin{equation}
 {\partial J_\pi (\phi;s_t) \over \partial \phi} \propto \mathbb E_\xi \left[ \Delta f^\phi(\xi;s_t) {\partial f^\phi(\xi;s_t) \over \partial \phi} \right].
+\end{equation}
 $$
 
 Details of updating policy parameters are described in Appendix C.1.
