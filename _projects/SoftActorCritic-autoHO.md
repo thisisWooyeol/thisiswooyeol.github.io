@@ -96,7 +96,7 @@ $$
 \end{equation}
 $$
 
-The summation term: $$ -\sum_{t=0}^T \alpha_t^* \mathcal H \ $$ is minus of the total entropy equals to the sum of entropy target weighted by $$ \alpha_t^* $$ for each time step. We can also include discount factor $$ \gamma $$ as usual. After solving for $$ Q_t^* $$ and $$ \pi_t^* $$ , we can solve the optimal dual variable $$ \alpha_t^* $$ as
+The summation term: $$ -\sum_{t=0}^T \alpha_t^* \mathcal H  $$  is minus of the total entropy equals to the sum of entropy target weighted by $$ \alpha_t^* $$ for each time step. We can also include discount factor $$ \gamma $$ as usual. After solving for $$ Q_t^* $$ and $$ \pi_t^* $$ , we can solve the optimal dual variable $$ \alpha_t^* $$ as
 
 $$
 \begin{equation}\label{eqn:alpha-opt}
