@@ -36,7 +36,7 @@ Previous soft actor-critic learns maximum entropy policies of a given temperatur
 The goal is to find a stochastic policy with maximal expected return that satisfies a minimum expected entropy constraint. The constrained optimization problem is
 
 $$
-\begin{equation}
+\begin{equation} \label{eqn: const-prob}
 \underset{\pi_{0:T}}{\mathrm{max}} \ \mathbb E_{\rho_\pi} \left[ \sum_{t=0}^T r(s_t,a_t) \right] \quad \mathrm{s.t.} \ \mathbb E_{(s_t,a_t) \sim \rho_\pi} \left[ -\mathrm{log}(\pi_t(a_t \mid s_t)) \right] \geq \mathcal H \quad \forall t
 \end{equation}
 $$
@@ -44,50 +44,64 @@ $$
 where $$ \mathcal H $$ is a desired minimum expected entropy (equals to minus of entropy target in the Table 1 from Appendix D). Since the policy at time $$ t $$ can only affect the future objective value, we rewrite the objective as an iterative maximization
 
 $$
+\begin{equation}
 \underset{\pi_0}{\mathrm{max}} \left( \mathbb E \left[ r(s_0,a_0) \right] + \underset{\pi_1}{\mathrm{max}} \left( \mathbb E\left[...\right] + \underset{\pi_T}{\mathrm{max}}\ \mathbb E \left[r(s_T,a_T)\right] \right) \right),
+\end{equation}
 $$
 
 subject to the constraint on entropy. Starting from the last time step, we change the constrained maximization to the **dual problem**. Subject to $$ \mathbb E_{(s_t,a_t) \sim \rho_\pi} \left[ -\mathrm{log} (\pi_T(a_T \mid s_T)) \right] \geq \mathcal H $$,
 
 $$
+\begin{equation}
 \underset{\pi_T}{\mathrm{max}}\ \mathbb E_{(s_T,a_T) \sim \rho_\pi} \left[r(s_T,a_T)\right] = \underset{\alpha_T \geq 0}{\mathrm{min}}\ \underset{\pi_T}{\mathrm{max}}\ \mathbb E \left[r(s_T,a_T) - \alpha_T\ \mathrm{log}\ \pi(a_T \mid s_T)\right] - \alpha_T \mathcal H,
+\end{equation}
 $$
 
 where $$ \alpha_T $$ is the dual variable. Since the objective is linear and the entropy constraint is convex function in $$ \pi_T $$ , strong duality holds. This dual objective is closely related to the maximum entropy objective with respect to the policy, and the optimal policy is the maximum entropy policy coresponding to the temperature $$ \alpha_T : \pi_T^* (a_T \mid s_T;\alpha_T) $$ . We can solve for the optimal dual variable $$ \alpha_T^* $$ as
 
 $$
+\begin{equation}
 \underset{\alpha_T}{\mathrm{argmin}}\ \mathbb E_{(s_t,a_t) \sim \pi_t^* } \left[ -\alpha_T \mathrm{log}\ \pi_T^* (a_T \mid s_T;\alpha_T) - \alpha_T \mathcal H \right].
+\end{equation}
 $$
 
 To simplify notation, we make use of the recursive definition of the soft Q-function
 
 $$
+\begin{equation}
 Q_t^* (s_t,a_t; \pi_{t+1:T}^* , \alpha_{t+1:T}^* ) = \mathbb E \left[r(s_t,a_t)\right] + \mathbb E_{\rho_\pi} \left[Q_{t+1}^* (s_{t+1},a_{t+1}) - \alpha_{t+1}^* \ \mathrm{log}\ \pi_{t+1}^* (a_{t+1} \mid s_{t|1}) \right],
+\end{equation}
 $$
 
 with $$ Q_T^* (s_T, a_T) = \mathbb E \left[ r(s_T, a_T) \right] $$ . Now, subject to the entropy constraints and again using the dual problem, we have
 
 $$
-\begin{align}
+\begin{align} \label{eqn: deploy-eqn}
+\begin{split}
 \underset{\pi_{T-1}}{\mathrm{max}} & \left( \mathbb E \left[ r(s_{T-1},a_{T-1}) \right] + \underset{\pi_T}{\mathrm{max}}\ \mathbb E \left[ r(s_T,a_T) \right] \right) \\
  & = \underset{\pi_{T-1}}{\mathrm{max}}\ \left( \mathbb E \left[ r(s_{T-1},a_{T-1}) \right] + \underset{\alpha_T \geq 0}{\mathrm{min}}\ \underset{\pi_T}{\mathrm{max}}\ \mathbb E \left[ r(s_T,a_T) - \alpha_T\ \mathrm{log}\ \pi_T(a_T \mid s_T) \right] - \alpha_T \mathcal H \right) \\
  & = \underset{\pi_{T-1}}{\mathrm{max}}\ \left( \mathbb E \left[ r(s_{T-1},a_{T-1}) \right] + Q_T^* (s_T,a_T) \right) \\
  & = \underset{\pi_{T-1}}{\mathrm{max}}\ \left( \mathbb E \left[ r(s_{T-1},a_{T-1}) \right] + \mathbb E_{\rho_\pi} \left[ Q_T^* (s_T,a_T) - \alpha_T^* \ \mathrm{log}\ \pi_T^* (a_T \mid s_T) \right] - \alpha_T^* \mathcal H \right) \\
  & = \underset{\pi_{T-1}}{\mathrm{max}}\ \left( Q_{T-1}^* (s_{T-1}, a_{T-1}) - \alpha_T^* \mathcal H \right) \\
  & = \underset{\alpha_{T-1} \geq 0}{\mathrm{min}}\ \underset{\pi_{T-1}}{\mathrm{max}}\ \left( \mathbb E \left[ Q_{T-1}^* (s_{T-1},a_{T-1}) \right] - \mathbb E \left[ \alpha_{T-1}\ \mathrm{log}\ \pi_{T-1}(a_{T-1} \mid s_{T-1}) \right] - \alpha_{T-1} \mathcal H \right) - \alpha_T^* \mathcal H
+\end{split}
 \end{align}
 $$
 
-By applying this procedure to the constrained optimization problem recursively, we get
+By applying the procedure (\ref{eqn:deploy-eqn}) to the constrained optimization problem recursively, we get
 
 $$
-\underset{\pi_{0:T}}{\mathrm{max}} \ \mathbb E_{\rho_\pi} \left[ \sum_{t=0}^T r(s_t,a_t) \right] \quad \mathrm{s.t.} \ \mathbb E_{(s_t,a_t) \sim \rho_\pi} \left[ -\mathrm{log}(\pi_t(a_t \mid s_t)) \right] \geq \mathcal H \quad \forall t \ \ = \mathbb E_{a_0 \sim \pi_0^* } \left[ Q_0^* (s_0,a_0)\right] - \sum_{t=0}^T \alpha_t^* \mathcal H.
+\begin{equation}
+(\ref{eqn:const-prob}) = \mathbb E_{a_0 \sim \pi_0^* } \left[ Q_0^* (s_0,a_0)\right] - \sum_{t=0}^T \alpha_t^* \mathcal H.
+\end{equation}
 $$
 
-The summation term $$ -\sum_{t=0}^T \alpha_t^* \mathcal H $$ is minus of the total entropy equals to the sum of entropy target weighted by $$ \alpha_t^* $$ for each time step. We can also include discount factor $$ \gamma $$ as usual. After solving for $$ Q_t^* $$ and $$ \pi_t^* $$ , we can solve the optimal dual variable $$ \alpha_t^* $$ as
+The summation term: $$ -\sum_{t=0}^T \alpha_t^* \mathcal H \ $$ is minus of the total entropy equals to the sum of entropy target weighted by $$ \alpha_t^* $$ for each time step. We can also include discount factor $$ \gamma $$ as usual. After solving for $$ Q_t^* $$ and $$ \pi_t^* $$ , we can solve the optimal dual variable $$ \alpha_t^* $$ as
 
 $$
+\begin{equation} \label{eqn: alpha-opt}
 \alpha_t^* = \underset{\alpha_t}{\mathrm{argmin}}\ \mathbb E_{a_t \sim \pi_t^* } \left[ -\alpha_t\ \mathrm{log}\ \pi_t^* (a_t \mid s_t;\alpha_t) - \alpha_t \bar{\mathcal H} \right].
+\end{equation}
 $$
 
 <br/>
@@ -110,10 +124,12 @@ The complete algorithm is described in Algorithm 1.
     Figure from Soft Actor-Critic Algorithms and Applications
 </div>
 
-In the previous version of [`soft actor-critic`](https://thisiswooyeol.github.io/projects/SoftActorCritic/) algorithm, they used an additional function approximator for the value function. But as it is found to be unnecessary, this algorithm only used two soft Q-function networks, their respective target networks and policy network parameters. In addition to the soft Q-function and the policy, **learning $$ \alpha $$ by minimizing the dual objective in Equation 17** (as numbered in the paper). This can be done by approximating **dual gradient descent**. Dual gradient descent alternates between optimizing the Largrangian with respect to the primal variables to convergence(solving for $$ Q_t^* , \pi_t^* $$ ), and then taking a gradient step on the dual variables(solving for $$ \alpha_t^* $$ with $$ Q_t^* , \pi_t^* $$ ). As optimizing with respect to the primal variables fully is impractical, a truncated approach that performs incomplete optimization (even for a single gradient step) still works in practice. Thus, $$ \alpha $$ is updated with the following objective:
+In the previous version of [`soft actor-critic`](https://thisiswooyeol.github.io/projects/SoftActorCritic/) algorithm, they used an additional function approximator for the value function. But as it is found to be unnecessary, this algorithm only used two soft Q-function networks, their respective target networks and policy network parameters. In addition to the soft Q-function and the policy, **learning $$ \alpha $$ by minimizing the dual objective in Equation (\ref{eqn:alpha-opt})**. This can be done by approximating **dual gradient descent**. Dual gradient descent alternates between optimizing the Largrangian with respect to the primal variables to convergence(solving for $$ Q_t^* , \pi_t^* $$ ), and then taking a gradient step on the dual variables(solving for $$ \alpha_t^* $$ with $$ Q_t^* , \pi_t^* $$ ). As optimizing with respect to the primal variables fully is impractical, a truncated approach that performs incomplete optimization (even for a single gradient step) still works in practice. Thus, $$ \alpha $$ is updated with the following objective:
 
 $$
+\begin{equation}
 J(\alpha) = \mathbb E_{a_t \sim \pi_t} \left[ -\alpha\ \mathrm{log}\ \pi_t(a_t \mid s_t) - \alpha \bar{\mathcal H} \right].
+\end{equation}
 $$
 
 <br/>
