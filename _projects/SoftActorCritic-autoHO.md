@@ -92,7 +92,7 @@ By applying the procedure (\ref{eqn:deploy-eqn}) to the constrained optimization
 
 $$
 \begin{equation}
-(\ref{eqn:const-prob}) = \mathbb E_{a_0 \sim \pi_0^* } \left[ Q_0^* (s_0,a_0)\right] - \sum_{t=0}^T \alpha_t^* \mathcal H.
+\mathrm Eq. (\ref{eqn:const-prob}) = \mathbb E_{a_0 \sim \pi_0^* } \left[ Q_0^* (s_0,a_0)\right] - \sum_{t=0}^T \alpha_t^* \mathcal H.
 \end{equation}
 $$
 
@@ -141,3 +141,69 @@ $$
 # Experiment
 <br/>
 
+### Simulated Benchmarks
+
+<div class="row justify-content-center">
+    <div class="col-8">
+        {% include figure.html path="assets/img/SoftActorCritic-HO/SAC-continuous-benchmark.PNG" title="SAC-task1" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from Soft Actor-Critic Algorithms and Applications
+</div>
+
+SAC performs comparably to the baseline methods on the easier tasks and outperforms them on the harder tasks with a large margin, both in terms of **learning speed** and **the final performance**. The results also show that the automatic temperature tuning scheme works well across all the environments, and thus, effectively eliminates the need for tuning the temperature. 
+
+<br/>
+<br/>
+
+### Quadrupedal Locomotion in the Real World
+
+**Task specification**
+- **Latencies** and **contacts** in the system **make the dynamics non-Markovian**, which can significantly degrade learning performance. Therefore, they construct the state out of the current and past five observations and actions.
+- Reward function rewards large forward velocity, penalizes large angular acceleration, large pitch angles and extending the front legs under the robot.
+- Robot training pipeline consists of two components parallel jobs: **training** and **data collection**.
+- Locomotion task (real-world reinforcement learning) is substantially challenging that an untrained policy can lose balance and fall, and too many falls will eventually **damage the robot, making sample-efficient learning essentially**.
+
+<div class="row justify-content-center">
+    <div class="col-8">
+        {% include figure.html path="assets/img/SoftActorCritic-HO/SAC-locomotion.PNG" title="SAC-task2" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from Soft Actor-Critic Algorithms and Applications
+</div>
+
+In the real world, the utility of a locomotion policy hinges critically on its **ability to generalize to different terrains and obstacles**. Because soft actor-critic learns robust policies, the results above show that the policy can readily generalize to these perturbation without any additional learning. This experiment is the first example of a deep reinforcement learning algorithm learning underactuated quadrupedal locomotion **directly in the real world without any simulation or pretraining**.
+
+<br/>
+<br/>
+
+### Dexterous Hand Manipulation
+
+The manipulation task requires a 3-finger dexterous robotic hand(9-DOF) to rotate a "valve"-like object into the correct position, with the colored part of the valve facing directly to the right, from any random starting position. This task is exceptionally challenging due to both the **perception challenges** and the **physical difficulty** of rotating the valve with such a complex robotic hand.
+
+<div class="row justify-content-center">
+    <div class="col-8">
+        {% include figure.html path="assets/img/SoftActorCritic-HO/SAC-hand-maniputation.PNG" title="SAC-task3" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from Soft Actor-Critic Algorithms and Applications
+</div>
+
+This task represents one of the most complex robotic manipulation tasks **learned directly end-to-end from raw images** in the real world with deep reinforcement learning, **without any simulation or pretraining**. The results above also show that learning the same task by feeding the valve position directly to the neural networks takes 3 hours, which is substantially faster than PPO did (7.4 hours).
+
+<br/>
+<br/>
+<br/>
+
+--------
+
+# Discussion
+<br/>
+
+- For the rllab humanoid task, the result of SAC with learned temperature highly **oscillates** compared with SAC with fixed temperature. Doesn't it mean automatic temperature tuning is brittle to harder task? 
+- Also, SAC with learned temperature has **worse asymptotic performance** than SAC with fixed temperature. Considering this fact, can we still say that automatic temperature tuning scheme works well across all the enviroments?
+- In the locomotion task, the paper describes how they define the reward function which aims to make the robot locomote well. I think it shows the importance of a **good reward function**. But, **making a good reward function MANUALLY** can be extremely harder for high-dimensional, abstract tasks. I think this problem pose the necessity of the research on **Unsupervised RL** or **Inverse RL**.
+- If we see [`the learned policy on the Dexterous Hand Manipulation task`](https://sites.google.com/view/sac-and-applications/), robotic hand accomplishes the task well, without using the finger left in the video. There may be other videos that the robotic hand use its whole three fingers to rotate the valve. But considering that possibility, the movements of the robotic hand seem not good enough in the perspective of human.
