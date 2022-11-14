@@ -171,6 +171,14 @@ where $$ p(z) $$ is a unit Gaussian prior over $$ Z $$ and $$ R(\mathcal T, z) $
 
 **Designing the architecture of the inference network**
 
+An encoding of a fully observed MDP should be **permutation invariant**: the order of a collection of transitions $$ \left\lbrace s_i, a_i, s_i', r_i \right\rbrace $$ doesn't matter when used to encode MDP (task inference, value function, etc.). (Because, a single transition contains all the information that makes task distribution: transition function, reward function) With this observation, a product of independent factors consitutes permutation-invariant inference network $$ q_\phi(z \mid c_{1:N}) $$ as
+
+$$
+\begin{equation}
+q_\phi(z \mid c_{1:N}) \propto \prod_{n=1}^N \Psi_\phi(z \mid c_n).
+\end{equation}
+$$
+
 <div class="row justify-content-center">
     <div class="col-6">
         {% include figure.html path="assets/img/PEARL/inference-network.PNG" title="inference-network" class="img-fluid" %}
@@ -180,17 +188,55 @@ where $$ p(z) $$ is a unit Gaussian prior over $$ Z $$ and $$ R(\mathcal T, z) $
     Figure from "Efficient Off-Policy Meta-Reinforcement Learning via Probabilistic Context Variables"
 </div>
 
-An encoding of a fully observed MDP should be **permutation invariant**: the order of a collection of transitions $$ \left\lbrace s_i, a_i, s_i', r_i \right\rbrace $$ doesn't matter when used to encode MDP (task inference, value function, etc.). (Because, a single transition contains all the information that makes task distribution: transition function, reward function) With this observation, a product of independent factors consitutes permutation-invariant inference network $$ q_\phi(z \mid c_{1:N}) $$ as
-
-$$
-\begin{equation}
-q_\phi(z \mid c_{1:N}) \propto \prod_{n=1}^N \Psi_\phi(z \mid c_n).
-\end{equation}
-$$
-
 To keep the method tractable, they use Gaussian factors $$ \Psi_\phi(z \mid c_n) = \mathcal N (f_\phi^\mu (c_n), f_\phi^\sigma (c_n)) $$ , which result in a Gaussian posterior.
 
 <br/>
 <br/>
 
 ### Posterior Sampling and Exploration via Latent Contexts
+Modeling the latent context as probabilistic allows us to make use of posterior sampling for efficient, **temporally extended exploration** at meta-test time. In this paper, PEARL directly infers a posterior over the latent context $$ Z $$ , which may encode the MDP itself if optimized for reconstruction, optimal behaviors if optimized for the policy, or the value function if optimized for a critic (actual implementation of PEARL as (\ref{eqn:critic-loss})). At meta-test time, $$ z $$ is sampled from the prior and a trajectory is collected according to $$ z $$ . Then **using the collected experience to update the posterior** and continue exploring coherently in a manner that **acts more and more optimally as our belief narrows**.
+
+<br/>
+<br/>
+<br/>
+
+-------
+
+# Off-Policy Meta-Reinforcement Learning
+<br/>
+
+There has been two challenges to design off-policy meta-RL algorithms:
+- The distribution of data used for adaptation need to match across meta-training and meta-test. (Lead to data inefficiency during meta-training)
+- Meta-RL requires the policy to reason about *distributions (over tasks, states and actions)* , so as to learn effective stochastic exploration strategies. (Using value-based RL in meta-learning is ineffective, **especially in reasoning about task during meta-test**)
+
+The main insight in designing an off-policy meta-RL method with the probabilistic context is that **the data used to train the encoder need not be the same as the data used to train the policy**. The policy can treat the context $$ z $$ as part of the state in an off-policy RL loop (as task inference is the only on-policy process that needs distribution match of data), while the stochasticity of the exploration process is provided by the uncertainty in the encoder $$ q(z \mid c) $$ (on-policy task inference via posterior sampling). The actor and critic are always trained with off-policy data from the **entire replay buffer $$ \mathcal B $$** . However, the encoder is trained with context batches sampled from a sampler $$ \mathcal S_c $$ , where $$ \mathcal S_c $$ is sampled from a replay buffer of **recently collected data** retains on-policy performance with better efficiency. (An in-between strategy between off-policy $$ \mathcal S_c $$ and strict on-policy $$ \mathcal S_c $$)
+
+The training procedure is summarized in Figure 2 and Algorithm 1. Meta-testing is described in Algorithm 2.
+
+<div class="row justify-content-center">
+    <div class="col-8">
+        {% include figure.html path="assets/img/PEARL/PEARL-meta-training.PNG" title="Meta-training procedure" class="img-fluid" %}
+    </div>
+    <div class="col-4">
+        {% include figure.html path="assets/img/PEARL/PEARL-training-algorithm.PNG" title="Meta-training algorithm" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from "Efficient Off-Policy Meta-Reinforcement Learning via Probabilistic Context Variables"
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-6">
+        {% include figure.html path="assets/img/PEARL/PEARL-testing-algorithm.PNG" title="Meta-testing algorithm" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from "Efficient Off-Policy Meta-Reinforcement Learning via Probabilistic Context Variables"
+</div>
+
+<br/>
+<br/>
+
+### Implementation
+- Algorithm is built on top of the **[soft actor-critic algorithm (SAC)](https://thisiswooyeol.github.io/projects/SoftActorCritic/).**
+- 
