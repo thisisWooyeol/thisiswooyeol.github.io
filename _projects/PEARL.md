@@ -112,4 +112,19 @@ $$
 <br/>
 
 ### Modeling and Learning Latent Contexts
-An amortized variational inference approach is used to train an *inference network* $$ q_\phi (z \mid c) $$ , parameterized by $$ \phi $$ , that estimates the posterior $$ p(z \mid c) $$ .
+An amortized variational inference approach is used to train an *inference network* $$ q_\phi (z \mid c) $$ , parameterized by $$ \phi $$ , that estimates the posterior $$ p(z \mid c) $$ . Let's first check how variational inference approach works in VAE. To model VAE with maximal likelihood method, we need to maximize marginal log-likelihood $$ \mathrm{log} p(x) = \mathcal{log} p(x \mid z)\ p(z) $$ . As it is hard to calculate, we approximate the distribution $$ p(z) $$ to tractable distribution $$ q(z \mid x) $$ , which is called variational inference. The evidence lower bound (ELBO) is calculated as RHS of the (\ref{eqn:ELBO}).
+
+$$
+\begin{equation}\label{eqn:ELBO}
+\mathrm{log}\ p(x) \geq \mathbb E_{z \sim q(z \mid x)} \left[ \mathrm{log}\ p(x \mid z) \right] - \mathrm{ D_{KL}} (q(z \mid x) \parallel p(z))
+\end{equation}
+$$
+
+$$
+\begin{align*}
+\text{proof\)}\ & \mathrm{log}\ p(x) & = \int q(z \mid x) \mathrm{log}\ \frac{p(x,z)}{q(z \mid x)}\, dz - \int q(z \mid x) \mathrm{log}\ frac{p(z \mid x)}{q(z \mid x)}\, dz \\
+& & = \int q(z \mid x) \mathrm{log}\ \frac{p(x,z)}{p(z)}\, dz + \int q(z \mid x) \mathrm{log}\ \frac{p(z)}{q(z \mid x)}\, dz - \int q(z \mid x) \mathrm{log}\ \frac{p(z \mid x)}{q(z \mid x)}\, dz \\
+& & = \mathbb E_{z \sim q(z \mid x)} \left[ \mathrm{log}\ p(x \mid z) \right] - \mathrm{D_{KL}} (q(z \mid x) \parallel p(z)) + \mathrm{D_{KL}} (q(z \mid x) \parallel p(z \mid x))
+\end{align*}
+$$
+
