@@ -125,7 +125,7 @@ An amortized variational inference approach is used to train an *inference netwo
     Figure from [Source](https://imgur.com/PhHb2aF)
 </div>
 
-To estimate VAE parameters with maximal likelihood method, we need to maximize marginal log-likelihood $$ \mathrm{log} p(x) = \mathcal{log} p(x \mid z)\ p(z) $$ . As it is hard to calculate, we approximate the distribution $$ p(z) $$ to tractable distribution $$ q(z \mid x) $$ , which is called variational inference. The evidence lower bound (ELBO) is calculated as RHS of the (\ref{eqn:ELBO}).
+To estimate VAE parameters with maximal likelihood method, we need to maximize marginal log-likelihood $$ \mathrm{log} p(x) = \mathcal{log} p(x \mid z)\ p(z) $$ . As it is hard to calculate, we approximate the distribution $$ p(z) $$ to tractable distribution $$ q(z \mid x) $$ , which is called a variational inference. The evidence lower bound (ELBO) is calculated as RHS of the (\ref{eqn:ELBO}).
 
 $$
 \begin{equation}\label{eqn:ELBO}
@@ -155,12 +155,39 @@ Specifically, $$ - \mathbb E_{z \sim q(z \mid x)} \left[ \mathrm{log}\ p(x \mid 
 
 **Applying this idea to meta-RL problem**
 
-As minimizing the KL divergence between the posterior $$ p(z \mid c) $$ and the inference network $$ q_\phi (z \mid c) $$ can be achieved by maximizing the ELBO, we can define the variational lower bound:
+As minimizing the KL divergence between the posterior $$ p(z \mid c) $$ and the inference network $$ q_\phi (z \mid c) $$ can be achieved by maximizing the ELBO, we can define the variational lower bound *loss*:
 
 $$
 \begin{equation}\label{eqn:inf-net}
-\mathbb E_{mathcal T} \left[ \mathbb E_{z \sim q_\phi(z \mid c^{\mathcal T}) \left[ R(\mathcal T, z) + \beta \mathrm{D_{KL}}(q_\phi(z \mid c^{\mathcal T}) \parallel p(z) \right]\right]
+\mathbb E_{\mathcal T} \left[ \mathbb E_{z \sim q_\phi (z \mid c^{\mathcal T})} \left[ R(\mathcal T, z) + \beta\ \mathrm{D_{KL}}\left(q_\phi(z \mid c^{\mathcal T}) \parallel p(z) \right) \right]\right]
 \end{equation}
 $$
 
-where $$ p(z) $$ is a unit Gaussian prior over $$ Z $$ and $$ R(\mathcal T, z) $$ could be a variety of objectives, such as reconstructing the MDP, modeling the state-action value functions or maximizing returns through the policy over the distribution of tasks.
+where $$ p(z) $$ is a unit Gaussian prior over $$ Z $$ and $$ R(\mathcal T, z) $$ could be a variety of objectives, such as reconstructing the MDP, modeling the state-action value functions or maximizing returns through the policy over the distribution of tasks. The KL divergence term can also be interpreted as the result of a variational approximation to the *information bottleneck* that **constrains $$ z $$ to contain only information from the context that is necessary to adapt to the task at hand**, mitigating overfitting to training tasks (by Lagrange multiplier $$ \beta $$ . 
+<br/>
+
+**Designing the architecture of the inference network**
+
+An encoding of a fully observed MDP should be **permutation invariant**: the order of a collection of transitions $$ \left\lbrace s_i, a_i, s_i', r_i \right\rbrace $$ doesn't matter when used to encode MDP (task inference, value function, etc.). (Because, a single transition contains all the information that makes task distribution: transition function, reward function) With this observation, a product of independent factors consitutes permutation-invariant inference network $$ q_\phi(z \mid c_{1:N}) $$ as
+
+$$
+\begin{equation}
+q_\phi(z \mid c_{1:N}) \propto \prod_{n=1}^N \Psi_\phi(z \mid c_n).
+\end{equation}
+$$
+
+<div class="row justify-content-center">
+    <div class="col-6">
+        {% include figure.html path="assets/img/PEARL/inference-network.jpg" title="inference-network" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from "Efficient Off-Policy Meta-Reinforcement Learning via Probabilistic Context Variables"
+</div>
+
+To keep the method tractable, they use Gaussian factors $$ \Psi_\phi(z \mid c_n) = \mathcal N (f_\phi^\mu (c_n), f_\phi^\sigma (c_n)) $$ , which result in a Gaussian posterior.
+
+<br/>
+<br/>
+
+### Posterior Sampling and Exploration via Latent Contexts
