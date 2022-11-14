@@ -171,14 +171,6 @@ where $$ p(z) $$ is a unit Gaussian prior over $$ Z $$ and $$ R(\mathcal T, z) $
 
 **Designing the architecture of the inference network**
 
-An encoding of a fully observed MDP should be **permutation invariant**: the order of a collection of transitions $$ \left\lbrace s_i, a_i, s_i', r_i \right\rbrace $$ doesn't matter when used to encode MDP (task inference, value function, etc.). (Because, a single transition contains all the information that makes task distribution: transition function, reward function) With this observation, a product of independent factors consitutes permutation-invariant inference network $$ q_\phi(z \mid c_{1:N}) $$ as
-
-$$
-\begin{equation}
-q_\phi(z \mid c_{1:N}) \propto \prod_{n=1}^N \Psi_\phi(z \mid c_n).
-\end{equation}
-$$
-
 <div class="row justify-content-center">
     <div class="col-6">
         {% include figure.html path="assets/img/PEARL/inference-network.PNG" title="inference-network" class="img-fluid" %}
@@ -187,6 +179,14 @@ $$
 <div class="caption">
     Figure from "Efficient Off-Policy Meta-Reinforcement Learning via Probabilistic Context Variables"
 </div>
+
+An encoding of a fully observed MDP should be **permutation invariant**: the order of a collection of transitions $$ \left\lbrace s_i, a_i, s_i', r_i \right\rbrace $$ doesn't matter when used to encode MDP (task inference, value function, etc.). (Because, a single transition contains all the information that makes task distribution: transition function, reward function) With this observation, a product of independent factors consitutes permutation-invariant inference network $$ q_\phi(z \mid c_{1:N}) $$ as
+
+$$
+\begin{equation}
+q_\phi(z \mid c_{1:N}) \propto \prod_{n=1}^N \Psi_\phi(z \mid c_n).
+\end{equation}
+$$
 
 To keep the method tractable, they use Gaussian factors $$ \Psi_\phi(z \mid c_n) = \mathcal N (f_\phi^\mu (c_n), f_\phi^\sigma (c_n)) $$ , which result in a Gaussian posterior.
 
