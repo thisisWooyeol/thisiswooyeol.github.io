@@ -115,6 +115,7 @@ $$
 An amortized variational inference approach is used to train an *inference network* $$ q_\phi (z \mid c) $$ , parameterized by $$ \phi $$ , that estimates the posterior $$ p(z \mid c) $$ . Let's first check how variational inference approach works in VAE. 
 
 **How variational inference approach works in VAE ?**
+
 <div class="row justify-content-center">
     <div class="col-6">
         {% include figure.html path="assets/img/PEARL/VAE.jpg" title="VAE" class="img-fluid" %}
@@ -148,11 +149,12 @@ L = - \mathbb E_{z \sim q(z \mid x)} \left[ \mathrm{log}\ p(x \mid z) \right] + 
 \end{equation}
 $$
 
-Specifically, $$ - \mathbb E_{z \sim q(z \mid x)} \left[ \mathrm{log}\ p(x \mid z) \right] $$ is a **reconstruction term** that calculates the cross-entropy between encoder and decoder. $$ \mathrm{D_{KL}} (q(z \mid x) \parallel p(z)) $$ is a **regularization term** that constrains $$ q(z \mid x) $$ to be similar to the prior $$ p(z) $$ (can be any tractable distribution). Meanwhile, maximizing the ELBO is equivalent to **minimizing the difference between posterior $$ p(z \mid x) $$ and its estimation $$ p(z \mid x) $$ **.
+Specifically, $$ - \mathbb E_{z \sim q(z \mid x)} \left[ \mathrm{log}\ p(x \mid z) \right] $$ is a **reconstruction term** that calculates the cross-entropy between encoder and decoder. $$ \mathrm{D_{KL}} (q(z \mid x) \parallel p(z)) $$ is a **regularization term** that constrains $$ q(z \mid x) $$ to be similar to the prior $$ p(z) $$ (can be any tractable distribution). Meanwhile, maximizing the ELBO is equivalent to **minimizing the difference between posterior $$ p(z \mid x) $$ and its estimation $$ p(z \mid x) $$**.
 
 <br/>
 
 **Applying this idea to meta-RL problem**
+
 As minimizing the KL divergence between the posterior $$ p(z \mid c) $$ and the inference network $$ q_\phi (z \mid c) $$ can be achieved by maximizing the ELBO, we can define the variational lower bound:
 
 $$
