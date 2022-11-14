@@ -112,7 +112,19 @@ $$
 <br/>
 
 ### Modeling and Learning Latent Contexts
-An amortized variational inference approach is used to train an *inference network* $$ q_\phi (z \mid c) $$ , parameterized by $$ \phi $$ , that estimates the posterior $$ p(z \mid c) $$ . Let's first check how variational inference approach works in VAE. To model VAE with maximal likelihood method, we need to maximize marginal log-likelihood $$ \mathrm{log} p(x) = \mathcal{log} p(x \mid z)\ p(z) $$ . As it is hard to calculate, we approximate the distribution $$ p(z) $$ to tractable distribution $$ q(z \mid x) $$ , which is called variational inference. The evidence lower bound (ELBO) is calculated as RHS of the (\ref{eqn:ELBO}).
+An amortized variational inference approach is used to train an *inference network* $$ q_\phi (z \mid c) $$ , parameterized by $$ \phi $$ , that estimates the posterior $$ p(z \mid c) $$ . Let's first check how variational inference approach works in VAE. 
+
+**How variational inference approach works in VAE ?**
+<div class="row justify-content-center">
+    <div class="col-6">
+        {% include figure.html path="assets/img/PEARL/VAE.jpg" title="VAE" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from [Source](https://imgur.com/PhHb2aF)
+</div>
+
+To estimate VAE parameters with maximal likelihood method, we need to maximize marginal log-likelihood $$ \mathrm{log} p(x) = \mathcal{log} p(x \mid z)\ p(z) $$ . As it is hard to calculate, we approximate the distribution $$ p(z) $$ to tractable distribution $$ q(z \mid x) $$ , which is called variational inference. The evidence lower bound (ELBO) is calculated as RHS of the (\ref{eqn:ELBO}).
 
 $$
 \begin{equation}\label{eqn:ELBO}
@@ -122,9 +134,31 @@ $$
 
 $$
 \begin{align*}
-\text{proof\)}\ & \mathrm{log}\ p(x) & = \int q(z \mid x) \mathrm{log}\ \frac{p(x,z)}{q(z \mid x)}\, dz - \int q(z \mid x) \mathrm{log}\ frac{p(z \mid x)}{q(z \mid x)}\, dz \\
+\text{proof)}\ \mathrm{log}\ p(x) & = \int q(z \mid x) \mathrm{log}\ \frac{p(x,z)}{q(z \mid x)}\, dz - \int q(z \mid x) \mathrm{log}\ \frac{p(z \mid x)}{q(z \mid x)}\, dz \\
 & & = \int q(z \mid x) \mathrm{log}\ \frac{p(x,z)}{p(z)}\, dz + \int q(z \mid x) \mathrm{log}\ \frac{p(z)}{q(z \mid x)}\, dz - \int q(z \mid x) \mathrm{log}\ \frac{p(z \mid x)}{q(z \mid x)}\, dz \\
 & & = \mathbb E_{z \sim q(z \mid x)} \left[ \mathrm{log}\ p(x \mid z) \right] - \mathrm{D_{KL}} (q(z \mid x) \parallel p(z)) + \mathrm{D_{KL}} (q(z \mid x) \parallel p(z \mid x))
 \end{align*}
 $$
 
+By maximizing the ELBO which is easy to calculate, we can maximize marginal log-likelihood $$ \mathrm{log} p(x) $$ . As the objective function used in deep learning is loss function, we can rewrite (\ref{eqn:ELBO}) as (\ref{eqn:Loss}).
+
+$$
+\begin{equation}\label{eqn:Loss}
+L = - \mathbb E_{z \sim q(z \mid x)} \left[ \mathrm{log}\ p(x \mid z) \right] + \mathrm{ D_{KL}} (q(z \mid x) \parallel p(z))
+\end{equation}
+$$
+
+Specifically, $$ - \mathbb E_{z \sim q(z \mid x)} \left[ \mathrm{log}\ p(x \mid z) \right] $$ is a **reconstruction term** that calculates the cross-entropy between encoder and decoder. $$ \mathrm{D_{KL}} (q(z \mid x) \parallel p(z)) $$ is a **regularization term** that constrains $$ q(z \mid x) $$ to be similar to the prior $$ p(z) $$ (can be any tractable distribution). Meanwhile, maximizing the ELBO is equivalent to **minimizing the difference between posterior $$ p(z \mid x) $$ and its estimation $$ p(z \mid x) $$ **.
+
+<br/>
+
+**Applying this idea to meta-RL problem**
+As minimizing the KL divergence between the posterior $$ p(z \mid c) $$ and the inference network $$ q_\phi (z \mid c) $$ can be achieved by maximizing the ELBO, we can define the variational lower bound:
+
+$$
+\begin{equation}\label{eqn:inf-net}
+\mathbb E_{mathcal T} \left[ \mathbb E_{z \sim q_\phi(z \mid c^{\mathcal T}) \left[ R(\mathcal T, z) + \beta \mathrm{D_{KL}}(q_\phi(z \mid c^{\mathcal T}) \parallel p(z) \right]\right]
+\end{equation}
+$$
+
+where $$ p(z) $$ is a unit Gaussian prior over $$ Z $$ and $$ R(\mathcal T, z) $$ could be a variety of objectives, such as reconstructing the MDP, modeling the state-action value functions or maximizing returns through the policy over the distribution of tasks.
