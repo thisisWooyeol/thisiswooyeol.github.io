@@ -47,7 +47,6 @@ Probabilistic embeddings for actor-critic RL (PEARL) achieves state-of-the-art r
 <br/>
 
 ### Meta-learning
-<br/>
 
 ***Context-based* meta-RL**
 - Prior works with recurrent and recursive meta-RL method adapt to new tasks by aggregating experience into a latent representation on which the policy is conditioned. (whole experience = task specific context)
@@ -96,6 +95,7 @@ $$
 -------
 
 # Problem Statement
+<br/>
 
 - Assume a distribution of tasks $$ p(\mathcal T) $$ , where each task is a MDP.
 - A task is defined as $$ \mathcal T = \left\lbrace p(s_0), p(s_{t+1} \mid s_t,a_t), r(s_t,a_t) \right\rbrace $$ . Note that **varying transition functions** and **varying reward functions** constitute task distribution.
@@ -135,8 +135,8 @@ $$
 $$
 \begin{align*}
 \text{proof)}\ \mathrm{log}\ p(x) & = \int q(z \mid x) \mathrm{log}\ \frac{p(x,z)}{q(z \mid x)}\, dz - \int q(z \mid x) \mathrm{log}\ \frac{p(z \mid x)}{q(z \mid x)}\, dz \\
-& & = \int q(z \mid x) \mathrm{log}\ \frac{p(x,z)}{p(z)}\, dz + \int q(z \mid x) \mathrm{log}\ \frac{p(z)}{q(z \mid x)}\, dz - \int q(z \mid x) \mathrm{log}\ \frac{p(z \mid x)}{q(z \mid x)}\, dz \\
-& & = \mathbb E_{z \sim q(z \mid x)} \left[ \mathrm{log}\ p(x \mid z) \right] - \mathrm{D_{KL}} (q(z \mid x) \parallel p(z)) + \mathrm{D_{KL}} (q(z \mid x) \parallel p(z \mid x))
+& = \int q(z \mid x) \mathrm{log}\ \frac{p(x,z)}{p(z)}\, dz + \int q(z \mid x) \mathrm{log}\ \frac{p(z)}{q(z \mid x)}\, dz - \int q(z \mid x) \mathrm{log}\ \frac{p(z \mid x)}{q(z \mid x)}\, dz \\
+& = \mathbb E_{z \sim q(z \mid x)} \left[ \mathrm{log}\ p(x \mid z) \right] - \mathrm{D_{KL}} (q(z \mid x) \parallel p(z)) + \mathrm{D_{KL}} (q(z \mid x) \parallel p(z \mid x))
 \end{align*}
 $$
 
