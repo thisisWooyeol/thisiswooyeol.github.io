@@ -47,6 +47,8 @@ Probabilistic embeddings for actor-critic RL (PEARL) achieves state-of-the-art r
 <br/>
 
 ### Meta-learning
+<br/>
+
 ***Context-based* meta-RL**
 - Prior works with recurrent and recursive meta-RL method adapt to new tasks by aggregating experience into a latent representation on which the policy is conditioned. (whole experience = task specific context)
 - *However*, PEARL represents task contexts with **probabilistic latent variables**, enabling reasoning over task uncertainty.
@@ -94,10 +96,10 @@ $$
 
 # Problem Statement
 
-- Assume a distribution of tasks $ p(\mathcal T) $, where each task is a MDP.
-- A task is defined as $ \mathcal T = \left\lbrace p(s_0), p(s_{t+1} \mid s_t,a_t), r(s_t,a_t) \right\rbrace $ . Note that **varying transition functions** and **varying reward functions** constitute task distribution.
-- Context $ c $ is referred to the history of past transitions. Let $ c^{\mathcal T}_ n = (s_n, a_n, r_n, s_n') $ be one transition in the task $ \mathcal T $ so that $ c^{\mathcal T}_ {1:N} $ comprises the experience collected so far.
-- Entirely new tasks are drawn from $ p(\mathcal T)$ at test-time.
+- Assume a distribution of tasks $$ p(\mathcal T) $$ , where each task is a MDP.
+- A task is defined as $$ \mathcal T = \left\lbrace p(s_0), p(s_{t+1} \mid s_t,a_t), r(s_t,a_t) \right\rbrace $$ . Note that **varying transition functions** and **varying reward functions** constitute task distribution.
+- Context $$ c $$ is referred to the history of past transitions. Let $$ c^{\mathcal T}_ n = (s_n, a_n, r_n, s_n') $$ be one transition in the task $$ \mathcal T $$ so that $$ c^{\mathcal T}_ {1:N} $$ comprises the experience collected so far.
+- Entirely new tasks are drawn from $$ p(\mathcal T) $$ at test-time.
 
 <br/>
 <br/>
@@ -109,4 +111,4 @@ $$
 <br/>
 
 ### Modeling and Learning Latent Contexts
-An 
+An amortized variational inference approach is used to train an *inference network* $$ q_\phi (z \mid c) $$ , parameterized by $$ \phi $$ , that estimates the posterior $$ p(z \mid c) $$ .
