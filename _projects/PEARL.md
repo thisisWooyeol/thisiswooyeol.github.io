@@ -114,6 +114,8 @@ $$
 ### Modeling and Learning Latent Contexts
 An amortized variational inference approach is used to train an *inference network* $$ q_\phi (z \mid c) $$ , parameterized by $$ \phi $$ , that estimates the posterior $$ p(z \mid c) $$ . Let's first check how variational inference approach works in VAE. 
 
+<br/>
+
 **How variational inference approach works in VAE ?**
 
 <div class="row justify-content-center">
@@ -164,6 +166,7 @@ $$
 $$
 
 where $$ p(z) $$ is a unit Gaussian prior over $$ Z $$ and $$ R(\mathcal T, z) $$ could be a variety of objectives, such as reconstructing the MDP, modeling the state-action value functions or maximizing returns through the policy over the distribution of tasks. The KL divergence term can also be interpreted as the result of a variational approximation to the *information bottleneck* that **constrains $$ z $$ to contain only information from the context that is necessary to adapt to the task at hand**, mitigating overfitting to training tasks (by Lagrange multiplier $$ \beta $$ . 
+
 <br/>
 
 **Designing the architecture of the inference network**
@@ -178,7 +181,7 @@ $$
 
 <div class="row justify-content-center">
     <div class="col-6">
-        {% include figure.html path="assets/img/PEARL/inference-network.jpg" title="inference-network" class="img-fluid" %}
+        {% include figure.html path="assets/img/PEARL/inference-network.png" title="inference-network" class="img-fluid" %}
     </div>
 </div>
 <div class="caption">
