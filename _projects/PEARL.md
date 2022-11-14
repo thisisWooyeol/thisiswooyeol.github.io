@@ -181,7 +181,7 @@ $$
 
 <div class="row justify-content-center">
     <div class="col-6">
-        {% include figure.html path="assets/img/PEARL/inference-network.png" title="inference-network" class="img-fluid" %}
+        {% include figure.html path="assets/img/PEARL/inference-network.PNG" title="inference-network" class="img-fluid" %}
     </div>
 </div>
 <div class="caption">
