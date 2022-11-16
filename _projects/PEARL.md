@@ -8,8 +8,9 @@ category: papers review
 ---
 
 # TL;DR:
-- Developed an **off-policy meta-RL algorithm** that disentangles **sample efficiency** and **task reasoning** problems.
-- Perform **online probabilistic filtering of latent task variables** to infer how to solve a new task from small amounts of experience.
+- PEARL decouples the problems of **inferring the task** and **solving it**, allowing for **off-policy meta-learning** while minimizing mismatch between train and test context distributions.
+- With **posterior sampling on latent context variable** on which the policy is conditioned, PEARL 
+- **Permutation-invariant encoder** for the latent context variable allows 
 
 <br/>
 <br/>
@@ -194,7 +195,7 @@ To keep the method tractable, they use Gaussian factors $$ \Psi_\phi(z \mid c_n)
 <br/>
 
 ### Posterior Sampling and Exploration via Latent Contexts
-Modeling the latent context as probabilistic allows us to make use of posterior sampling for efficient, **temporally extended exploration** at meta-test time. In this paper, PEARL directly infers a posterior over the latent context $$ Z $$ , which may encode the MDP itself if optimized for reconstruction, optimal behaviors if optimized for the policy, or the value function if optimized for a critic (actual implementation of PEARL as (\ref{eqn:critic-loss})). At meta-test time, $$ z $$ is sampled from the prior and a trajectory is collected according to $$ z $$ . Then **using the collected experience to update the posterior** and continue exploring coherently in a manner that **acts more and more optimally as our belief narrows**.
+Modeling the latent context as probabilistic allows us to make use of posterior sampling for efficient, **temporally extended exploration** at meta-test time. In this paper, PEARL directly infers a posterior over the latent context $$ Z $$ , which may encode the MDP itself if optimized for reconstruction, optimal behaviors if optimized for the policy, or the value function if optimized for a critic (actual implementation of PEARL as (\ref{eqn:critic-loss})). During meta-training, the prior distribution over tasks is captured with training tasks and also learns to efficiently use experience to infer new tasks. At meta-test time, $$ z $$ is sampled from the prior and a trajectory is collected according to $$ z $$ . Then **using the collected experience to update the posterior** and continue exploring coherently in a manner that **acts more and more optimally as our belief narrows**.
 
 <br/>
 <br/>
@@ -217,7 +218,7 @@ The training procedure is summarized in Figure 2 and Algorithm 1. Meta-testing i
     <div class="col-8">
         {% include figure.html path="assets/img/PEARL/PEARL-meta-training.PNG" title="Meta-training procedure" class="img-fluid" %}
     </div>
-    <div class="col-4">
+    <div class="col-6">
         {% include figure.html path="assets/img/PEARL/PEARL-training-algorithm.PNG" title="Meta-training algorithm" class="img-fluid" %}
     </div>
 </div>
@@ -238,5 +239,117 @@ The training procedure is summarized in Figure 2 and Algorithm 1. Meta-testing i
 <br/>
 
 ### Implementation
-- Algorithm is built on top of the **[soft actor-critic algorithm (SAC)](https://thisiswooyeol.github.io/projects/SoftActorCritic/).**
-- 
+- Algorithm is built on top of the **[`soft actor-critic algorithm (SAC)`](https://thisiswooyeol.github.io/projects/SoftActorCritic/).**
+- Parameters of the inference network $$ q(z \mid c) $$ , actor $$ \pi_\theta(a \mid s, z) $$ and critic $$ Q_\theta(s,a,z) $$ are optimized jointly as Figure 2 with reparameterization trick on sampling context variable $$ z $$ .
+- Inference network is trained to **encode the value function** using gradients from the Bellman update for the critic (line 19 of Algorithm 1).
+- The critic loss and the actor loss are written as
+
+$$
+\begin{align}\label{eqn:critic-loss}
+\mathcal L_{\mathrm{critic}} = \mathbb E_{(s,a,r,s') \sim \mathcal B, z \sim q_\phi(z \mid c)} \left[ Q_\theta(s,a,z) - (r+\bar{V}(s',\bar{z}))\right]^2 \\ \label{eqn:actor-loss}
+\mathcal L_{\mathrm{actor}} = \mathbb E_{(s \sim \mathcal B, a \sim \pi_\theta, z \sim q_\phi(z \mid c)} \left[ \mathrm{D_{KL}} \left( \pi_\theta(a \mid s, \bar{z}) \parallel \frac{\mathrm{exp} (Q_\theta(s,a,\bar{z}))}{\mathcal Z_\theta(s) \right)\right]
+\end{align}
+$$
+
+where $$ \bar{V} is a target network and $$ \bar{z} $$ indicates that gradients are not being computed through it (as a computational graph on Figure 2).
+- The context data sampler $$ \mathcal S_c $$ samples uniformly from the most recently collected batch of data (line 13 of Algorithm 1).
+- The batch of data $$ \mathcal B^i $$ is recollected every 1000 meta-training optimization steps.
+
+<br/>
+<br/>
+<br/>
+
+-------
+
+# Experiments
+<br/>
+
+### Sample Efficiency and Performance
+<br/>
+
+<div class="row justify-content-center">
+    <div class="col-8">
+        {% include figure.html path="assets/img/PEARL/PEARL-exp-continuous.PNG" title="Meta-learning continuous control" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from "Efficient Off-Policy Meta-Reinforcement Learning via Probabilistic Context Variables"
+</div>
+
+**Experimental Setup.**
+- 6 locomotion task families **require adaptation across reward functions or across dynamics**.
+- Baseline algorithms: gradient-based(ProMP, MAML-TRPO), recurrence-based($$ \text{RL}^2 $$ with PPO)
+- Attempted to adapt recurrent DDPG, but not work (due to the distribution mismatch in the adaptation data and the difficulty of training with trajectories rather than decorrelated transitions)
+
+<br/>
+
+**Results.**
+PEARL uses 20-100x fewer samples during meta-training than previous meta-RL approaches while improving final asymptotic performance by 50-100% in five of six domains.
+
+<br/>
+<br/>
+
+### Posterior Sampling For Exploration
+
+<div class="row justify-content-center">
+    <div class="col-8">
+        {% include figure.html path="assets/img/PEARL/PEARL-exp-sparse.PNG" title="Sparse 2D navigation" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from "Efficient Off-Policy Meta-Reinforcement Learning via Probabilistic Context Variables"
+</div>
+
+- While they aim to adapt to new tasks with spare rewards, meta-training with sparse rewards is expremely difficult. For simplicity they assume access to the dense reward (the negative distance to the goal as the reward) during meta-training, as done by [`MAESN`](https://arxiv.org/abs/1802.07245).
+- MAESN : models probabilistic task variables, performs on-policy gradient-based meta-learning
+- PEARL can **adapt to the new sparse goal in fewer trajectories** and also **outperforms MAESN in terms of final performance**. 
+- PEARL is also more efficient during meta-training.
+
+<br/>
+<br/>
+
+### Ablations
+
+<div class="row justify-content-center">
+    <div class="col-4">
+        {% include figure.html path="assets/img/PEARL/PEARL-exp-encoder.PNG" title="Recurrent encoder ablation" class="img-fluid" %}
+    </div>
+    <div class="col-4">
+        {% include figure.html path="assets/img/PEARL/PEARL-exp-sampler.PNG" title="Context sampling ablation" class="img-fluid" %}
+    </div>
+    <div class="col-4">
+        {% include figure.html path="assets/img/PEARL/PEARL-exp-deterministic.PNG" title="Deterministic latent context" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from "Efficient Off-Policy Meta-Reinforcement Learning via Probabilistic Context Variables"
+</div>
+
+**Inference network architecture.** 
+- Compare permutation-invariant encoder for the latent context $$ Z $$ to **RNN encoder**. There are two options for sampling the RL batch: 1) **unordered transitions** as in PEARL ("RNN tran"), 2) sets of **trajectories** ("RNN traj"). 
+- "RNN tran" results in comparable performance to PEARL, at the cost of **slower optimization**.
+- "RNN traj" results in steep drop in performance.
+- The result demonstrates **the importance of decorrelating the samples** used for the RL objective.
+
+<br/>
+
+**Data sampling strategies.**
+- Ablate the **context sampling strategy** used during training. Three options for $$ \mathcal S_c $$ are:
+    1) original : sample recently colleted data, distinct from the RL batch
+    2) "off-policy" : sample fully off-policy data, distinct from the RL batch
+    3) "off-policy RL-batch" : sample fully off-policy data, identical to the RL batch
+- The results demonstrates **the importance of careful data sampling in off-policy meta-RL**.
+
+<br/>
+
+**Deterministic context.**
+- "deterministic" : let the distribution $$ q_\phi (z \mid c) $$ to a point estimate.
+- With no stochasticity in the latent context variable, **the only stochasticity comes from the policy and is thus time-invariant, hindering temporally extended exploration**. 
+
+<br/>
+<br/>
+<br/>
+
+-------
+
+# Discussion
