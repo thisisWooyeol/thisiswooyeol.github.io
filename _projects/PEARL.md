@@ -9,8 +9,10 @@ category: papers review
 
 # TL;DR:
 - PEARL decouples the problems of **inferring the task** and **solving it**, allowing for **off-policy meta-learning** while minimizing mismatch between train and test context distributions.
-- With **posterior sampling on latent context variable** on which the policy is conditioned, PEARL 
-- **Permutation-invariant encoder** for the latent context variable allows 
+- With **posterior sampling on latent context variable** on which the policy is conditioned, PEARL can conduct **temporally extended exploration** to adapt unseen tasks rapidly.
+- **Permutation-invariant encoder** for the latent context variable allows decomposing a trajectory into a collection of single transitions.
+- To train context variable in a on-policy manner, context sampler $$ \mathcal S_c $$ **samples recently collected data** retaining on-policy performance with better efficiency.
+- PEARL outperforms prior algorithms in **sample efficiency by 20-100X** as well as in **asymptotic performance by 50-100%** in five of six domains.
 
 <br/>
 <br/>
@@ -215,10 +217,10 @@ The main insight in designing an off-policy meta-RL method with the probabilisti
 The training procedure is summarized in Figure 2 and Algorithm 1. Meta-testing is described in Algorithm 2.
 
 <div class="row justify-content-center">
-    <div class="col-8">
+    <div class="col-7">
         {% include figure.html path="assets/img/PEARL/PEARL-meta-training.PNG" title="Meta-training procedure" class="img-fluid" %}
     </div>
-    <div class="col-6">
+    <div class="col-5">
         {% include figure.html path="assets/img/PEARL/PEARL-training-algorithm.PNG" title="Meta-training algorithm" class="img-fluid" %}
     </div>
 </div>
@@ -251,7 +253,7 @@ $$
 \end{align}
 $$
 
-where $$ \bar{V} is a target network and $$ \bar{z} $$ indicates that gradients are not being computed through it (as a computational graph on Figure 2).
+where $$ \bar{V} $$ is a target network and $$ \bar{z} $$ indicates that gradients are not being computed through it (as a computational graph on Figure 2).
 - The context data sampler $$ \mathcal S_c $$ samples uniformly from the most recently collected batch of data (line 13 of Algorithm 1).
 - The batch of data $$ \mathcal B^i $$ is recollected every 1000 meta-training optimization steps.
 
@@ -290,9 +292,10 @@ PEARL uses 20-100x fewer samples during meta-training than previous meta-RL appr
 <br/>
 
 ### Posterior Sampling For Exploration
+<br/>
 
 <div class="row justify-content-center">
-    <div class="col-8">
+    <div class="col-6">
         {% include figure.html path="assets/img/PEARL/PEARL-exp-sparse.PNG" title="Sparse 2D navigation" class="img-fluid" %}
     </div>
 </div>
@@ -309,6 +312,7 @@ PEARL uses 20-100x fewer samples during meta-training than previous meta-RL appr
 <br/>
 
 ### Ablations
+<br/>
 
 <div class="row justify-content-center">
     <div class="col-4">
