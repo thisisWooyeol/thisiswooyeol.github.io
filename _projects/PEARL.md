@@ -2,7 +2,7 @@
 layout: page
 title: PEARL
 description: Review on "Efficient Off-Policy Meta-Reinforcement Learning via Probabilistic Context Variables"
-img: assets/img/1.jpg
+img: assets/img/PEARL/PEARL-thumbnail.jpg
 importance: 4
 category: papers review
 ---
@@ -248,8 +248,8 @@ The training procedure is summarized in Figure 2 and Algorithm 1. Meta-testing i
 
 $$
 \begin{align}\label{eqn:critic-loss}
-\mathcal L_{\mathrm{critic}} = \mathbb E_{(s,a,r,s') \sim \mathcal B, z \sim q_\phi(z \mid c)} \left[ Q_\theta(s,a,z) - (r+\bar{V}(s',\bar{z}))\right]^2 \\ \label{eqn:actor-loss}
-\mathcal L_{\mathrm{actor}} = \mathbb E_{(s \sim \mathcal B, a \sim \pi_\theta, z \sim q_\phi(z \mid c)} \left[ \mathrm{D_{KL}} \left( \pi_\theta(a \mid s, \bar{z}) \parallel \frac{\mathrm{exp} (Q_\theta(s,a,\bar{z}))}{\mathcal Z_\theta(s) \right)\right]
+& \mathcal L_{\mathrm{critic}} = \mathbb E_{(s,a,r,s') \sim \mathcal B, z \sim q_\phi(z \mid c)} \left[ Q_\theta(s,a,z) - (r+\bar{V}(s',\bar{z}))\right]^2 \\
+& \mathcal L_{\mathrm{actor}} = \mathbb E_{s \sim \mathcal B, a \sim \pi_\theta, z \sim q_\phi(z \mid c)} \left[ \mathrm{D_{KL}} \left( \pi_\theta(a \mid s, \bar{z}) \parallel \frac{\mathrm{exp} (Q_\theta(s,a,\bar{z}))}{\mathcal Z_\theta(s)} \right)\right]
 \end{align}
 $$
 
@@ -330,7 +330,9 @@ PEARL uses 20-100x fewer samples during meta-training than previous meta-RL appr
 </div>
 
 **Inference network architecture.** 
-- Compare permutation-invariant encoder for the latent context $$ Z $$ to **RNN encoder**. There are two options for sampling the RL batch: 1) **unordered transitions** as in PEARL ("RNN tran"), 2) sets of **trajectories** ("RNN traj"). 
+- Compare permutation-invariant encoder for the latent context $$ Z $$ to **RNN encoder**. There are two options for sampling the RL batch: 
+    1) **unordered transitions** as in PEARL ("RNN tran")
+    2) sets of **trajectories** ("RNN traj")
 - "RNN tran" results in comparable performance to PEARL, at the cost of **slower optimization**.
 - "RNN traj" results in steep drop in performance.
 - The result demonstrates **the importance of decorrelating the samples** used for the RL objective.
