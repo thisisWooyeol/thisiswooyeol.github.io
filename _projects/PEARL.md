@@ -280,7 +280,7 @@ where $$ \bar{V} $$ is a target network and $$ \bar{z} $$ indicates that gradien
 
 **Experimental Setup.**
 - 6 locomotion task families **require adaptation across reward functions or across dynamics**.
-- Baseline algorithms: gradient-based(ProMP, MAML-TRPO), recurrence-based($$ \text{RL}^2 $$ with PPO)
+- Baseline algorithms: gradient-based(ProMP, MAML-TRPO), recurrence-based( with PPO)
 - Attempted to adapt recurrent DDPG, but not work (due to the distribution mismatch in the adaptation data and the difficulty of training with trajectories rather than decorrelated transitions)
 
 <br/>
