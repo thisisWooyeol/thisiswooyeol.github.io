@@ -44,3 +44,62 @@ There have been a few attemps to use MPC in model-based meta-RL or meta-learning
 <br/>
 
 ### Motion Control in Dynamic Environments
+
+<div class="row justify-content-center">
+    <div class="col-6">
+        {% include figure.html path="assets/img/MPC-PEARL/MPC-PEARL-dynamic-system.PNG" title="configuration of the motion control problem" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from "Infusing Model Predictive Control into Meta-Reinforcement Learning for Mobile Robots in Dynamic Environments"
+</div>
+
+**The motions of the robot and obstacles**
+
+- The motion of the robot (discrete-time nonlinear system): x_{t+1} = f(x_t, u_t) $$ , where $$ x_t \in \mathcal X \subseteq \mathbb R^{n_x} $$ and $$ u_t \in \mathcal U \subseteq \mathbb R^{n_u} $$ are the robot's state and control input at stage t.
+- state of dynamic obstacles: $$ x_{t,i}^d \in \mathbb R^{n_d}, i=1, ..., N_d $$
+- state of static obstacles: $$ x_i^s \in \mathbb R^{n_s}, i=1,...,N_s $$
+- As a common practice, the obstacles' motion can be tracked with high accuracy (fully observability assumption).
+<br/>
+
+**Definition of the motion control problem**
+
+- The motion control problem: MDP tuple $$ \mathcal T := \left( \mathcal{S,U} , P, c, \gamma \right) $$ , where $$ \mathcal S \subseteq \mathbb R^{n_x+n_dN_d+n_sN_s} $$ and $$ \mathcal U $$ are the state and action spaces, respectively, $$ c$$ iis a stage-wise cost function of interest. 
+- The MDP state: $$ s_t := \left( x_t,x_{t,1}^d, ..., x_{t,N_d}^d, x_1^s,..., x_{N_s}^s \right) $$ , concatenating the robot state and the states of the static and dynamic obstacles. 
+- The stage-cost function $$ c $$ is chosen as follows:
+
+  $$
+  \begin{equation}
+  c(s_t,u_t) := l(x_t,u_t) + w_d \mathbf 1_{ \lbrace x_t \notin \mathcal X_t^d \rbrace } + w_s \mathbf 1_{ \lbrace x_t \notin \mathcal X^s \rbrace } - w_g \mathbf 1_{ \lbrace x_t \in \mathcal X^g \rbrace } , 
+  \end{equation}
+  $$
+
+  where the loss function $$ l $$ measures the control performance, $$ \mathcal X_t^d $$ and $$ \mathcal X^s $$ denote the safe regions with respect to dynamic and static obstacles to be defined.
+- $$ \mathcal X_t^d := \lbrace x \in \mathbb R^{n_x} \mid h_d(x,x_{t,i}^d) \geq \epsilon_i^d, i=1,...N_d \rbrace $$ : The safety function is $$ h_d(x,x_i^d) := \lVert p^r -p_i^d \rVert_2 $$ , where $$ p^r $$ and $$ p_i^d $$ represent the center of gravities of the robot and dynamic obstacle $$ i $$ , respectively. The threshold is $$ \epsilon_i^d = r^r+r_i^d+r^\text{safe} $$ , where $$ r^r $$ and $$ r_i^d $$ are the radii of balls covering the robot and the obstacle respectively. $$ \mathcal X^s $$ can be designed in a similar manner.
+- $$ \mathcal X^g := \lbrace x \in \mathbb R^{n_x} \mid \lVert p^r -p_\text{goal} \rVert_2 \leq \epsilon^g \rbrace $$ : incentivizes the robot to reach a neighborhood of the goal point.
+
+<br/>
+<br/>
+
+### Off-Policy Meta-Reinforcement Learning
+
+As the motion pattern of dynamic obstacles and the configuration of static obstacles (transition function $$ P $$ and cost function $$ c $$ ) vary, it is desired to train the robot via meta-RL. To enhance sample efficiency in meta-RL, the authors adopt [`PEARL`](https://thisiswooyeol.github.io/projects/PEARL/), which is a state-of-the-art off-policy meta-RL algorithm. (You can see detailed explanations on `PEARL` algorithm at the link above.)
+
+<div class="row justify-content-center">
+    <div class="col-6">
+        {% include figure.html path="assets/img/MPC-PEARL/PEARL-in-navigation-task.PNG" title="PEARL in robot navigation task" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from "Infusing Model Predictive Control into Meta-Reinforcement Learning for Mobile Robots in Dynamic Environments"
+</div>
+
+Fig. 2 shows how the PEARL policy operates in the robot navigation task. This example indicates that **PEARL policies may induce overly conservative behaviors** to bypass regions cluttered with moving obstacles.
+
+<br/>
+<br/>
+<br/>
+
+-------
+
+# Infusing MPC into Meta-RL
