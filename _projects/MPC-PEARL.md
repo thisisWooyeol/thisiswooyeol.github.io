@@ -56,7 +56,7 @@ There have been a few attemps to use MPC in model-based meta-RL or meta-learning
 
 **The motions of the robot and obstacles**
 
-- The motion of the robot (discrete-time nonlinear system): x_{t+1} = f(x_t, u_t) $$ , where $$ x_t \in \mathcal X \subseteq \mathbb R^{n_x} $$ and $$ u_t \in \mathcal U \subseteq \mathbb R^{n_u} $$ are the robot's state and control input at stage t.
+- The motion of the robot (discrete-time nonlinear system): $$ x_{t+1} = f(x_t, u_t) $$ , where $$ x_t \in \mathcal X \subseteq \mathbb R^{n_x} $$ and $$ u_t \in \mathcal U \subseteq \mathbb R^{n_u} $$ are the robot's state and control input at stage t.
 - state of dynamic obstacles: $$ x_{t,i}^d \in \mathbb R^{n_d}, i=1, ..., N_d $$
 - state of static obstacles: $$ x_i^s \in \mathbb R^{n_s}, i=1,...,N_s $$
 - As a common practice, the obstacles' motion can be tracked with high accuracy (fully observability assumption).
@@ -87,7 +87,7 @@ As the motion pattern of dynamic obstacles and the configuration of static obsta
 
 <div class="row justify-content-center">
     <div class="col-6">
-        {% include figure.html path="assets/img/MPC-PEARL/PEARL-in-navigation-task.PNG" title="PEARL in robot navigation task" class="img-fluid" %}
+        {% include figure.html path="assets/img/MPC-PEARL/PEARL-on-navigation-problem.PNG" title="PEARL on robot navigation task" class="img-fluid" %}
     </div>
 </div>
 <div class="caption">
