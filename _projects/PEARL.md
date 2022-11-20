@@ -2,7 +2,7 @@
 layout: page
 title: PEARL
 description: Review on "Efficient Off-Policy Meta-Reinforcement Learning via Probabilistic Context Variables"
-img: assets/img/PEARL/PEARL-thumbnail.jpg
+img: assets/img/PEARL/PEARL-thumbnail.PNG
 importance: 4
 category: papers review
 ---
