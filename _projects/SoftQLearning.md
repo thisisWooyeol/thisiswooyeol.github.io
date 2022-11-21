@@ -29,7 +29,7 @@ Maximum Entropy RL objective is
 
 $$
 \begin{equation}
-\pi_\mathrm{MaxEnt}^* =\underset{\pi}{\argmax}\sum_t \mathbb E_{(s_t,a_t) \sim \rho_\pi} \left[\sum_{l=t}^\infty \gamma^{l-t} \mathbb E_{(s_l,a_l)} \left[r(s_t,a_t)+\alpha \mathcal H(\pi(\cdot|s_t)) \right]\right]
+\pi_\mathrm{MaxEnt}^* =\underset{\pi}{\mathrm{arg\,max}}\sum_t \mathbb E_{(s_t,a_t) \sim \rho_\pi} \left[\sum_{l=t}^\infty \gamma^{l-t} \mathbb E_{(s_l,a_l)} \left[r(s_t,a_t)+\alpha \mathcal H(\pi(\cdot|s_t)) \right]\right]
 \end{equation}
 $$
 
