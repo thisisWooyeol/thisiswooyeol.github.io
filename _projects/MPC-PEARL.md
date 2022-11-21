@@ -167,7 +167,7 @@ As PEARL does not use the known system dynamcis that is often available for vari
 $$
 \begin{align}
 \begin{split}
-\mathrm{min}_ {\mathbf u} & J(x_t, \mathbf u) = l_f(x_{t+K \mid t} ) + \sum_{k=0}^{K-1} l(x_{t+k \mid t} , u_{t+k \mid t} ) \\
+\underset{\mathbf u}{\mathrm{min}} & J(x_t, \mathbf u) = l_f(x_{t+K \mid t} ) + \sum_{k=0}^{K-1} l(x_{t+k \mid t} , u_{t+k \mid t} ) \\
 \text{s.t.} & x_{t+k+1 \mid t} = f(x_{t+K \mid t} , u_{t+k \mid t})  \\
 & x_{t \mid t} = x_t  \\
 & x_{t+k \mid t} \in \mathcal X_{t+k}^d \cap \mathcal X^s  \\
