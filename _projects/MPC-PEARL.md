@@ -321,7 +321,7 @@ MPC-PEARL is compared to PEARL, GP-MPC, MPC-SAC and GRBAL (Model-based meta-RL m
 <div class="caption">
     Figure from "Infusing Model Predictive Control into Meta-Reinforcement Learning for Mobile Robots in Dynamic Environments"
 </div>
- i
+ 
 - The **agressive goal-oriented nature of GP-MPC** causes a collision (SR:0.48, TT:59.62).
 - PEARL displays a **conservative behavior** that does not lead to any collisions (CFR:0.84), but falling behind GP-MPC in terms of navigation performance (SR:0.03, SPL: 0.03, TT:249.61).
 - MPC-PEARL with $$ \epsilon = 0.2 $$ showed the best performance, balancing safety and efficiency (SR:0.67, TT:211.35, SPL:0.44).
