@@ -60,10 +60,10 @@ There have been a few attemps to use MPC in model-based meta-RL or meta-learning
 
   $$
   \begin{equation}
-  x_{t+1} = f(x_t, u_t)
+  x_{t+1} = f(x_t, u_t),
   \end{equation}
   $$
-  , where $$ x_t \in \mathcal X \subseteq \mathbb R^{n_x} $$ and $$ u_t \in \mathcal U \subseteq \mathbb R^{n_u} $$ are the robot's state and control input at stage t.
+  where $$ x_t \in \mathcal X \subseteq \mathbb R^{n_x} $$ and $$ u_t \in \mathcal U \subseteq \mathbb R^{n_u} $$ are the robot's state and control input at stage t.
 - state of dynamic obstacles: $$ x_{t,i}^d \in \mathbb R^{n_d}, i=1, ..., N_d $$
 - state of static obstacles: $$ x_i^s \in \mathbb R^{n_s}, i=1,...,N_s $$
 - As a common practice, the obstacles' motion can be tracked with high accuracy (fully observability assumption).
@@ -165,20 +165,21 @@ To resolve the limited nagivation performance of PEARL, learning-based MPC is co
 As PEARL does not use the known system dynamcis that is often available for various practical robots, authors adpoted a learning-based MPC technique that solves the given task and uses model information in a receding horizon fashion:
 
 $$
-\begin{subequations}
 \begin{align}
+\begin{split}
 \mathrm{min}_ {\mathbf u} & J(x_t, \mathbf u) = l_f(x_{t+K \mid t} ) + \sum_{k=0}^{K-1} l(x_{t+k \mid t} , u_{t+k \mid t} ) \\
-\text{s.t.} & x_{t+k+1 \mid t} = f(x_{t+K \mid t} , u_{t+k \mid t}) \label{eqn:motion-model} \\
-& x_{t \mid t} = x_t \label{eqn:3c} \\
-& x_{t+k \mid t} \in \mathcal X_{t+k}^d \cap \mathcal X^s \label{eqn:3d} \\
-& u_{u+k \mid t} \in \mathcal U, \label{eqn:3e}
+\text{s.t.} & x_{t+k+1 \mid t} = f(x_{t+K \mid t} , u_{t+k \mid t})  \\
+& x_{t \mid t} = x_t  \\
+& x_{t+k \mid t} \in \mathcal X_{t+k}^d \cap \mathcal X^s  \\
+& u_{u+k \mid t} \in \mathcal U,
+\end{split}
 \end{align}
-\end{subequations}
 $$
 
-where $$ \mathbf u = (u_{t \mid t} , ... , u_{t+K-1 \mid t} ) $$ is a control sequence over the $$ K $$ prediction horizon, \eqref{eqn:motion-model} and \eqref{eqn:3e} must be satisfied for $$ k=0,..., K-1} and \eqref{eqn:3d} (safe region constraint) must hold for $$ k=0,...K $$ . Unfortunately, the MPC problem in the above form is impossible to solve because in general **the safe region $$ \mathcal X_{t+k}^d $$ is unknown**; it includes information about the future motion of dynamic obstacles. Here are how the authors solved this problem.
+where $$ \mathbf u = (u_{t \mid t} , ... , u_{t+K-1 \mid t} ) $$ is a control sequence over the $$ K $$ prediction horizon, (3b) and (3e) must be satisfied for $$ k=0,..., K-1 $$ and (3d) (safe region constraint) must hold for $$ k=0,...K $$ . Unfortunately, the MPC problem in the above form is impossible to solve because in general **the safe region $$ \mathcal X_{t+k}^d $$ is unknown**; it includes information about the future motion of dynamic obstacles. Here are how the authors solved this problem.
 
 <br/>
 
 **Learning the motion of obstacles via GPR**
 
+-
