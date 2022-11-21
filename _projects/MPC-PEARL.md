@@ -76,7 +76,7 @@ There have been a few attemps to use MPC in model-based meta-RL or meta-learning
 - The stage-cost function $$ c $$ is chosen as follows:
 
   $$
-  \begin{equation}
+  \begin{equation}\label{eqn:cost}
   c(s_t,u_t) := l(x_t,u_t) + w_d \mathbf 1_{ \lbrace x_t \notin \mathcal X_t^d \rbrace } + w_s \mathbf 1_{ \lbrace x_t \notin \mathcal X^s \rbrace } - w_g \mathbf 1_{ \lbrace x_t \in \mathcal X^g \rbrace } , 
   \end{equation}
   $$
@@ -89,6 +89,7 @@ There have been a few attemps to use MPC in model-based meta-RL or meta-learning
 <br/>
 
 ### Off-Policy Meta-Reinforcement Learning
+<br/>
 
 As the motion pattern of dynamic obstacles and the configuration of static obstacles (transition function $$ P $$ and cost function $$ c $$ ) vary, it is desired to train the robot via meta-RL. To enhance sample efficiency in meta-RL, adopt [`PEARL`](https://thisiswooyeol.github.io/projects/PEARL/), which is a state-of-the-art off-policy meta-RL algorithm. (You can see detailed explanations on `PEARL` algorithm at the link above.)
 
@@ -161,11 +162,12 @@ To resolve the limited nagivation performance of PEARL, learning-based MPC is co
 <br/>
 
 ### Learning-Based MPC with CVaR Constraints
+<br/>
 
 As PEARL does not use the known system dynamcis that is often available for various practical robots, authors adpoted a learning-based MPC technique that solves the given task and uses model information in a receding horizon fashion:
 
 $$
-\begin{align}
+\begin{align}\label{eqn:MPC-det}
 \begin{split}
 \underset{\mathbf u}{\mathrm{min}}\ & J(x_t, \mathbf u) = l_f(x_{t+K \mid t} ) + \sum_{k=0}^{K-1} l(x_{t+k \mid t} , u_{t+k \mid t} ) \\
 \text{s.t.}\ & x_{t+k+1 \mid t} = f(x_{t+K \mid t} , u_{t+k \mid t})  \\
@@ -200,15 +202,15 @@ where $$ \mathbf u = (u_{t \mid t} , ... , u_{t+K-1 \mid t} ) $$ is a control se
   $$
   
   where $$ \delta_\text{CVaR} $$ is a user-specific non-negative threshold representing **the maximum tolerable risk level**.
-- CVaR constraint can be approximated by **sample average approximation (SAA)** using a GPR distribution samples $$ \lbrace \hat{x}_ {t+k}^{d, (m)} \rbrace_{m=1}^M_\mathrm{SAA} $$ . The resulting **GP-MPC** formulation is
+- CVaR constraint can be approximated by **sample average approximation (SAA)** using a GPR distribution samples $$ \lbrace \hat{x}_ {t+k}^{d, (m)} \rbrace_{m=1}^{M_\mathrm{SAA}} $$ . The resulting **GP-MPC** formulation is
   
   $$
   \begin{align}
   \begin{split}
   \underset{\mathbf u, \xi}{\mathrm{min}}\ & J(x_t, \mathbf u) \\
-  \text{s.t.}\ & \xi_k + \sum_{m=1}^{M_\text{SAA}} \frac{ (L(x_{t+k \mid t}, \hat{x}_ {t+k}^{d,(m)} - \xi_k)^+}{M_{\text{SAA}}(1-\alpha)} \leq \delta_\text{CVaR} \\
+  \text{s.t.}\ & \xi_k + \sum_{m=1}^{M_\text{SAA}} \frac{ \left(L(x_{t+k \mid t}, \hat{x}_ {t+k}^{d,(m))} - \xi_k \right)^+}{M_{\text{SAA}}(1-\alpha)} \leq \delta_\text{CVaR} \\
   & x_{t+k \mid t} \in \mathcal X^s \\
-  & (3b), (3c), and (3e).
+  & (3b), (3c), \text{and} (3e).
   \end{split}
   \end{align}
   $$
@@ -247,11 +249,79 @@ where $$ \mathbf u = (u_{t \mid t} , ... , u_{t+K-1 \mid t} ) $$ is a control se
   \end{align*}
   $$
   
-  where $$ T_s $$ is the sample time and the slip angle $$ \beta_t $$ is defined as $$ \beta_t := \mathrm{tan}^{-1}(\frac{\mathrm{tan} \delta_t}{2}).
+  where $$ T_s $$ is the sample time and the slip angle $$ \beta_t $$ is defined as $$ \beta_t := \mathrm{tan}^{-1}(\frac{\mathrm{tan} \delta_t}{2}) $$ .
   
 <br/>
 
-**MPC module**
+**MPC-PEARL Details**
 
 - The MPC module is activated with a probability of $$ \epsilon \in \lbrace 0.2, 0.5, 0.8, 1 \rbrace $$ when the event occur.
-- 
+- The loss function in \eqref{eqn:cost} is chosen to speed up navigation with limited control energy as $$ l(x_t, u_t) := \lVert x_t - x_\text{goal} \rVert_Q^2 + \lVert u_t \rVert_R^2 $$ where $$ Q =\mathrm{diag}[1,1,0], R=0.2I_{n_u} $$ .
+- The terminal cost function in \eqref{eqn:MPC-det} was chosen similarly to the loss function in the cost function as $$ l_f(x) := \lVert x-x_\text{goal} \rVert_{Q_f}^2 with $$ Q_f = 20 Q $$ .
+
+<br/>
+
+**Baseline Algorithms and Performance Metrics**
+
+MPC-PEARL is compared to PEARL, GP-MPC, MPC-SAC and GRBAL (Model-based meta-RL method with gradient-based MAML), using the following metrics:
+- *Success Rate (SR)*: reaching the goal point & no collision occurs
+- *Travel Time (TT)*: time to reach the goal without any collision
+- *Collision-Free Rate (CFR)*: # no collision tasks / # all tasks
+- *Success Weighted by Path Length (SPL)*: $$ \frac{1}{N} \sum_{i=1}^N S_i \frac{l_i}{\mathrm{max}(p_i, l_i) $$ where $$ l_i $$ is the shortest-path distance from the agent's starting position to the goal in episode i, $$ p_i $$ is the length of path actually taken by agent and $$ S_i $$ is a binary indicator of success in episode i.
+- *Mean Goal Distance (MGD)*: the average Euclidean distance between the robot and the goal.
+
+<br/>
+<br/>
+
+### Restaurant Environment
+<br/>
+
+<div class="row justify-content-center">
+    <div class="col-6">
+        {% include figure.html path="assets/img/MPC-PEARL/Experiment-restaurant-graph.PNG" title="Restaurant Environment Results" class="img-fluid" %}
+    </div>
+    <div class="col-6">
+        {% include figure.html path="assets/img/MPC-PEARL/Experiment-restaurant-table.PNG" title="Restaurnat Environment Metrics" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from "Infusing Model Predictive Control into Meta-Reinforcement Learning for Mobile Robots in Dynamic Environments"
+</div>
+
+- Fig. 4 displays that MPC-PEARL with $$ \epsilon = 0.2, 0.5 $$ shows the best performance not the case with $$ \epsilon = 0.8 $$ or $$ 1 $$ , which has fewer opportunities to discover control actions that are better than MPC actions. This indicates that **MPC-PEARL effectively exploits both MPC and PEARL** to attain better navigation performances.
+- GrBAL presents the worst performance in terms of all metrics. As GrBAL is a **pure model-based method**, it suffers from the bias accumulated during trajectory rollouts. Also, the lack of a systematic exploration scheme degrades the overall performance.
+- **The systematic infusion of MPC actions accelerates meta-training**, particularly in the early stages. However, **the infusion rate should be kept under a certain threshold** to improve the overall performance.
+- **The online adaptation scheme does not significantly degrade the performance of the MPC-PEARL policy with $$ \epsilon = 0.2 $$** although the online version uses much less information.
+
+<br/>
+
+<div class="row justify-content-center">
+    <div class="col-6">
+        {% include figure.html path="assets/img/MPC-PEARL/Experiment-restaurant-trajectories.PNG" title="Restaurant Environment Trajectories" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from "Infusing Model Predictive Control into Meta-Reinforcement Learning for Mobile Robots in Dynamic Environments"
+</div>
+
+- In Fig. 5 (a), the robot controlled by MPC is **stuck in the middle due to its short horizon**.
+- In Fig. 5 (b), PEARL steers the robot toward a **conservative path, detouring the cluttered region**.
+- In the case of MPC-PEARL with $$ \epsilon = 0.2, 0.5, 0.8 $$ , **the robot takes a riskier yet shorter path without a collision**.
+
+<br/>
+<br/>
+
+### Sidewalk Environment
+
+<div class="row justify-content-center">
+    <div class="col-6">
+        {% include figure.html path="assets/img/MPC-PEARL/Experiment-sidewalk-trajectories.PNG" title="Sidewalk Environment Trajectories" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from "Infusing Model Predictive Control into Meta-Reinforcement Learning for Mobile Robots in Dynamic Environments"
+</div>
+ i
+- The **agressive goal-oriented nature of GP-MPC** causes a collision (SR:0.48, TT:59.62).
+- PEARL displays a **conservative behavior** that does not lead to any collisions (CFR:0.84), but falling behind GP-MPC in terms of navigation performance (SR:0.03, SPL: 0.03, TT:249.61).
+- MPC-PEARL with $$ \epsilon = 0.2 $$ showed the best performance, balancing safety and efficiency (SR:0.67, TT:211.35, SPL:0.44).
