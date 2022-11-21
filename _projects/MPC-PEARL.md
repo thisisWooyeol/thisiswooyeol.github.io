@@ -59,7 +59,7 @@ There have been a few attemps to use MPC in model-based meta-RL or meta-learning
 - The motion of the robot is modeled by the following discrete-time nonlinear system:
 
   $$
-  \begin{equation}
+  \begin{equation}\label{eqn:robot-motion}
   x_{t+1} = f(x_t, u_t),
   \end{equation}
   $$
@@ -167,7 +167,7 @@ As PEARL does not use the known system dynamcis that is often available for vari
 $$
 \begin{align}
 \begin{split}
-\underset{\mathbf u}{\mathrm{min}} & J(x_t, \mathbf u) = l_f(x_{t+K \mid t} ) + \sum_{k=0}^{K-1} l(x_{t+k \mid t} , u_{t+k \mid t} ) \\
+\underset{\mathbf u}{\mathrm{min}}\ & J(x_t, \mathbf u) = l_f(x_{t+K \mid t} ) + \sum_{k=0}^{K-1} l(x_{t+k \mid t} , u_{t+k \mid t} ) \\
 \text{s.t.}\ & x_{t+k+1 \mid t} = f(x_{t+K \mid t} , u_{t+k \mid t})  \\
 & x_{t \mid t} = x_t  \\
 & x_{t+k \mid t} \in \mathcal X_{t+k}^d \cap \mathcal X^s  \\
@@ -189,6 +189,69 @@ where $$ \mathbf u = (u_{t \mid t} , ... , u_{t+K-1 \mid t} ) $$ is a control se
 
 **CVaR constraints for safety**
 
-- Due to the **stochastic nature of $$ \hat{\mathcal X_{t+k}^d} $$** , imposing the deterministic constraint $$ x_{t+k \mid t} \in \hat{\mathcal X_{t+k}^d} $$ is likely to cause infeasibility or an overly conservative solution.
+- Due to the **stochastic nature of $$ \hat{\mathcal X}_ {t+k}^d $$** , imposing the deterministic constraint $$ x_{t+k \mid t} \in \hat{\mathcal X}_ {t+k}^d $$ is likely to cause infeasibility or an overly conservative solution.
 - As a remedy a **probabilistic constraint** is used: **CVaR constraint**
+- CVaR of a random loss $$ X $$ is its expected value within the $$ (1-\alpha) $$ worst-case quantile and is defined as $$ \mathrm{CVaR}_ \alpha [X]:= \mathrm{min}_ {\xi \in \mathbb R} \mathbb E [\xi + (X - \xi)^+ / (1 -\alpha)] $$ , where $$ \alpha \in (0,1) $$ and $$ (x)^+ = \mathrm{max} \lbrace x,0 \rbrace $$ (Check [`Conditional Value-at-Risk (CVAR): Algorithms and Applications`](https://www-iam.mathematik.hu-berlin.de/~romisch/SP01/Uryasev.pdf) by Stan Uryasev if you want more detailed explanations.
+- CVaR is a **convex risk measure** and **discerns a rare but catastrophic event** in the worst-case tail distribution unlike chance constraits. (As CVaR is a expectation value)
+- By replacing a random loss $$ X $$ in CVaR definition with $$ L(x_t, \hat{x}_ t^d) := \mathrm{max}_ {i=1,...N_d} \lbrace \epsilon_i^d - h_d(x_t,\hat{x}_ {t,i}^d) \rbrace $$ , the deterministic safe region constrint (3d) now can be written in probabilistic as
+  
+  $$
+  \mathrm{CVaR}_ \alpha \left[ L(x_{t+k \mid t}, \hat{x}_ {t+k}^d \right] = \underset{\xi \in \mathbb R}{\mathrm{min}} \left( \xi + \frac{1}{1-\alpha} \mathbb E \left[ \left( L(x_{t+k \mid t}, \hat{x}_ {t+k}^d) - \xi \right)^+ \right] \right) \leq \delta_{\text{CVaR}},
+  $$
+  
+  where $$ \delta_\text{CVaR} $$ is a user-specific non-negative threshold representing **the maximum tolerable risk level**.
+- CVaR constraint can be approximated by **sample average approximation (SAA)** using a GPR distribution samples $$ \lbrace \hat{x}_ {t+k}^{d, (m)} \rbrace_{m=1}^M_\mathrm{SAA} $$ . The resulting **GP-MPC** formulation is
+  
+  $$
+  \begin{align}
+  \begin{split}
+  \underset{\mathbf u, \xi}{\mathrm{min}}\ & J(x_t, \mathbf u) \\
+  \text{s.t.}\ & \xi_k + \sum_{m=1}^{M_\text{SAA}} \frac{ (L(x_{t+k \mid t}, \hat{x}_ {t+k}^{d,(m)} - \xi_k)^+}{M_{\text{SAA}}(1-\alpha)} \leq \delta_\text{CVaR} \\
+  & x_{t+k \mid t} \in \mathcal X^s \\
+  & (3b), (3c), and (3e).
+  \end{split}
+  \end{align}
+  $$
+  
+<br/>
+<br/>
+<br/>
+
+-------
+
+# Simulation Results
+<br/>
+
+### Simulation Details
+<br/>
+
+**Robot Dynamics**
+
+- state: the robot's CoG $$ (x_t^c, y_t^c) $$ and the heading angle $$ \theta_t $$ 
+- control input (available action): the velocity $$ v_t $$ and the steering angle of the front wheel $$ \delta_t $$ , where the action space is set to $$ \mathcal U:= [9,v_\text{max}] \times [-\frac{\pi}{2}, \frac{\pi}{2}] $$ .
+- The transition model of robot in \eqref{eqn:robot-motion} are now given by
+<div class="row justify-content-center">
+    <div class="col-6">
+        {% include figure.html path="assets/img/MPC-PEARL/Kinematics-of-lateral-vehicle-motion.PNG" title="Kinematics of lateral vehicle motion" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from R. Rajamani, "Vehicle Dynamics and Control"
+</div>
+  
+  $$
+  \begin{align*}
+  x_{t+1}^c & = x_t^c + T_s v_t \mathrm{cos}(\theta_t + \beta_t) \\
+  y_{t+1}^c & = y_t^c + T_s v_t \mathrm{sin}(\theta_t + \beta_t) \\
+  \theta_{t+1}^c & = \theta_t + T_s \frac{v_t \mathrm{cos}(\beta_t)}{L} \mathrm{tan}(\delta_t),
+  \end{align*}
+  $$
+  
+  where $$ T_s $$ is the sample time and the slip angle $$ \beta_t $$ is defined as $$ \beta_t := \mathrm{tan}^{-1}(\frac{\mathrm{tan} \delta_t}{2}).
+  
+<br/>
+
+**MPC module**
+
+- The MPC module is activated with a probability of $$ \epsilon \in \lbrace 0.2, 0.5, 0.8, 1 \rbrace $$ when the event occur.
 - 
