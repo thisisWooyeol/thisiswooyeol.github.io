@@ -182,4 +182,13 @@ where $$ \mathbf u = (u_{t \mid t} , ... , u_{t+K-1 \mid t} ) $$ is a control se
 
 **Learning the motion of obstacles via GPR**
 
--
+- GPR is performed online using a training dataset $$ \mathcal D_t = \lbrace x_{t-l}^d, v_{t-l}^d \rbrace_{l=1}^{N_\mathrm{GP}} $$ ($$ N_\mathrm{GP} $$ most recent observations of the obstacles' state transitions), where $$ v_{t-l}^d := x_{t-l+1}^d - x_{t-l}^d $$ .
+- (detailed description about GPR: TBD)
+
+<br/>
+
+**CVaR constraints for safety**
+
+- Due to the **stochastic nature of $$ \hat{\mathcal X_{t+k}^d} $$** , imposing the deterministic constraint $$ x_{t+k \mid t} \in \hat{\mathcal X_{t+k}^d} $$ is likely to cause infeasibility or an overly conservative solution.
+- As a remedy a **probabilistic constraint** is used: **CVaR constraint**
+- 
