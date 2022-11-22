@@ -44,6 +44,7 @@ There have been a few attemps to use MPC in model-based meta-RL or meta-learning
 <br/>
 
 ### Motion Control in Dynamic Environments
+<br/>
 
 <div class="row justify-content-center">
     <div class="col-6">
@@ -198,7 +199,7 @@ where $$ \mathbf u = (u_{t \mid t} , ... , u_{t+K-1 \mid t} ) $$ is a control se
 - By replacing a random loss $$ X $$ in CVaR definition with $$ L(x_t, \hat{x}_ t^d) := \mathrm{max}_ {i=1,...N_d} \lbrace \epsilon_i^d - h_d(x_t,\hat{x}_ {t,i}^d) \rbrace $$ , the deterministic safe region constrint (3d) now can be written in probabilistic as
   
   $$
-  \mathrm{CVaR}_ \alpha \left[ L(x_{t+k \mid t}, \hat{x}_ {t+k}^d \right] = \underset{\xi \in \mathbb R}{\mathrm{min}} \left( \xi + \frac{1}{1-\alpha} \mathbb E \left[ \left( L(x_{t+k \mid t}, \hat{x}_ {t+k}^d) - \xi \right)^+ \right] \right) \leq \delta_{\text{CVaR}},
+  \mathrm{CVaR}_ \alpha \left[ L(x_{t+k \mid t}, \hat{x}_ {t+k}^d) \right] = \underset{\xi \in \mathbb R}{\mathrm{min}} \left( \xi + \frac{1}{1-\alpha} \mathbb E \left[ \left( L(x_{t+k \mid t}, \hat{x}_ {t+k}^d) - \xi \right)^+ \right] \right) \leq \delta_{\text{CVaR}},
   $$
   
   where $$ \delta_\text{CVaR} $$ is a user-specific non-negative threshold representing **the maximum tolerable risk level**.
@@ -208,7 +209,7 @@ where $$ \mathbf u = (u_{t \mid t} , ... , u_{t+K-1 \mid t} ) $$ is a control se
   \begin{align}
   \begin{split}
   \underset{\mathbf u, \xi}{\mathrm{min}}\ & J(x_t, \mathbf u) \\
-  \text{s.t.}\ & \xi_k + \sum_{m=1}^{M_\text{SAA}} \frac{ \left(L(x_{t+k \mid t}, \hat{x}_ {t+k}^{d,(m))} - \xi_k \right)^+}{M_{\text{SAA}}(1-\alpha)} \leq \delta_\text{CVaR} \\
+  \text{s.t.}\ & \xi_k + \sum_{m=1}^{M_\text{SAA}} \frac{ \left(L(x_{t+k \mid t}, \hat{x}_ {t+k}^{d,(m)}) - \xi_k \right)^+}{M_{\text{SAA}}(1-\alpha)} \leq \delta_\text{CVaR} \\
   & x_{t+k \mid t} \in \mathcal X^s \\
   & (3b), (3c), \text{and} (3e).
   \end{split}
@@ -257,18 +258,18 @@ where $$ \mathbf u = (u_{t \mid t} , ... , u_{t+K-1 \mid t} ) $$ is a control se
 
 - The MPC module is activated with a probability of $$ \epsilon \in \lbrace 0.2, 0.5, 0.8, 1 \rbrace $$ when the event occur.
 - The loss function in \eqref{eqn:cost} is chosen to speed up navigation with limited control energy as $$ l(x_t, u_t) := \lVert x_t - x_\text{goal} \rVert_Q^2 + \lVert u_t \rVert_R^2 $$ where $$ Q =\mathrm{diag}[1,1,0], R=0.2I_{n_u} $$ .
-- The terminal cost function in \eqref{eqn:MPC-det} was chosen similarly to the loss function in the cost function as $$ l_f(x) := \lVert x-x_\text{goal} \rVert_{Q_f}^2 with $$ Q_f = 20 Q $$ .
+- The terminal cost function in \eqref{eqn:MPC-det} was chosen similarly to the loss function in the cost function as $$ l_f(x) := \lVert x-x_\text{goal} \rVert_{Q_f}^2 $$ with $$ Q_f = 20 Q $$ .
 
 <br/>
 
 **Baseline Algorithms and Performance Metrics**
 
 MPC-PEARL is compared to PEARL, GP-MPC, MPC-SAC and GRBAL (Model-based meta-RL method with gradient-based MAML), using the following metrics:
-- *Success Rate (SR)*: reaching the goal point & no collision occurs
-- *Travel Time (TT)*: time to reach the goal without any collision
-- *Collision-Free Rate (CFR)*: # no collision tasks / # all tasks
-- *Success Weighted by Path Length (SPL)*: $$ \frac{1}{N} \sum_{i=1}^N S_i \frac{l_i}{\mathrm{max}(p_i, l_i) $$ where $$ l_i $$ is the shortest-path distance from the agent's starting position to the goal in episode i, $$ p_i $$ is the length of path actually taken by agent and $$ S_i $$ is a binary indicator of success in episode i.
-- *Mean Goal Distance (MGD)*: the average Euclidean distance between the robot and the goal.
+- ***Success Rate (SR)***: reaching the goal point & no collision occurs
+- ***Travel Time (TT)***: time to reach the goal without any collision
+- ***Collision-Free Rate (CFR)***: # no collision tasks / # all tasks
+- ***Success Weighted by Path Length (SPL)***: $$ \frac{1}{N} \sum_{i=1}^N S_i \frac{l_i}{\mathrm{max}}(p_i, l_i) $$ where $$ l_i $$ is the shortest-path distance from the agent's starting position to the goal in episode i, $$ p_i $$ is the length of path actually taken by agent and $$ S_i $$ is a binary indicator of success in episode i.
+- ***Mean Goal Distance (MGD)***: the average euclidean distance between the robot and the goal
 
 <br/>
 <br/>
