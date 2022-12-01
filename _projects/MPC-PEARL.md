@@ -197,7 +197,7 @@ where $$ \mathbf u = (u_{t \mid t} , ... , u_{t+K-1 \mid t} ) $$ is a control se
   \end{align*}
   $$
 
-- The corresponding approximation of $$ \mathbf v $$ at an arbitrary test point $$ \mathbf x $$ is then represented by $$ \mathbf v(\mathbf x) \sim \mathcal N (\mu^v(\mathbf x), \Sigma^v(\mathbf x)) $$ , where $$ \mu^v and \Sigma^v $$ are computed as
+- The corresponding approximation of $$ \mathbf v $$ at an arbitrary test point $$ \mathbf x $$ is then represented by $$ \mathbf v(\mathbf x) \sim \mathcal N (\mu^v(\mathbf x), \Sigma^v(\mathbf x)) $$ , where $$ \mu^v $$ and $$ \Sigma^v $$ are computed as
 
   $$
   \begin{align*}
