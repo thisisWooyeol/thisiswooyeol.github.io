@@ -3,8 +3,8 @@ layout: page
 title: MPC-PEARL
 description: Review on "Infusing Model Predictive Control into Meta-Reinforcement Learning for Mobile Robots in Dynamic Environments"
 img: assets/img/MPC-PEARL/MPC-PEARL-thumbnail.PNG
-importance: 5
-category: papers review
+importance: 1
+category: my own wiki
 ---
 
 TL;DR:
@@ -186,7 +186,27 @@ where $$ \mathbf u = (u_{t \mid t} , ... , u_{t+K-1 \mid t} ) $$ is a control se
 **Learning the motion of obstacles via GPR**
 
 - GPR is performed online using a training dataset $$ \mathcal D_t = \lbrace x_{t-l}^d, v_{t-l}^d \rbrace_{l=1}^{N_\mathrm{GP}} $$ ($$ N_\mathrm{GP} $$ most recent observations of the obstacles' state transitions), where $$ v_{t-l}^d := x_{t-l+1}^d - x_{t-l}^d $$ .
-- (detailed description about GPR: TBD)
+- The GPR problem is defined for each $$ j$$ th entry of $$ \mathbf v $$ as 
+  
+  $$
+  \begin{align}
+  \tilde{\mathrm{v}}_ j = & \mathbf{v}_ j (\tilde{\mathrm{x}}_ j) + \omega_j.\\
+  \text{where} & \mathbf{v}_ j (\mathrm{x}) \sim \mathcal{GP}(\mathbf{0}, k_j(\mathrm{x, x'})) \\
+  & k_j(\mathrm{x,x'} = \sigma_f^2 \mathrm{exp} \left( - \frac{ \lVert \mathrm{x}_ j - \mathrm{x'}_ j \rVert }{2\lambda^2} \right) \\
+  & \omega_j \sim \mathcal N \left( \mathbf{0}, \text{diag} \left[ \sigma_{\omega, j}^2, \ldots , \sigma_{\omega, j}^2 \right] \right)
+  \end{align}
+  $$
+
+- The corresponding approximation of $$ \mathbf v $$ at an arbitrary test point $$ \mathbf x $$ is then represented by $$ \mathbf v(\mathbf x) \sim \mathcal N (\mu^v(\mathbf x), \Sigma^v(\mathbf x)) $$ , where $$ \mu^v and \Sigma^v $$ are computed as
+
+  $$
+  \begin{align}
+  \mu^v(\mathbf x) &= K_j(\mathbf x, \tilde{\mathrm{x}}) \left[ K_j(\tilde{\mathrm{x}}, \tilde{\mathrm{x}}) + \sigma_{\omega, j}^2 I \right]^{-1} \tilde{\mathrm{v}}_ j \\
+  \Sigma^v(\mathbf x) &= k_j(\mathbf{x, x}) - K_j(\mathbf x, \tilde{\mathrm{x}}) \left[ K_j(\tilde{\mathrm{x}}, \tilde{\mathrm{x}}) + \sigma_{\omega, j}^2 I \right]^{-1} K_j(\tilde{\mathrm{x}}, \mathbf x)
+  \end{align}
+  $$
+  
+- The state of the obstacle Starting from $$ \hat{x}_ t^d \sim \mathcal N(x_t^d, \mathbf 0) $$ , 
 
 <br/>
 
@@ -259,6 +279,7 @@ where $$ \mathbf u = (u_{t \mid t} , ... , u_{t+K-1 \mid t} ) $$ is a control se
 - The MPC module is activated with a probability of $$ \epsilon \in \lbrace 0.2, 0.5, 0.8, 1 \rbrace $$ when the event occur.
 - The loss function in \eqref{eqn:cost} is chosen to speed up navigation with limited control energy as $$ l(x_t, u_t) := \lVert x_t - x_\text{goal} \rVert_Q^2 + \lVert u_t \rVert_R^2 $$ where $$ Q =\mathrm{diag}[1,1,0], R=0.2I_{n_u} $$ .
 - The terminal cost function in \eqref{eqn:MPC-det} was chosen similarly to the loss function in the cost function as $$ l_f(x) := \lVert x-x_\text{goal} \rVert_{Q_f}^2 $$ with $$ Q_f = 20 Q $$ .
+- The GPR is performed using the latest $$ N_\text{GP} = 10 $$ observations for predicting the motion of the closest $$ N_\text{adapt} = 2 $$ obstacles for a planning horizon of $$ K = 10 $$ .
 
 <br/>
 
