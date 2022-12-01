@@ -189,24 +189,28 @@ where $$ \mathbf u = (u_{t \mid t} , ... , u_{t+K-1 \mid t} ) $$ is a control se
 - The GPR problem is defined for each $$ j$$ th entry of $$ \mathbf v $$ as 
   
   $$
-  \begin{align}
-  \tilde{\mathrm{v}}_ j = & \mathbf{v}_ j (\tilde{\mathrm{x}}_ j) + \omega_j.\\
-  \text{where} & \mathbf{v}_ j (\mathrm{x}) \sim \mathcal{GP}(\mathbf{0}, k_j(\mathrm{x, x'})) \\
-  & k_j(\mathrm{x,x'} = \sigma_f^2 \mathrm{exp} \left( - \frac{ \lVert \mathrm{x}_ j - \mathrm{x'}_ j \rVert }{2\lambda^2} \right) \\
+  \begin{align*}
+  \ \ \tilde{\mathrm{v}}_ j =  & \mathbf{v}_ j (\tilde{\mathrm{x}}_ j) + \omega_j.\\
+  \text{where} \ \ & \mathbf{v}_ j (\mathrm{x}) \sim \mathcal{GP}(\mathbf{0}, k_j(\mathrm{x, x'})) \\
+  & k_j(\mathrm{x,x'}) = \sigma_f^2 \ \mathrm{exp} \left( - \frac{ \lVert \mathrm{x}_ j - \mathrm{x_j'} \rVert }{2\lambda^2} \right) \\
   & \omega_j \sim \mathcal N \left( \mathbf{0}, \text{diag} \left[ \sigma_{\omega, j}^2, \ldots , \sigma_{\omega, j}^2 \right] \right)
-  \end{align}
+  \end{align*}
   $$
 
 - The corresponding approximation of $$ \mathbf v $$ at an arbitrary test point $$ \mathbf x $$ is then represented by $$ \mathbf v(\mathbf x) \sim \mathcal N (\mu^v(\mathbf x), \Sigma^v(\mathbf x)) $$ , where $$ \mu^v and \Sigma^v $$ are computed as
 
   $$
-  \begin{align}
-  \mu^v(\mathbf x) &= K_j(\mathbf x, \tilde{\mathrm{x}}) \left[ K_j(\tilde{\mathrm{x}}, \tilde{\mathrm{x}}) + \sigma_{\omega, j}^2 I \right]^{-1} \tilde{\mathrm{v}}_ j \\
-  \Sigma^v(\mathbf x) &= k_j(\mathbf{x, x}) - K_j(\mathbf x, \tilde{\mathrm{x}}) \left[ K_j(\tilde{\mathrm{x}}, \tilde{\mathrm{x}}) + \sigma_{\omega, j}^2 I \right]^{-1} K_j(\tilde{\mathrm{x}}, \mathbf x)
-  \end{align}
+  \begin{align*}
+  \mu_j^v(\mathbf x) &= K_j(\mathbf x, \tilde{\mathrm{x}}) \left[ K_j(\tilde{\mathrm{x}}, \tilde{\mathrm{x}}) + \sigma_{\omega, j}^2 I \right]^{-1} \tilde{\mathrm{v}}_ j \\
+  \Sigma_j^v(\mathbf x) &= k_j(\mathbf{x, x}) - K_j(\mathbf x, \tilde{\mathrm{x}}) \left[ K_j(\tilde{\mathrm{x}}, \tilde{\mathrm{x}}) + \sigma_{\omega, j}^2 I \right]^{-1} K_j(\tilde{\mathrm{x}}, \mathbf x)
+  \end{align*}
   $$
   
-- The state of the obstacle Starting from $$ \hat{x}_ t^d \sim \mathcal N(x_t^d, \mathbf 0) $$ , 
+- Starting from $$ \hat{x}_ t^d \sim \mathcal N(x_t^d, \mathbf 0) $$ , the approximated state of the obstacle $$ \hat{x}_ {t+k+1}^d \sim \mathcal N(\mu_{t+k+1}, \Sigma_{t+k+1}) $$ is obtained by propagating the state vector using the estimated velocity evaluated at the current mean state:
+  
+  $$
+  \mu_{t+k+1} = \mu_{t+k} + \mu^v(\mu_{t+k}), \ \ \Sigma_{t+k+1} = \Sigma_{t+k} + \Sigma^v(\mu_{t+k})
+  $$
 
 <br/>
 
