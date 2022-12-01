@@ -183,7 +183,7 @@ where $$ \mathbf u = (u_{t \mid t} , ... , u_{t+K-1 \mid t} ) $$ is a control se
 
 <br/>
 
-**Learning the motion of obstacles via GPR**
+**Learning the motion of obstacles via GPR [What is GPR?](http://mlg.eng.cam.ac.uk/pub/pdf/Ras04.pdf)**
 
 - GPR is performed online using a training dataset $$ \mathcal D_t = \lbrace x_{t-l}^d, v_{t-l}^d \rbrace_{l=1}^{N_\mathrm{GP}} $$ ($$ N_\mathrm{GP} $$ most recent observations of the obstacles' state transitions), where $$ v_{t-l}^d := x_{t-l+1}^d - x_{t-l}^d $$ .
 - The GPR problem is defined for each $$ j$$ th entry of $$ \mathbf v $$ as 
