@@ -3,7 +3,7 @@ layout: page
 title: MPC-PEARL
 description: Review on "Infusing Model Predictive Control into Meta-Reinforcement Learning for Mobile Robots in Dynamic Environments"
 img: assets/img/MPC-PEARL/MPC-PEARL-thumbnail.PNG
-importance: 1
+importance: 5
 category: papers review
 ---
 
