@@ -27,7 +27,7 @@ TL;DR:
 <br/>
 
 <div class="row justify-content-center">
-    <div class="col-6">
+    <div class="col-10">
         {% include figure.html path="assets/img/MBMRL-Flight/MBMRL-Flight-transport-task.PNG" title="Quadcopter Payload Transport Task" class="img-fluid" %}
     </div>
 </div>
