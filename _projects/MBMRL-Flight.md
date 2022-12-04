@@ -36,20 +36,17 @@ TL;DR:
 </div>
 
 <br/>
-<br/>
 
 ### Limits of hand-designed model on the flight tasks
 
 **The complex interaction between the magnetic gripper and the payload** are unlikely to be represented accurately by hand-designed models. Even more unpredictable is **the effect of the payload on the dynamics of the quadcopter** when the payload is lifted off the ground.
 
 <br/>
-<br/>
 
 ### Need for fast adaptation
 
 Conventional learning-based methods typically require a large amount of data to learn accurate models, and therefore may be slow to adapt. The payload adaptation task illustrates the need for fast adaptation; the robot must very quickly **determine the payload parameters**, and then **adjust its motor commands accordingly**.
 
-<br/>
 <br/>
 
 ### Proposed method: model-based meta-RL
