@@ -63,6 +63,7 @@ A **predictive dynamics model** which is **augmented with stochastic latent vari
 --------
 
 # Related Work
+<br/>
 
 **Controlling Aerial Vehicles**
 
@@ -92,4 +93,15 @@ A **predictive dynamics model** which is **augmented with stochastic latent vari
 --------
 
 # Preliminaries
+<br/>
+
+Model-based reinforcement learning estimates the underlying dynamics from data by training a dynamics model $$ p_\theta(s_{t+1} \mid s_t, a_t) $$ via maximum likelihood
+
+$$
+\begin{align}
+\theta* &= \underset{\theta}{\mathrm{argmax}} \ p(\mathcal D^\text{train} \mid \theta) \nonumber\\
+ &= \underset{\theta}{\mathrm{argmax}} \sum_{(s_t,a_t,s_{t+1}) \in \mathcal D^\text{train}} \mathrm{log} \ p_\theta(s_{t+1} \mid s_t, a_t).
+\end{align}
+$$
+
 
