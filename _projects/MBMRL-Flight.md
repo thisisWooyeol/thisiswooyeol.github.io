@@ -101,4 +101,4 @@ $$
 \end{align}
 $$
 
-
+To instantiate this method, the authors extend the [`PETS algorithm`](https://arxiv.org/abs/1805.12114)(TBD), which handles expressive **neural network dynamics models** and attain good sample efficiency and **final performance**. PETS uses an ensemble of deterministic and probabilistic neural network models, each parameterizing a Gaussian distribution of $$ s_{t+1} $$ conditioned on both $$ s_t $$ and $$ a_t $$ .
