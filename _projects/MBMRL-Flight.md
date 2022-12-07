@@ -101,4 +101,21 @@ $$
 \end{align}
 $$
 
-To instantiate this method, the authors extend the [`PETS algorithm`](https://arxiv.org/abs/1805.12114)(TBD), which handles expressive **neural network dynamics models** and attain good sample efficiency and **final performance**. PETS uses an ensemble of deterministic and probabilistic neural network models, each parameterizing a Gaussian distribution of $$ s_{t+1} $$ conditioned on both $$ s_t $$ and $$ a_t $$ .
+To instantiate this method, the authors extend the [`PETS algorithm`](https://arxiv.org/abs/1805.12114), which handles expressive **neural network dynamics models** to attain good sample efficiency as model-based algorithms and **asymptotic performance** as model-free algorithms. PETS uses an ensemble of probabilistic neural network models, each parameterizing a Gaussian distribution of $$ s_{t+1} $$ conditioned on both $$ s_t $$ and $$ a_t $$ . The learned dynamics model is used to plan and execute actions via model predictive control (MPC) with trajectory sampling (TS)(due to probabilistic models). Trajectory sampling predicts plausible state trajectories begins by creating $$ P $$ particles from the current state, $$ s_{t=0}^p =s_0 \forall p $$ . Each particle is then propagated by: $$ s_{t+1}^p \sim \tilde{f}_ {\theta_{b(p,t)}} (s_t^p,a_t) $$ , according to a particular bootstrap $$ b(p,t) \text{in} \lbrace 1, \ldots, B \rbrace $$ , where $$ B $$ is the number of bootstrap models in the ensemble. Unlike a common technique to compute the optimal action sequence (random sampling shooting), PETS used cross-entropy method (CEM), which samples actions from a distribution closer to previous action samples that yielded high reward. Now the overall PETS algorithm can be summarized in Algorithm 1.
+
+<div class="row justify-content-center">
+    <div class="col-10">
+        {% include figure.html path="assets/img/MBMRL-Flight/PETS-algorithm.PNG" title="PETS algorithm" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from "Deep Reinforcement Learning in a Handful of Trials using Probabilistic Dynamics Models"
+</div>
+
+<br/>
+<br/>
+<br/>
+
+--------
+
+# Model-Based Meta-Learning For Quadcopter Payload Transport
