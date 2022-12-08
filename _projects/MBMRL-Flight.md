@@ -81,7 +81,7 @@ A **predictive dynamics model** which is **augmented with stochastic latent vari
 **Model-based Meta-learning**
 
 - [`O'Connell et al.`](https://arxiv.org/abs/2103.01932) used MAML algorithm for adapting a drone's internal dynamics model. The resulting adapted model, however, **did not improve the performance of the closed-loop controller**. In contrast, the authors demonstrate that their method does improve performance of the model-based controller.
-- [`Nagabandi et al. (GrBAL)`](https://arxiv.org/abs/1803.11347) and [`Kaushik et al.`](https://arxiv.org/abs/2003.04663) explored **meta-learning for online adaptation in MBRL** for a legged robot, which demonstrated improved closed-loop controller performance with adapted model.
+- [`Nagabandi et al.(GrBAL)`](https://arxiv.org/abs/1803.11347) and [`Kaushik et al.`](https://arxiv.org/abs/2003.04663) explored **meta-learning for online adaptation in MBRL** for a legged robot, which demonstrated improved closed-loop controller performance with adapted model.
 
 <br/>
 <br/>
@@ -96,7 +96,7 @@ Model-based reinforcement learning estimates the underlying dynamics from data b
 
 $$
 \begin{align}
-\theta* &= \underset{\theta}{\mathrm{argmax}} \ p(\mathcal D^\text{train} \mid \theta) \nonumber\\
+\theta* &= \underset{\theta}{\mathrm{argmax}} \ p(\mathcal D^\text{train} \mid \theta) \nonumber\\ \label{eqn:model-train}
  &= \underset{\theta}{\mathrm{argmax}} \sum_{(s_t,a_t,s_{t+1}) \in \mathcal D^\text{train}} \mathrm{log} \ p_\theta(s_{t+1} \mid s_t, a_t).
 \end{align}
 $$
@@ -104,7 +104,7 @@ $$
 To instantiate this method, the authors extend the [`PETS algorithm`](https://arxiv.org/abs/1805.12114), which handles expressive **neural network dynamics models** to attain good sample efficiency as model-based algorithms and **asymptotic performance** as model-free algorithms. PETS uses an ensemble of probabilistic neural network models, each parameterizing a Gaussian distribution of $$ s_{t+1} $$ conditioned on both $$ s_t $$ and $$ a_t $$ . The learned dynamics model is used to plan and execute actions via model predictive control (MPC) with trajectory sampling (TS)(due to probabilistic models). Trajectory sampling predicts plausible state trajectories begins by creating $$ P $$ particles from the current state, $$ s_{t=0}^p =s_0 \forall p $$ . Each particle is then propagated by: $$ s_{t+1}^p \sim \tilde{f}_ {\theta_{b(p,t)}} (s_t^p,a_t) $$ , according to a particular bootstrap $$ b(p,t) \text{in} \lbrace 1, \ldots, B \rbrace $$ , where $$ B $$ is the number of bootstrap models in the ensemble. Unlike a common technique to compute the optimal action sequence (random sampling shooting), PETS used cross-entropy method (CEM), which samples actions from a distribution closer to previous action samples that yielded high reward. Now the overall PETS algorithm can be summarized in Algorithm 1.
 
 <div class="row justify-content-center">
-    <div class="col-8">
+    <div class="col-6">
         {% include figure.html path="assets/img/MBMRL-Flight/PETS-algorithm.PNG" title="PETS algorithm" class="img-fluid" %}
     </div>
 </div>
@@ -137,3 +137,45 @@ Data is collected by manually piloting the quadcopter along random paths for eac
 <br/>
 
 ### Model Training with Known Dynamics Variables
+
+In case we know all the "factors of variation" in the dynamics across tasks at training time, represented explicitly as a "dynamic variable" $$ z_k \in \mathbb R^{d_z} $$ , we can learn a single dynamics model $$ p_\theta $$ across all tasks by using $$ z_k $$ as an auxiliary input to PETS:
+
+$$
+\begin{equation}
+s_{t+1} \sim p_\theta (s_{t+1} \mid s_t, a_t, z_k ).
+\end{equation}
+$$
+
+Training is analogous to \eqref{eqn:model-train} , but with an additional conditioning on $$ z_{1:K} \doteq [ z_1, \ldots, z_K ] $$ :
+
+$$
+\begin{align}
+\theta* &= \underset{\theta}{\mathrm{argmax}} \ p(\mathcal D^\text{train} \mid z_{1:K}, \theta) \nonumber\\ \label{eqn:known-model-train}
+ &= \underset{\theta}{\mathrm{argmax}} \sum_{k=1}^K \sum_{(s_t,a_t,s_{t+1}) \in \mathcal D^\text{train}_ k} \mathrm{log} \ p_\theta(s_{t+1} \mid s_t, a_t, z_k).
+\end{align}
+$$
+
+<br/>
+
+### Meta-Training with Latent Dynamics Variables
+
+In most cases, we can't know or measure dynamic factors at every training time. Thus, a more general training procedure that *infers* the dynamics variables $$ z_{1:K} $$ and the model parameters $$ \theta $$ *jointly*. This is begun by placing a prior over $$ z_{1:K} \sim p(z_{1:K}) = \mathcal N(0,I) $$ , and then jointly infer the posterior $$ p(\theta, z_{1:K} \ mid \mathcal D^\text{train}_ {1:K} ) $$ .
+
+Unfortunately, inferring $$ p(\theta, z_{1:K} \ mid \mathcal D^\text{train}_ {1:K} ) $$ exactly is computationally intractable. Therefore, the authors used an approximate variational posterior, which is a Gaussian with diagonal covariance, factored over tasks,
+
+$$
+\begin{equation}
+q_{\phi_k} (z_k) = \mathcal N(\mu_k, \Sigma_k) \approx p(z_k \mid \mathcal D^\text{train}) \quad \forall k \in [K],
+\end{equation}
+$$
+
+and parameterized by $$ \phi_k \doteq \lbrace \mu_k, \Sigma_k \rbrace $$ . Unlike the case of known dynamics variables \eqref{eqn:known-model-train}, now we must marginalize out $$ z_{1:K} $$ because it is unknown. Therfore, the model training with latent dynamics variables can be written as:
+
+$$
+\begin{align}
+\mathrm{log}\ p(\mathcal D^\text{train} \mid \theta) &= \mathrm{log} \int_{z_{1:K}} p(\mathcal D^\text{train} \mid z_{1:K}, \theta) p(z_{1:K})\, dz_{1:K} \nonumber\\
+&= \sum_{k=1}^K \mathrm{log}\ \mathbb E_{z_k \sim q_{\phi_k}} p(\mathcal D^\text{train} \mid z_{1:K}, \theta) \cdot p(z_{1:K})/q_{\phi_k}(z_k) \nonumber\\
+&\geq \sum_{k=1}^K \mathbb E_{z_k \sim q_{\phi_k}} \sum_{(s_t,a_t,s_{t+1}) \in \mathcal D^\text{train}_ k} \mathrm{log}\ p_\theta(s_{t+1} \mid s_t, a_t, z_k) - \mathrm{KL}(q_{\phi_k}(z_k) \parallel p(z_k)) \quad \text{(\because definition of KL-div & 0 \leq q leq 1, inequality holds)} \nonumber\\ \label{eqn:marginalize-latent}
+&\doteq \mathrm{ELBO}(\mathcal D^\text{train} \mid \theta, \phi_{1:K}) .
+\end{align}
+$$
