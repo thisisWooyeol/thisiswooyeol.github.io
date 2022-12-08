@@ -159,9 +159,9 @@ $$
 
 ### Meta-Training with Latent Dynamics Variables
 
-In most cases, we can't know or measure dynamic factors at every training time. Thus, a more general training procedure that *infers* the dynamics variables $$ z_{1:K} $$ and the model parameters $$ \theta $$ *jointly*. This is begun by placing a prior over $$ z_{1:K} \sim p(z_{1:K}) = \mathcal N(0,I) $$ , and then jointly infer the posterior $$ p(\theta, z_{1:K} \ mid \mathcal D^\text{train}_ {1:K} ) $$ .
+In most cases, we can't know or measure dynamic factors at every training time. Thus, a more general training procedure that ***infers* the dynamics variables $$ z_{1:K} $$ and the model parameters $$ \theta $$ *jointly***. This is begun by placing a prior over $$ z_{1:K} \sim p(z_{1:K}) = \mathcal N(0,I) $$ , and then jointly infer the posterior $$ p(\theta, z_{1:K} \ mid \mathcal D^\text{train}_ {1:K} ) $$ .
 
-Unfortunately, inferring $$ p(\theta, z_{1:K} \ mid \mathcal D^\text{train}_ {1:K} ) $$ exactly is computationally intractable. Therefore, the authors used an approximate variational posterior, which is a Gaussian with diagonal covariance, factored over tasks,
+Unfortunately, inferring $$ p(\theta, z_{1:K} \ mid \mathcal D^\text{train}_ {1:K} ) $$ exactly is computationally intractable. Therefore, the authors used an **approximate variational posterior**, which is a Gaussian with diagonal covariance, factored over tasks,
 
 $$
 \begin{equation}
@@ -179,3 +179,37 @@ $$
 &\doteq \mathrm{ELBO}(\mathcal D^\text{train} \mid \theta, \phi_{1:K}) .
 \end{align}
 $$
+
+The propsoed meta-training algorithm then optimizes both $$ \theta $$ and the variational parameters $$ \phi_{1:K} $$ of each task with respect to the evidence lower bound
+
+$$
+\begin{equation}
+\theta* \doteq \underset{\theta}{\mathrm{argmax}}\ \underset{\phi_{1:K}}{\mathrm{max}}\ \mathrm{ELBO}(\mathcal D^\text{train} \mid \theta, \phi_{1:K}).
+\end{equation}
+$$
+
+<br/>
+
+### Test-Time Task Inference
+
+At test time, the robot must infer the unknown dynamics variables $$ z^\text{test} $$ online in order to improve the learned dynamics model $$ p_{\theta*} $$ and the resulting MPC planner. Similarly to meta-training with latent variables, a variational approximation is used for $$ z^\text{test} $$ :
+
+$$
+\begin{equation}
+q_{\phi^\text{test}}(z^\text{test}) = \mathcal N(\mu^\text{test}, \Sigma^\text{test}) \approx p(z^\text{test} \mid \mathcal D^\text{test}),
+\end{equation}
+$$
+
+parameterized by $$ \phi^\text{test} \doteq \lbrace \mu^\text{test}, \Sigma^\text{test} \rbrace $$ . Variational inference is used to optimze $$ \phi^\text{text} $$ such that **the approximate distribution $$ q_{\phi^\text{test}}(z^\text{test}) $$ is close to the true distribution $$ p(z^\text{test} \mid \mathcal D^\text{test} $$** , measured by the Kullback-Leibler divergence:
+
+$$
+\begin{align}
+\phi* &\doteq \underset{\phi}{\mathrm{argmax}}\ -\mathrm{KL}( q_\phi(z^\text{test} \parallel p(z^\text{test} \mid \mathcal D^\text{test}, \theta*)) \nonumber\\
+&= \underset{\phi}{\mathrm{argmax}}\ \mathbb E_{z^\text{test} \sim q_\phi} \mathrm{log}\ p(z^\text{test} \mid \mathcal D^\text{test}, \theta*) - \mathrm{log}\ q_\phi(z^\text{test}) \nonumber\\
+&= \underset{\phi}{\mathrm{argmax}}\ \mathbb E_{z^\text{test} \sim q_\phi} \mathrm{log}\ p(z^\text{test} \mid \mathcal D^\text{test}, \theta*) - \mathrm{log}\ q_\phi(z^\text{test}) + \mathrm{log}\ p(z^\text{test}) \nonumber\\
+&= \underset{\phi}{\mathrm{argmax}}\ \mathbb E_{z^\text{test} \sim q_\phi} \sum_{(s_t,a_t,s_{t+1}) \in \mathcal D^\text{test}} \mathrm{log}\ p_{\theta*}(s_{t+1} \mid s_t, a_t, z^\text{test}) - \mathrm{KL}(q_\phi(z^\text{test} \parallel p(z^\text{test})) \nonumber\\
+&= \underset{\phi}{\mathrm{argmax}}\ \mathrm{ELBO}(\mathcal D^\text{test} \mid \theta*, \phi).
+\end{align}
+$$
+
+The objective 
