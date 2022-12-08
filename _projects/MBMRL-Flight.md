@@ -175,7 +175,7 @@ $$
 \begin{align}
 \mathrm{log}\ p(\mathcal D^\text{train} \mid \theta) &= \mathrm{log} \int_{z_{1:K}} p(\mathcal D^\text{train} \mid z_{1:K}, \theta) p(z_{1:K})\, dz_{1:K} \nonumber\\
 &= \sum_{k=1}^K \mathrm{log}\ \mathbb E_{z_k \sim q_{\phi_k}} p(\mathcal D^\text{train} \mid z_{1:K}, \theta) \cdot p(z_{1:K})/q_{\phi_k}(z_k) \nonumber\\
-&\geq \sum_{k=1}^K \mathbb E_{z_k \sim q_{\phi_k}} \sum_{(s_t,a_t,s_{t+1}) \in \mathcal D^\text{train}_ k} \mathrm{log}\ p_\theta(s_{t+1} \mid s_t, a_t, z_k) - \mathrm{KL}(q_{\phi_k}(z_k) \parallel p(z_k)) \quad (\because \text{definition of KL-div & } 0 \leq q leq 1 \text{, inequality holds)} \nonumber\\ \label{eqn:marginalize-latent}
+&\geq \sum_{k=1}^K \mathbb E_{z_k \sim q_{\phi_k}} \sum_{(s_t,a_t,s_{t+1}) \in \mathcal D^\text{train}_ k} \mathrm{log}\ p_\theta(s_{t+1} \mid s_t, a_t, z_k) - \mathrm{KL}(q_{\phi_k}(z_k) \parallel p(z_k)) \quad (\because \text{def. of KL-div & } 0 \leq q \leq 1 \text{, inequality holds)} \nonumber\\ \label{eqn:marginalize-latent}
 &\doteq \mathrm{ELBO}(\mathcal D^\text{train} \mid \theta, \phi_{1:K}) .
 \end{align}
 $$
@@ -207,9 +207,43 @@ $$
 \phi* &\doteq \underset{\phi}{\mathrm{argmax}}\ -\mathrm{KL}( q_\phi(z^\text{test} \parallel p(z^\text{test} \mid \mathcal D^\text{test}, \theta*)) \nonumber\\
 &= \underset{\phi}{\mathrm{argmax}}\ \mathbb E_{z^\text{test} \sim q_\phi} \mathrm{log}\ p(z^\text{test} \mid \mathcal D^\text{test}, \theta*) - \mathrm{log}\ q_\phi(z^\text{test}) \nonumber\\
 &= \underset{\phi}{\mathrm{argmax}}\ \mathbb E_{z^\text{test} \sim q_\phi} \mathrm{log}\ p(z^\text{test} \mid \mathcal D^\text{test}, \theta*) - \mathrm{log}\ q_\phi(z^\text{test}) + \mathrm{log}\ p(z^\text{test}) \nonumber\\
-&= \underset{\phi}{\mathrm{argmax}}\ \mathbb E_{z^\text{test} \sim q_\phi} \sum_{(s_t,a_t,s_{t+1}) \in \mathcal D^\text{test}} \mathrm{log}\ p_{\theta*}(s_{t+1} \mid s_t, a_t, z^\text{test}) - \mathrm{KL}(q_\phi(z^\text{test} \parallel p(z^\text{test})) \nonumber\\
+&= \underset{\phi}{\mathrm{argmax}}\ \mathbb E_{z^\text{test} \sim q_\phi} \sum_{(s_t,a_t,s_{t+1}) \in \mathcal D^\text{test}} \mathrm{log}\ p_{\theta*}(s_{t+1} \mid s_t, a_t, z^\text{test}) - \mathrm{KL}(q_\phi(z^\text{test} \parallel p(z^\text{test})) \nonumber\\ \label{eqn:test-objective}
 &= \underset{\phi}{\mathrm{argmax}}\ \mathrm{ELBO}(\mathcal D^\text{test} \mid \theta*, \phi).
 \end{align}
 $$
 
-The objective 
+Note the objective \eqref{eqn:test-objective} corresponds to the test-time ELBO of $$ \mathcal D^\text{test} $$ , analogous to training-time ELBO of $$ \mathcal D^\text{train} $$ \eqref{eqn:marginalize-latent}. As equation \eqref{eqn:test-objective} is tractable to optimize, and therefore at test time we perform **gradient descent online** in order to learn $$ \phi^\text{test} $$ and therefore improve the predictions of our learned dynamics model.
+
+The overall training and test time graphical models are summarized in Figure 4.
+
+<div class="row justify-content-center">
+    <div class="col-10">
+        {% include figure.html path="assets/img/MBMRL-Flight/meta-rl-graphical-model.PNG" title="Probabilistic graphical models of the drone-payload system dynamics" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from "Model-Based Meta-Reinforcement Learning for Flight with Suspended Payloads"
+</div>
+
+<br/>
+
+### Method Summary
+
+<div class="row justify-content-center">
+    <div class="col-10">
+        {% include figure.html path="assets/img/MBMRL-Flight/MBMRL-Flight-algorithm.PNG" title="Algorithm of MBMRL for Quadcopter Payload Transport" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from "Model-Based Meta-Reinforcement Learning for Flight with Suspended Payloads"
+</div>
+
+The equation numberings above are based on those in the original paper. In this post, equation (7) means \eqref{eqn:marginalize-latent}, equation (2) means Algorithm 1 from `PETS` and equation (9) means \eqref{eqn:test-objective}.
+
+<br/>
+
+### Method Implementation
+
+**Payload variations**
+- 3D printed payloads weighing between 10-15 grams.
+- 
