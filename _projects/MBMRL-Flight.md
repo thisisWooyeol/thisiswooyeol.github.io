@@ -8,11 +8,11 @@ category: papers review
 ---
 
 TL;DR:
-- Proposed a **meta-learning approach** that "learns how to learn" **models of various payloads** that a priori unknown physical properties vary dynamics **in an online fashion**.
+- Proposed a **meta-learning approach** that "learns how to learn" **models of various payloads** that a priori unknown physical properties vary dynamics.
 - By **augmenting the dynamic model with stochastic latent variables**, the authors infused meta-learning approach into MBRL.
 - **Usage of unknown latent variables** leads to outperforming results compared to pure model-based methods.
 - By **online adaptation mechanism**, the dynamics variables converges and the tracking error also reduces.
-- Proposed approach successfully completes the full end-to-end payload trasportation task as well as transporting a suspended payload towards a moving target, around an obstacle by following a predefined path, and along trajectories dictated using a "wand"-like interface.
+- Proposed approach shows improved performance for the full end-to-end payload trasportation task as well as transporting a suspended payload towards a moving target, around an obstacle by following a predefined path, and along trajectories dictated using a "wand"-like interface.
 
 <br/>
 <br/>
@@ -298,15 +298,13 @@ The equation numberings above are based on those in the original paper. In this 
 <br/>
 
 ### Trajectory Following
-<br/>
 
 - Tracking specified payload trajectories: a **circle** or **square path** in the image plane or a **figure 8 path** parallel to the ground (with a suspended cable either 18cm or 30cm long)
 - Used a **latent variable of dimension one**
 
-<br/>
 <div class="row justify-content-center">
     <div class="col-8">
-        {% include figure.html path="assets/img/MBMRL-Flight/MBMRL-trajectory-tracking-result.PNG" title="Results of rajectory tracking experiments" class="img-fluid" %}
+        {% include figure.html path="assets/img/MBMRL-Flight/MBMRL-trajectory-tracking-result.PNG" title="Results of trajectory tracking experiments" class="img-fluid" %}
     </div>
     <div class="col-4">
         {% include figure.html path="assets/img/MBMRL-Flight/MBMRL-trajectory-tracking.PNG" title="Visualizations of trajectory tracking experiments" class="img-fluid" %}
@@ -316,3 +314,48 @@ The equation numberings above are based on those in the original paper. In this 
     Figure from "Model-Based Meta-Reinforcement Learning for Flight with Suspended Payloads"
 </div>
 <br/>
+
+- Both the online adaptation methods(=the proposed method and MBRL with history) better track the specified goal trajectories compared to the non-adaptation methods(=MBRL and PID controller)**(Q1)**.
+- The proposed method outperforms the other meta-learning method MBRL with history **(Q2)**.
+- The proposed method **with unknown latent variables at training time outperforms** the proposed method **with known latent variables (Q3)**. Inferring unknown latent variables at training-time might **captures unspecified types of variation from potentially hard to observe factors**.
+- The proposed method has an ability to **generalize to new payloads not seen during training (Q4)**. Learning how string lengths affect the dynamcis benefited from a few minutes of data from a third (24cm) string length, allowing the algorithm to rapidly interpolate to unseen string lengths of 21cm or 27cm at test-time, shown in Table 2.
+
+<div class="row justify-content-center">
+    <div class="col-6">
+        {% include figure.html path="assets/img/MBMRL-Flight/MBMRL-trajectory-tracking-graph.PNG" title="trajectory tracking latent variables" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from "Model-Based Meta-Reinforcement Learning for Flight with Suspended Payloads"
+</div>
+<br/>
+
+- **The dynamic variable converges to different values depending on the cable length**, which shows that **the test-time inference procedure is able to differentiate between the dynamics of the two different payloads (Q5)**.
+- As the **inferred value converges**, **the learned model-based controller becomes more accurate** and is therefore better able to track the desired path **(Q1)**.
+
+<br/>
+<br/>
+
+### End-to-End Payload Transportation
+<br/>
+
+<div class="row justify-content-center">
+    <div class="col-6">
+        {% include figure.html path="assets/img/MBMRL-Flight/MBMRL-payload-transportation-result.PNG" title="Payload transportation task results" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from "Model-Based Meta-Reinforcement Learning for Flight with Suspended Payloads"
+</div>
+<br/>
+
+- The proposed method successfully completes the full task **(Q6)** due to the online adaptation mechanism **(Q1, Q5)**.
+- Each time the quadcopter transitions between transporting a payload and not transporing a payload, the quadcopter **re-adapt online** to be able to successfully follow the specified trajectories.
+
+<br/>
+<br/>
+
+### Additional Use Cases
+
+- Additional payload transportation cases are available on the authors' [`website`](https://sites.google.com/view/ral-meta-rl-for-flight)
+- The proposed method is able to transport a suspended payload **(Q6): towards a moving target, around an obstacle by following a predifined path,** and **along trajectories dictated using a "wand"-like interface**.
