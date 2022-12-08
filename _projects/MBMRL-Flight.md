@@ -96,7 +96,7 @@ Model-based reinforcement learning estimates the underlying dynamics from data b
 
 $$
 \begin{align}
-\theta* &= \underset{\theta}{\mathrm{argmax}} \ p(\mathcal D^\text{train} \mid \theta) \nonumber\\ \label{eqn:model-train}
+\theta^* &= \underset{\theta}{\mathrm{argmax}} \ p(\mathcal D^\text{train} \mid \theta) \nonumber\\ \label{eqn:model-train}
  &= \underset{\theta}{\mathrm{argmax}} \sum_{(s_t,a_t,s_{t+1}) \in \mathcal D^\text{train}} \mathrm{log} \ p_\theta(s_{t+1} \mid s_t, a_t).
 \end{align}
 $$
@@ -132,7 +132,7 @@ To instantiate this method, the authors extend the [`PETS algorithm`](https://ar
 
 ### Data Collection
 
-Data is collected by manually piloting the quadcopter along random paths for each of the $$ K $$ suspended payloads. A dataset $$ \mathcal D^\text{train} $$ consists of $$ K $$ separate datasets $$ \mathcal D^\text{train} \doteq \mathcal D^\text{train}_ {1:K} \doteq \lbrace D^\text{train}_ 1, \ldots , D^\text{train}_ K \rbrace $$ , one per payload task.
+Data is collected by manually piloting the quadcopter along random paths for each of the $$ K $$ suspended payloads. A dataset $$ \mathcal D^\text{train} $$ consists of $$ K $$ separate datasets $$ \mathcal D^\text{train} \doteq \mathcal D^\text{train}_ {1:K} \doteq \lbrace \mathcal D^\text{train}_ 1, \ldots , \mathcal D^\text{train}_ K \rbrace $$ , one per payload task.
 
 <br/>
 
@@ -150,7 +150,7 @@ Training is analogous to \eqref{eqn:model-train} , but with an additional condit
 
 $$
 \begin{align}
-\theta* &= \underset{\theta}{\mathrm{argmax}} \ p(\mathcal D^\text{train} \mid z_{1:K}, \theta) \nonumber\\ \label{eqn:known-model-train}
+\theta^* &= \underset{\theta}{\mathrm{argmax}} \ p(\mathcal D^\text{train} \mid z_{1:K}, \theta) \nonumber\\ \label{eqn:known-model-train}
  &= \underset{\theta}{\mathrm{argmax}} \sum_{k=1}^K \sum_{(s_t,a_t,s_{t+1}) \in \mathcal D^\text{train}_ k} \mathrm{log} \ p_\theta(s_{t+1} \mid s_t, a_t, z_k).
 \end{align}
 $$
@@ -159,9 +159,9 @@ $$
 
 ### Meta-Training with Latent Dynamics Variables
 
-In most cases, we can't know or measure dynamic factors at every training time. Thus, a more general training procedure that ***infers* the dynamics variables $$ z_{1:K} $$ and the model parameters $$ \theta $$ *jointly***. This is begun by placing a prior over $$ z_{1:K} \sim p(z_{1:K}) = \mathcal N(0,I) $$ , and then jointly infer the posterior $$ p(\theta, z_{1:K} \ mid \mathcal D^\text{train}_ {1:K} ) $$ .
+In most cases, we can't know or measure dynamic factors at every training time. Thus, a more general training procedure that ***infers* the dynamics variables $$ z_{1:K} $$ and the model parameters $$ \theta $$ *jointly***. This is begun by placing a prior over $$ z_{1:K} \sim p(z_{1:K}) = \mathcal N(0,I) $$ , and then jointly infer the posterior $$ p(\theta, z_{1:K} \mid \mathcal D^\text{train}_ {1:K} ) $$ .
 
-Unfortunately, inferring $$ p(\theta, z_{1:K} \ mid \mathcal D^\text{train}_ {1:K} ) $$ exactly is computationally intractable. Therefore, the authors used an **approximate variational posterior**, which is a Gaussian with diagonal covariance, factored over tasks,
+Unfortunately, inferring $$ p(\theta, z_{1:K} \mid \mathcal D^\text{train}_ {1:K} ) $$ exactly is computationally intractable. Therefore, the authors used an **approximate variational posterior**, which is a Gaussian with diagonal covariance, factored over tasks,
 
 $$
 \begin{equation}
@@ -175,7 +175,7 @@ $$
 \begin{align}
 \mathrm{log}\ p(\mathcal D^\text{train} \mid \theta) &= \mathrm{log} \int_{z_{1:K}} p(\mathcal D^\text{train} \mid z_{1:K}, \theta) p(z_{1:K})\, dz_{1:K} \nonumber\\
 &= \sum_{k=1}^K \mathrm{log}\ \mathbb E_{z_k \sim q_{\phi_k}} p(\mathcal D^\text{train} \mid z_{1:K}, \theta) \cdot p(z_{1:K})/q_{\phi_k}(z_k) \nonumber\\
-&\geq \sum_{k=1}^K \mathbb E_{z_k \sim q_{\phi_k}} \sum_{(s_t,a_t,s_{t+1}) \in \mathcal D^\text{train}_ k} \mathrm{log}\ p_\theta(s_{t+1} \mid s_t, a_t, z_k) - \mathrm{KL}(q_{\phi_k}(z_k) \parallel p(z_k)) \quad \text{(\because definition of KL-div & 0 \leq q leq 1, inequality holds)} \nonumber\\ \label{eqn:marginalize-latent}
+&\geq \sum_{k=1}^K \mathbb E_{z_k \sim q_{\phi_k}} \sum_{(s_t,a_t,s_{t+1}) \in \mathcal D^\text{train}_ k} \mathrm{log}\ p_\theta(s_{t+1} \mid s_t, a_t, z_k) - \mathrm{KL}(q_{\phi_k}(z_k) \parallel p(z_k)) \quad (\because \text{definition of KL-div & } 0 \leq q leq 1 \text{, inequality holds)} \nonumber\\ \label{eqn:marginalize-latent}
 &\doteq \mathrm{ELBO}(\mathcal D^\text{train} \mid \theta, \phi_{1:K}) .
 \end{align}
 $$
@@ -184,7 +184,7 @@ The propsoed meta-training algorithm then optimizes both $$ \theta $$ and the va
 
 $$
 \begin{equation}
-\theta* \doteq \underset{\theta}{\mathrm{argmax}}\ \underset{\phi_{1:K}}{\mathrm{max}}\ \mathrm{ELBO}(\mathcal D^\text{train} \mid \theta, \phi_{1:K}).
+\theta^* \doteq \underset{\theta}{\mathrm{argmax}}\ \underset{\phi_{1:K}}{\mathrm{max}}\ \mathrm{ELBO}(\mathcal D^\text{train} \mid \theta, \phi_{1:K}).
 \end{equation}
 $$
 
