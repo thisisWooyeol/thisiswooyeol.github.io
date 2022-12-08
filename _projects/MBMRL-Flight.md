@@ -179,9 +179,9 @@ and parameterized by $$ \phi_k \doteq \lbrace \mu_k, \Sigma_k \rbrace $$ . Unlik
 
 $$
 \begin{align}
-\mathrm{log}\ p(\mathcal D^\text{train} \mid \theta) &= \mathrm{log} \int_{z_{1:K}} p(\mathcal D^\text{train} \mid z_{1:K}, \theta) p(z_{1:K})\, dz_{1:K} \nonumber\\
+\mathrm{log}\ p(\mathcal D^\text{train} & \mid \theta) = \mathrm{log} \int_{z_{1:K}} p(\mathcal D^\text{train} \mid z_{1:K}, \theta) p(z_{1:K})\, dz_{1:K} \nonumber\\
 &= \sum_{k=1}^K \mathrm{log}\ \mathbb E_{z_k \sim q_{\phi_k}} p(\mathcal D^\text{train} \mid z_{1:K}, \theta) \cdot p(z_{1:K})/q_{\phi_k}(z_k) \nonumber\\
-&\geq \sum_{k=1}^K \mathbb E_{z_k \sim q_{\phi_k}} \sum_{(s_t,a_t,s_{t+1}) \in \mathcal D^\text{train}_ k} \mathrm{log}\ p_\theta(s_{t+1} \mid s_t, a_t, z_k) - \mathrm{KL}(q_{\phi_k}(z_k) \parallel p(z_k)) \quad (\because \text{def. of KL-div & } 0 \leq q \leq 1 \text{, inequality holds)} \nonumber\\ \label{eqn:marginalize-latent}
+&\geq \sum_{k=1}^K \mathbb E_{z_k \sim q_{\phi_k}} \sum_{(s_t,a_t,s_{t+1}) \in \mathcal D^\text{train}_ k} \mathrm{log}\ p_\theta(s_{t+1} \mid s_t, a_t, z_k) - \mathrm{KL}(q_{\phi_k}(z_k) \parallel p(z_k)) \quad (\because \text{def. of KL-div & } 0 \leq q \leq 1 \to \text{inequality holds)} \nonumber\\ \label{eqn:marginalize-latent}
 &\doteq \mathrm{ELBO}(\mathcal D^\text{train} \mid \theta, \phi_{1:K}) .
 \end{align}
 $$
@@ -211,7 +211,7 @@ parameterized by $$ \phi^\text{test} \doteq \lbrace \mu^\text{test}, \Sigma^\tex
 
 $$
 \begin{align}
-\phi* &\doteq \underset{\phi}{\mathrm{argmax}}\ -\mathrm{KL}( q_\phi(z^\text{test} \parallel p(z^\text{test} \mid \mathcal D^\text{test}, \theta*)) \nonumber\\
+\phi^* &\doteq \underset{\phi}{\mathrm{argmax}}\ -\mathrm{KL}( q_\phi(z^\text{test} \parallel p(z^\text{test} \mid \mathcal D^\text{test}, \theta*)) \nonumber\\
 &= \underset{\phi}{\mathrm{argmax}}\ \mathbb E_{z^\text{test} \sim q_\phi} \mathrm{log}\ p(z^\text{test} \mid \mathcal D^\text{test}, \theta*) - \mathrm{log}\ q_\phi(z^\text{test}) \nonumber\\
 &= \underset{\phi}{\mathrm{argmax}}\ \mathbb E_{z^\text{test} \sim q_\phi} \mathrm{log}\ p(z^\text{test} \mid \mathcal D^\text{test}, \theta*) - \mathrm{log}\ q_\phi(z^\text{test}) + \mathrm{log}\ p(z^\text{test}) \nonumber\\
 &= \underset{\phi}{\mathrm{argmax}}\ \mathbb E_{z^\text{test} \sim q_\phi} \sum_{(s_t,a_t,s_{t+1}) \in \mathcal D^\text{test}} \mathrm{log}\ p_{\theta*}(s_{t+1} \mid s_t, a_t, z^\text{test}) - \mathrm{KL}(q_\phi(z^\text{test} \parallel p(z^\text{test})) \nonumber\\ \label{eqn:test-objective}
@@ -266,7 +266,7 @@ The equation numberings above are based on those in the original paper. In this 
 
 **Dynamic Model $$ p_\theta $$ and MPC Details**
 
-- NN consists of four FC hidden layers of size 200 with *swish activations*(also known as SeLU).
+- NN consists of four FC hidden layers of size 200 with *swish activations* (also known as SeLU).
 - MPC is run with a time horizon of 5 steps, using the **cross entropy method** to optimize, with a sample size 50, selecting 10 elite samples and 3 iterations.
 - MPC computation takes 50-100ms -> select control frequency to be 4Hz for both training and test time -> 150-200ms for latent variable inference
 
@@ -290,11 +290,29 @@ The equation numberings above are based on those in the original paper. In this 
 <br/>
 
 **Baseline Approaches**
-- **MBRL**: state consists of only the current payload pixel location and size
-- **MBRL with history**: simple meta-learning approach, where the state consists of the past 8 states and actions concatenated together
-- **PID controller**: three PID controllers for each Cartesian velocity command axis. PID gains are manually tuned by evaluating the performance of the controller on a trajectory following path not used in this experiments for a single payload.
+- ***MBRL***: state consists of only the current payload pixel location and size
+- ***MBRL with history***: simple meta-learning approach, where the state consists of the past 8 states and actions concatenated together
+- ***PID controller***: three PID controllers for each Cartesian velocity command axis. PID gains are manually tuned by evaluating the performance of the controller on a trajectory following path not used in this experiments for a single payload.
 
 <br/>
 <br/>
 
 ### Trajectory Following
+<br/>
+
+- Tracking specified payload trajectories: a **circle** or **square path** in the image plane or a **figure 8 path** parallel to the ground (with a suspended cable either 18cm or 30cm long)
+- Used a **latent variable of dimension one**
+
+<br/>
+<div class="row justify-content-center">
+    <div class="col-8">
+        {% include figure.html path="assets/img/MBMRL-Flight/MBMRL-trajectory-tracking-result.PNG" title="Results of rajectory tracking experiments" class="img-fluid" %}
+    </div>
+    <div class="col-4">
+        {% include figure.html path="assets/img/MBMRL-Flight/MBMRL-trajectory-tracking.PNG" title="Visualizations of trajectory tracking experiments" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from "Model-Based Meta-Reinforcement Learning for Flight with Suspended Payloads"
+</div>
+<br/>
