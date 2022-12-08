@@ -244,6 +244,21 @@ The equation numberings above are based on those in the original paper. In this 
 
 ### Method Implementation
 
-**Payload variations**
+**Payload Variations**
+
 - 3D printed payloads weighing between 10-15 grams.
-- 
+- Experiments **vary primarily the string length** between 18-30cm long (18cm or 30cm). (since the dynamics are more sensitive to string length than mass)
+
+<br/>
+
+**Data Collection Spec.**
+
+- actions $$ a \in \mathbb R^3 $$ : Cartesian velocity commands
+- states $$ s \in \mathbb R^3 $$ : pixel location $$ \mathbb R^2 $$ X size of the payload $$ \mathbb R $$
+
+<br/>
+
+**Dynamic Model $$ p_\theta $$ and MPC Details**
+
+- NN consists of four FC hidden layers of size 200 with *swish activations*(also known as SeLU).
+- MPC
