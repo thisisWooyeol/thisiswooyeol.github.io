@@ -101,7 +101,9 @@ $$
 \end{align}
 $$
 
-To instantiate this method, the authors extend the [`PETS algorithm`](https://arxiv.org/abs/1805.12114), which handles expressive **neural network dynamics models** to attain good sample efficiency as model-based algorithms and **asymptotic performance** as model-free algorithms. PETS uses an ensemble of probabilistic neural network models, each parameterizing a Gaussian distribution of $$ s_{t+1} $$ conditioned on both $$ s_t $$ and $$ a_t $$ . The learned dynamics model is used to plan and execute actions via model predictive control (MPC) with trajectory sampling (TS)(due to probabilistic models). Trajectory sampling predicts plausible state trajectories begins by creating $$ P $$ particles from the current state, $$ s_{t=0}^p =s_0 \forall p $$ . Each particle is then propagated by: $$ s_{t+1}^p \sim \tilde{f}_ {\theta_{b(p,t)}} (s_t^p,a_t) $$ , according to a particular bootstrap $$ b(p,t) \text{in} \lbrace 1, \ldots, B \rbrace $$ , where $$ B $$ is the number of bootstrap models in the ensemble. Unlike a common technique to compute the optimal action sequence (random sampling shooting), PETS used cross-entropy method (CEM), which samples actions from a distribution closer to previous action samples that yielded high reward. Now the overall PETS algorithm can be summarized in Algorithm 1.
+To instantiate this method, the authors extend the [`PETS algorithm`](https://arxiv.org/abs/1805.12114), which handles expressive **neural network dynamics models** to attain good sample efficiency as model-based algorithms and **asymptotic performance** as model-free algorithms. PETS uses an ensemble of probabilistic neural network models, each parameterizing a Gaussian distribution of $$ s_{t+1} $$ conditioned on both $$ s_t $$ and $$ a_t $$ . The learned dynamics model is used to plan and execute actions via model predictive control (MPC) with trajectory sampling (TS)(due to probabilistic models). Trajectory sampling predicts plausible state trajectories begins by creating $$ P $$ particles from the current state, $$ s_{t=0}^p =s_0 \forall p $$ . Each particle is then propagated by: $$ s_{t+1}^p \sim \tilde{f}_ {\theta_{b(p,t)}} (s_t^p,a_t) $$ , according to a particular bootstrap $$ b(p,t) \text{in} \lbrace 1, \ldots, B \rbrace $$ , where $$ B $$ is the number of bootstrap models in the ensemble. Unlike a common technique to compute the optimal action sequence (random sampling shooting), PETS used [`cross-entropy method(CEM)`](https://www.researchgate.net/publication/279242256_Chapter_3_The_Cross-Entropy_Method_for_Optimization), which samples actions from a distribution closer to previous action samples that yielded high reward:
+(TBD)
+Now the overall PETS algorithm can be summarized in Algorithm 1.
 
 <div class="row justify-content-center">
     <div class="col-6">
@@ -130,10 +132,13 @@ To instantiate this method, the authors extend the [`PETS algorithm`](https://ar
     Figure from "Model-Based Meta-Reinforcement Learning for Flight with Suspended Payloads"
 </div>
 
+<br/>
+
 ### Data Collection
 
 Data is collected by manually piloting the quadcopter along random paths for each of the $$ K $$ suspended payloads. A dataset $$ \mathcal D^\text{train} $$ consists of $$ K $$ separate datasets $$ \mathcal D^\text{train} \doteq \mathcal D^\text{train}_ {1:K} \doteq \lbrace \mathcal D^\text{train}_ 1, \ldots , \mathcal D^\text{train}_ K \rbrace $$ , one per payload task.
 
+<br/>
 <br/>
 
 ### Model Training with Known Dynamics Variables
@@ -155,6 +160,7 @@ $$
 \end{align}
 $$
 
+<br/>
 <br/>
 
 ### Meta-Training with Latent Dynamics Variables
@@ -189,6 +195,7 @@ $$
 $$
 
 <br/>
+<br/>
 
 ### Test-Time Task Inference
 
@@ -217,7 +224,7 @@ Note the objective \eqref{eqn:test-objective} corresponds to the test-time ELBO 
 The overall training and test time graphical models are summarized in Figure 4.
 
 <div class="row justify-content-center">
-    <div class="col-10">
+    <div class="col-6">
         {% include figure.html path="assets/img/MBMRL-Flight/meta-rl-graphical-model.PNG" title="Probabilistic graphical models of the drone-payload system dynamics" class="img-fluid" %}
     </div>
 </div>
@@ -226,11 +233,13 @@ The overall training and test time graphical models are summarized in Figure 4.
 </div>
 
 <br/>
+<br/>
 
 ### Method Summary
+<br/>
 
 <div class="row justify-content-center">
-    <div class="col-10">
+    <div class="col-6">
         {% include figure.html path="assets/img/MBMRL-Flight/MBMRL-Flight-algorithm.PNG" title="Algorithm of MBMRL for Quadcopter Payload Transport" class="img-fluid" %}
     </div>
 </div>
@@ -243,22 +252,49 @@ The equation numberings above are based on those in the original paper. In this 
 <br/>
 
 ### Method Implementation
+<br/>
 
 **Payload Variations**
 
 - 3D printed payloads weighing between 10-15 grams.
 - Experiments **vary primarily the string length** between 18-30cm long (18cm or 30cm). (since the dynamics are more sensitive to string length than mass)
 
-<br/>
-
 **Data Collection Spec.**
 
 - actions $$ a \in \mathbb R^3 $$ : Cartesian velocity commands
 - states $$ s \in \mathbb R^3 $$ : pixel location $$ \mathbb R^2 $$ X size of the payload $$ \mathbb R $$
 
-<br/>
-
 **Dynamic Model $$ p_\theta $$ and MPC Details**
 
 - NN consists of four FC hidden layers of size 200 with *swish activations*(also known as SeLU).
-- MPC
+- MPC is run with a time horizon of 5 steps, using the **cross entropy method** to optimize, with a sample size 50, selecting 10 elite samples and 3 iterations.
+- MPC computation takes 50-100ms -> select control frequency to be 4Hz for both training and test time -> 150-200ms for latent variable inference
+
+<br/>
+<br/>
+<br/>
+
+--------
+
+# Experimental Evaluation
+<br/>
+
+**Aims of Experiments**
+- **Q1** Does **online adaptation** via meta-learning lead to **better performance compared to non-adaptive methods?**
+- **Q2** How does our **meta-learning approach** compare to **MBRL conditioned on a history** of states and actions?
+- **Q3** How does our approach with **known versus unknown dynamics variables** compare?
+- **Q4** **Can we *generalize* to payloads** that were not seen at training time?
+- **Q5** Is the test-time inference procedure able to **differentiate between different *a priori* unknown payloads?**
+- **Q6** Can our approach enable a quadcopter to fulfill a complete payload pick-up, transport, and drop-off task, as well as other **realistic payload transportation scenarios?**
+
+<br/>
+
+**Baseline Approaches**
+- **MBRL**: state consists of only the current payload pixel location and size
+- **MBRL with history**: simple meta-learning approach, where the state consists of the past 8 states and actions concatenated together
+- **PID controller**: three PID controllers for each Cartesian velocity command axis. PID gains are manually tuned by evaluating the performance of the controller on a trajectory following path not used in this experiments for a single payload.
+
+<br/>
+<br/>
+
+### Trajectory Following
