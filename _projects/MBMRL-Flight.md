@@ -209,7 +209,7 @@ For a rare-event probability $$ l $$ , most or all of the indicators $$ \mathbf 
 **Algorithm A (CE Algorithm for Rare-Event Estimation)** *Given the sample size $$ N $$ and the rarity parameter $$ \varrho $$ , execute the following steps.
 
 1. *Define $$ \hat{\mathbf v}_ 0 = \mathbf u $$ . Let $$ N^e = \left \lceil \varrho N \right \rceil $$ . Set $$ t=1 $$ (iteration counter).*
-2. *Generate $$ \mathbf{X_1, \ldots, X_N} \underset{\mathrm{iid}}{\sim} f(\cdot;\hat{\mathbf v}_ {t-1}) $$ . Calculate $$ S_i = S(\mathbf X_i) \forall i $$ , and order these from smallest to largest: $$ S_{(1)} \leqslant \ldots \leqslant S_{(N)} $$ . Let $$ \hat{\gamma}_ t $$ be the sample $$ (1-\varrho)$$ -quantile of performances; that is, $$ \hat{\gamma}_ t = S_{(N-N^e+1)} $$ . If $$ \hat{\gamma}_ t > \gamma $$ , reset $$ \hat{\gamma}_ t $$ to $$ \gamma $$ .*
+2. *Generate $$ \mathbf{X_1, \ldots, X_N} \underset{\mathrm{iid}}{\sim} f(\cdot;\hat{\mathbf v}_ {t-1}) $$ . Calculate $$ S_{(i)} = S(\mathbf X_i) \forall i $$ , and order these from smallest to largest: $$ S_{(1)} \leqslant \ldots \leqslant S_{(N)} $$ . Let $$ \hat{\gamma}_ t $$ be the sample $$ (1-\varrho)$$ -quantile of performances; that is, $$ \hat{\gamma}_ t = S_{(N-N^e+1)} $$ . If $$ \hat{\gamma}_ t > \gamma $$ , reset $$ \hat{\gamma}_ t $$ to $$ \gamma $$ .*
 3. *Use the* **same** *sample $$ \mathbf{X_1, \ldots, X_N} $$ to solve the stochastic program*:
   
   $$
@@ -227,8 +227,29 @@ For a rare-event probability $$ l $$ , most or all of the indicators $$ \mathbf 
 
 **Cross-Entropy Method for Optimization**
 
-The estimation algorithm above leads naturally to a simple optimization heuristic.
+The estimation algorithm above leads naturally to a simple optimization heuristic. Optimization problem can be written, with an assumtion that only one maximizer $$ \mathbf x^* $$ exists for simplicity, as
 
+$$
+S(\mathbf x^* ) = \gamma^* = \underset{\mathbf x \in \mathfrak X}{\mathrm{max}} S(\mathbf x).
+$$
+
+We can now associate with the above optimization problem the estimation of the probability $$ l = \mathbb P(S(\mathbf X) \geqslant \gamma) $$ , where $$ \gamma $$ is close to the unknown $$ \gamma^* $$ . Typically, $$ l $$ is a rare-event probability, and the multi-level CE approach of Algorithm A can be used to find an importance sampling distribution that concentrates all its mass in a neighborhood of the point $$ \mathbf x^* $$ . Sampling from such a distribution thus produces optimal or near-optimal states. Although the final level $$ \gamma = \gamma^* $$ is generally not known in advance, the CE method for optimization produces a sequence of levels $$ \lbrace \hat{\gamma}_ t \rbrace $$ and reference parameters $$ \lbrace \hat{\mathbf v}_ t \rbrace $$ such that ideally the former tends to the optimal $$ \gamma^* $$ and the latter to the optimal reference vector $$ \mathbf v^* $$ corresponding to the point mass at $$ \mathbf x^* $$ .
+
+**Algorithm B (CE Algorithm for Optimization)**
+
+1. *Choose an initial parameter vector $$ \hat{\mathbf v}_ 0 $$ . Let $$ N^e = \left \lceil \varrho N \right \rceil $$ . Set $$ t=1 $$ (level counter).*
+2. *Generate $$ \mathbf{X_1, \ldots, X_N} \underset{\mathrm{iid}}{\sim} f(\cdot;\hat{\mathbf v}_ {t-1}) $$ . Calculate the performances $$ S_{(i)} = S(\mathbf X_i) \forall i $$ , and order them from smallest to largest: $$ S_{(1)} \leqslant \ldots \leqslant S_{(N)} $$ . Let $$ \hat{\gamma}_ t $$ be the sample $$ (1-\varrho)$$ -quantile of performances; that is, $$ \hat{\gamma}_ t = S_{(N-N^e+1)} $$ .*
+3. *Use the* **same** *sample $$ \mathbf{X_1, \ldots, X_N} $$ to solve the stochastic program*:
+
+  $$
+  \hat{\mathbf v}_ t = \underset{\mathbf v}{\mathrm{argmax}} = \frac{1}{N} \sum_{k=1}^N \mathbf I_{\lbrace S(\mathbf X_k) \geqslant \hat{\gamma}_ t \rbrace} \mathrm{ln}\ f(\mathbf X_k;\mathbf v).
+  $$
+  
+4. *If some stopping criterion is met, stop; otherwise set $$ t=t+1 $$ , and return to Step 2.*
+
+Note that the estimation Step 5 of Algorithm A is missing in Algorithm B, because in the optimization setting we are not interested in estimating $$ l $$ per se. For the same reason the likelihood ration term $$ \frac{f(\mathbf X_k;\mathbf u)}{f(\mathbf X_k;\hat{\mathbf v}_ {t-1})} $$ in Algorithm A is missing in Algorithm B.
+
+To run the algorithm, (1)a class of parametric sampling densities $$ \lbrace f(\cdot;\mathbf v), \ \mathbf v \in \mathcal V \rbrace $$ , (2)the initial vector $$ \hat{\mathbf v}_ 0 $$ , (3)the sample size $$ N $$ , (4)the rarity parameter $$ \varrho $$ , and (5)a stopping criterion are needed to be predefined.
 
 <br/>
 <br/>
