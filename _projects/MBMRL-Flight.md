@@ -204,6 +204,8 @@ $$
 
 where $$ \mathbf{X_1, \ldots, X_N} \underset{\mathrm{iid}}{\sim} f(\cdot;\mathbf w) $$ . The optimal parameter $$ \hat{\mathbf v} $$ can often be obtained in explicit form, in particular when the class of sampling distributions forms an *exponential family*. 
 
+<br/>
+
 For a rare-event probability $$ l $$ , most or all of the indicators $$ \mathbf I_{\lbrace S(\mathbf X) \geqslant \gamma \rbrace} $$ are zero, and the maximization problem become useless. In that case a **multi-level CE** procedure is used, where a sequence of reference parameters $$ \lbrace \hat{\mathbf v}_ t \rbrace $$ and levels $$ \lbrace \hat{\gamma}_ t \rbrace $$ is constructed with the goal that the former converges to $$ \mathbf v^* $$ and the latter to $$ \gamma $$ . The actual procedure is described in the following algorithm.
 
 **Algorithm A (CE Algorithm for Rare-Event Estimation)** *Given the sample size $$ N $$ and the rarity parameter $$ \varrho $$ , execute the following steps.
@@ -211,11 +213,9 @@ For a rare-event probability $$ l $$ , most or all of the indicators $$ \mathbf 
 1. *Define $$ \hat{\mathbf v}_ 0 = \mathbf u $$ . Let $$ N^e = \left \lceil \varrho N \right \rceil $$ . Set $$ t=1 $$ (iteration counter).*
 2. *Generate $$ \mathbf{X_1, \ldots, X_N} \underset{\mathrm{iid}}{\sim} f(\cdot;\hat{\mathbf v}_ {t-1}) $$ . Calculate $$ S_{(i)} = S(\mathbf X_i) \forall i $$ , and order these from smallest to largest: $$ S_{(1)} \leqslant \ldots \leqslant S_{(N)} $$ . Let $$ \hat{\gamma}_ t $$ be the sample $$ (1-\varrho)$$ -quantile of performances; that is, $$ \hat{\gamma}_ t = S_{(N-N^e+1)} $$ . If $$ \hat{\gamma}_ t > \gamma $$ , reset $$ \hat{\gamma}_ t $$ to $$ \gamma $$ .*
 3. *Use the* **same** *sample $$ \mathbf{X_1, \ldots, X_N} $$ to solve the stochastic program*:
-  
   $$
   \hat{\mathbf v}_ t = \underset{\mathbf v}{\mathrm{argmax}} = \frac{1}{N} \sum_{k=1}^N \mathbf I_{\lbrace S(\mathbf X_k) \geqslant \hat{\gamma}_ t \rbrace} \frac{f(\mathbf X_k;\mathbf u)}{f(\mathbf X_k;\hat{\mathbf v}_ {t-1})} \mathrm{ln}\ f(\mathbf X_k;\mathbf v).
   $$
-  
 4. *If $$ \hat{\gamma}_ t < \gamma $$ , set $$ t = t+1 $$ and reiterate from Step 2; otherwise, proceed with Step 5.*
 5. *Let $$ T=t $$ be the final iteration counter. Generate $$ \mathbf{X_1, \ldots, X_N} \underset{\mathrm{iid}}{\sim} f(\cdot;\hat{\mathbf v}_ T) $$ and estimate $$ l $$ via importance sampling:
 
@@ -240,16 +240,16 @@ We can now associate with the above optimization problem the estimation of the p
 1. *Choose an initial parameter vector $$ \hat{\mathbf v}_ 0 $$ . Let $$ N^e = \left \lceil \varrho N \right \rceil $$ . Set $$ t=1 $$ (level counter).*
 2. *Generate $$ \mathbf{X_1, \ldots, X_N} \underset{\mathrm{iid}}{\sim} f(\cdot;\hat{\mathbf v}_ {t-1}) $$ . Calculate the performances $$ S_{(i)} = S(\mathbf X_i) \forall i $$ , and order them from smallest to largest: $$ S_{(1)} \leqslant \ldots \leqslant S_{(N)} $$ . Let $$ \hat{\gamma}_ t $$ be the sample $$ (1-\varrho)$$ -quantile of performances; that is, $$ \hat{\gamma}_ t = S_{(N-N^e+1)} $$ .*
 3. *Use the* **same** *sample $$ \mathbf{X_1, \ldots, X_N} $$ to solve the stochastic program*:
-
   $$
+  \begin{equation}
   \hat{\mathbf v}_ t = \underset{\mathbf v}{\mathrm{argmax}} = \frac{1}{N} \sum_{k=1}^N \mathbf I_{\lbrace S(\mathbf X_k) \geqslant \hat{\gamma}_ t \rbrace} \mathrm{ln}\ f(\mathbf X_k;\mathbf v).
+  \end{equation}
   $$
-  
 4. *If some stopping criterion is met, stop; otherwise set $$ t=t+1 $$ , and return to Step 2.*
 
 Note that the estimation Step 5 of Algorithm A is missing in Algorithm B, because in the optimization setting we are not interested in estimating $$ l $$ per se. For the same reason the likelihood ration term $$ \frac{f(\mathbf X_k;\mathbf u)}{f(\mathbf X_k;\hat{\mathbf v}_ {t-1})} $$ in Algorithm A is missing in Algorithm B.
 
-To run the algorithm, (1)a class of parametric sampling densities $$ \lbrace f(\cdot;\mathbf v), \ \mathbf v \in \mathcal V \rbrace $$ , (2)the initial vector $$ \hat{\mathbf v}_ 0 $$ , (3)the sample size $$ N $$ , (4)the rarity parameter $$ \varrho $$ , and (5)a stopping criterion are needed to be predefined.
+To run the algorithm, (1) a class of parametric sampling densities $$ \lbrace f(\cdot;\mathbf v), \ \mathbf v \in \mathcal V \rbrace $$ , (2) the initial vector $$ \hat{\mathbf v}_ 0 $$ , (3) the sample size $$ N $$ , (4) the rarity parameter $$ \varrho $$ , and (5) a stopping criterion are needed to be predefined.
 
 <br/>
 <br/>
@@ -342,7 +342,7 @@ $$
 The propsoed meta-training algorithm then optimizes both $$ \theta $$ and the variational parameters $$ \phi_{1:K} $$ of each task with respect to the evidence lower bound
 
 $$
-\begin{equation}
+\begin{equation}\label{eqn:unknown-model-train}
 \theta^* \doteq \underset{\theta}{\mathrm{argmax}}\ \underset{\phi_{1:K}}{\mathrm{max}}\ \mathrm{ELBO}(\mathcal D^\text{train} \mid \theta, \phi_{1:K}).
 \end{equation}
 $$
@@ -398,8 +398,6 @@ The overall training and test time graphical models are summarized in Figure 4.
 <div class="caption">
     Figure from "Model-Based Meta-Reinforcement Learning for Flight with Suspended Payloads"
 </div>
-
-The equation numberings above are based on those in the original paper. In this post, equation (7) means \eqref{eqn:marginalize-latent}, equation (2) means Algorithm 1 from `PETS` and equation (9) means \eqref{eqn:test-objective}.
 
 <br/>
 
