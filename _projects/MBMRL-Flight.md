@@ -183,7 +183,26 @@ $$
 \hat{l} = \frac{1}{N} \sum_{k=1}^N \mathbf I_{\lbrace S(\mathbf X_k) \geqslant \gamma \rbrace} \frac{f(\mathbf X_k;\mathbf u)}{g(\mathbf X_k)} 
 $$
 
-is an unbiased estimator of $$ l $$ : a so-called *importance sampling estimator*. The optimal importance sampling pdf (that is, the pdf $$ g^* $$ for which the variance of $$ \hat{l} $$ is minimal is given as $$ g^* (\mathbf x) = f(\mathbf x; \mathbf u) \mathbf I_{\lbrace S(\mathbf x) \geqslant \gamma \rbrace} / l $$ . However, **as $$ l $$ is unknown**, CE method choose the importance sampling pdf $$ g $$ from within the parametric class of pdfs $$ \lbrace f(\cdot;\mathbf v), \mathbf v \in \mathcal V \rbrace $$ s.t. the KL divergence between $$ g^* $$ and $$ g $$ is minimal. 
+is an unbiased estimator of $$ l $$ : a so-called *importance sampling estimator*. The optimal importance sampling pdf (that is, the pdf $$ g^* $$ for which the variance of $$ \hat{l} $$ is minimal is given as $$ g^* (\mathbf x) = f(\mathbf x; \mathbf u) \mathbf I_{\lbrace S(\mathbf x) \geqslant \gamma \rbrace} / l $$ . However, **as $$ l $$ is unknown**, CE method choose the importance sampling pdf $$ g $$ from within the parametric class of pdfs $$ \lbrace f(\cdot;\mathbf v), \mathbf v \in \mathcal V \rbrace $$ s.t. the KL divergence between $$ g^* $$ and $$ g $$ is minimal. The CE minimization procedure then reduces to finding an optimal reference parameter vector, $$ \mathbf v^* $$ say, by cross-entropy minimization:
+
+$$
+\begin{align*}
+\mathbf v^* &= \underset{\mathbf v}{\mathrm{argmin}} \mathcal D(g^* , f(\cdot; \mathbf v)) \\
+&= \underset{\mathbf v}{\mathrm{argmin}} \int g^* (mathbf x) \mathrm{ln}\ \frac{g^* (\mathbf x)}{f(\mathbf x;\mathbf v)} \, d \mathbf x \\
+&= \underset{\mathbf v}{\mathrm{argmax}} \int g^* (mathbf x) \mathrm{ln}\ f(\mathbf x;\mathbf v) \, d \mathbf x \\
+&= \underset{\mathbf v}{\mathrm{argmax}} \int \frac{f(\mathbf x; \mathbf u) \mathbf I_{\lbrace S(\mathbf x) \geqslant \gamma \rbrace}}{g(\mathbf x)}  \mathrm{ln}\ f(\mathbf x;\mathbf v) \, d \mathbf x \\
+&= \underset{\mathbf v}{\mathrm{argmax}} \mathbb E_{\mathbf u} \left[ \mathbf I_{\lbrace S(\mathbf X) \geqslant \gamma \rbrace}  \mathrm{ln}\ f(\mathbf X;\mathbf v) \right] \\
+&= \underset{\mathbf v}{\mathrm{argmax}} \mathbb E_{\mathbf w} \left[ \mathbf I_{\lbrace S(\mathbf X) \geqslant \gamma \rbrace}  \mathrm{ln}\ f(\mathbf X;\mathbf v) \frac{f(\mathbf X;\mathbf u)}{f(\mathbf X;\mathbf w)} \right],
+\end{align*}
+$$
+
+where $$ \mathbf w $$ is any reference parameter. This $$ \mathbf v^* $$ can be estimated via the stochastic sampling:
+
+$$
+\hat{\mathbf v} = \underset{\mathbf v}{\mathrm{argmax}} = \frac{1}{N} \sum_{k=1}^N I_{\lbrace S(\mathbf X_k) \geqslant \gamma \rbrace} frac{f(\mathbf X_k;\mathbf u)}{f(\mathbf X_k;\mathbf w)} \mathrm{ln}\ f(\mathbf X_k;\mathbf v),
+$$
+
+where $$ \mathbf{X_1, \ldots, X_N} \underset{\mathrm{iid}}{\sim} f(\cdot;\mathbf w) $$ . The optimal parameter $$ \hat{\mathbf v} $$ 
 
 ### PETS algorithm summary
 
