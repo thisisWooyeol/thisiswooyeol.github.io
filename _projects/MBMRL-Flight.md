@@ -218,7 +218,6 @@ For a rare-event probability $$ l $$ , most or all of the indicators $$ \mathbf 
   $$
 4. *If $$ \hat{\gamma}_ t < \gamma $$ , set $$ t = t+1 $$ and reiterate from Step 2; otherwise, proceed with Step 5.*
 5. *Let $$ T=t $$ be the final iteration counter. Generate $$ \mathbf{X_1, \ldots, X_N} \underset{\mathrm{iid}}{\sim} f(\cdot;\hat{\mathbf v}_ T) $$ and estimate $$ l $$ via importance sampling*:
-
   $$
   \hat{l} = \frac{1}{N} \sum_{k=1}^N \mathbf I_{\lbrace S(\mathbf X_k) \geqslant \gamma \rbrace} \frac{f(\mathbf X_k;\mathbf u)}{f(\mathbf X_k;\hat{\mathbf v}_ T)}.
   $$
