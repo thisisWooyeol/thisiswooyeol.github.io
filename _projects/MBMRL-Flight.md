@@ -213,7 +213,6 @@ For a rare-event probability $$ l $$ , most or all of the indicators $$ \mathbf 
 1. *Define $$ \hat{\mathbf v}_ 0 = \mathbf u $$ . Let $$ N^e = \left \lceil \varrho N \right \rceil $$ . Set  $$ t=1 $$ (iteration counter).*
 2. *Generate $$ \mathbf{X_1, \ldots, X_N} \underset{\mathrm{iid}}{\sim} f(\cdot;\hat{\mathbf v}_ {t-1}) $$ . Calculate $$ S_{(i)} = S(\mathbf X_i)\ \forall i $$ , and order these from smallest to largest: $$ S_{(1)} \leqslant \ldots \leqslant S_{(N)} $$ . Let $$ \hat{\gamma}_ t $$ be the sample $$ (1-\varrho) \text{-quantile of performances} $$ ; that is, $$ \hat{\gamma}_ t = S_{(N-N^e+1)} $$ . If $$ \hat{\gamma}_ t > \gamma $$ , reset $$ \hat{\gamma}_ t $$ to $$ \gamma $$ .*
 3. *Use the* **same** *sample $$ \mathbf{X_1, \ldots, X_N} $$ to solve the stochastic program*:
-
   $$
   \hat{\mathbf v}_ t = \underset{\mathbf v}{\mathrm{argmax}} = \frac{1}{N} \sum_{k=1}^N \mathbf I_{\lbrace S(\mathbf X_k) \geqslant \hat{\gamma}_ t \rbrace} \frac{f(\mathbf X_k;\mathbf u)}{f(\mathbf X_k;\hat{\mathbf v}_ {t-1})} \mathrm{ln}\ f(\mathbf X_k;\mathbf v).
   $$
