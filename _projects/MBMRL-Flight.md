@@ -218,6 +218,7 @@ For a rare-event probability $$ l $$ , most or all of the indicators $$ \mathbf 
   \hat{\mathbf v}_ t = \underset{\mathbf v}{\mathrm{argmax}} = \frac{1}{N} \sum_{k=1}^N \mathbf I_{\lbrace S(\mathbf X_k) \geqslant \hat{\gamma}_ t \rbrace} \frac{f(\mathbf X_k;\mathbf u)}{f(\mathbf X_k;\hat{\mathbf v}_ {t-1})} \mathrm{ln}\ f(\mathbf X_k;\mathbf v).
   \end{equation*}
   $$
+
 4. *If $$ \hat{\gamma}_ t < \gamma $$ , set $$ t = t+1 $$ and reiterate from Step 2; otherwise, proceed with Step 5.*
 5. *Let $$ T=t $$ be the final iteration counter. Generate $$ \mathbf{X_1, \ldots, X_N} \underset{\mathrm{iid}}{\sim} f(\cdot;\hat{\mathbf v}_ T) $$ and estimate $$ l $$ via importance sampling*:
 
