@@ -500,7 +500,7 @@ The overall training and test time graphical models are summarized in Figure 4.
 <br/>
 
 <div class="row justify-content-center">
-    <div class="col-6">
+    <div class="col-10">
         {% include figure.html path="assets/img/MBMRL-Flight/MBMRL-payload-transportation-result.PNG" title="Payload transportation task results" class="img-fluid" %}
     </div>
 </div>
