@@ -253,6 +253,18 @@ We can now associate with the above optimization problem the estimation of the p
 Note that the estimation Step 5 of Algorithm A is missing in Algorithm B, because in the optimization setting we are not interested in estimating $$ l $$ per se. For the same reason the likelihood ration term $$ f(\mathbf X_k;\mathbf u) / f(\mathbf X_k;\hat{\mathbf v}_ {t-1}) $$ in Algorithm A is missing in Algorithm B. To run the algorithm, (1) a class of parametric sampling densities $$ \lbrace f(\cdot;\mathbf v), \ \mathbf v \in \mathcal V \rbrace $$ , (2) the initial vector $$ \hat{\mathbf v}_ 0 $$ , (3) the sample size $$ N $$ , (4) the rarity parameter $$ \varrho $$ , and (5) a stopping criterion are needed to be predefined.
 
 <br/>
+<div class="row justify-content-center">
+    <div class="col-6">
+        {% include figure.html path="assets/img/MBMRL-Flight/PETS-CEM-performance-comparison.PNG" title="MPC action optimizer comparison" class="img-fluid" %}
+    </div>
+</div>
+<div class="caption">
+    Figure from "Deep Reinforcement Learning in a Handful of Trials using Probabilistic Dynamics Models"
+</div>
+
+The results from [`PETS paper`](https://arxiv.org/abs/1805.12114) show that using CEM significantly outperforms random search on the half-cheetah task. Simple random search techniques are simple and have ease of parallelism, but they suffer in high dimensional spaces. 
+
+<br/>
 <br/>
 
 ### PETS algorithm summary
