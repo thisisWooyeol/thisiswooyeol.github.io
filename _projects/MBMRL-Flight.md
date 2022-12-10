@@ -152,7 +152,7 @@ The learned dynamics model is used to plan and execute actions via model predict
 
 ### Optimizing action sequence via Cross-Entropy Method (CEM)
 
-Unlike a common technique to compute the optimal action sequence (random sampling shooting), PETS used [`cross-entropy method(CEM)`](https://www.researchgate.net/publication/279242256_Chapter_3_The_Cross-Entropy_Method_for_Optimization). The *cross-entropy (CE) method* is an **adaptive importance sampling procedure for the estimation of rare-event probabilities**, which uses the *cross-entropy* or *Kullback-Leibler divergence* as a measure of closeness between two sampling distributions. By using the cross-entropy method to gradually change the sampling distribution of the random search so that **the rare-event**, especially locating an optimal or near optimal solution using naive random search, **is more likely to occur**. 
+Unlike a common technique to compute the optimal action sequence (random sampling shooting), PETS used [`cross-entropy method(CEM)`](https://www.researchgate.net/publication/279242256_Chapter_3_The_Cross-Entropy_Method_for_Optimization). The *cross-entropy (CE) method* is an **adaptive importance sampling procedure for the estimation of rare-event probabilities**, which uses the *cross-entropy* or *Kullback-Leibler divergence* as a measure of closeness between two sampling distributions. By using the cross-entropy method to **gradually change the sampling distribution** of the random search so that **the rare-event**, especially locating an optimal or near optimal solution using naive random search, **is more likely to occur**. Eventually, the sampling distribution converges to a distribution with a probability mass concentrated in a region of near-optimal solutions.
 
 The CE method can be applied to two types of problems:
 
@@ -166,24 +166,24 @@ The CE method can be applied to two types of problems:
 Consider the estimation of the probability 
 
 $$
-l = \mathbb P(S(\mathbf X) \geqslant \gamma) = \mathbb E \left[ \mathbf I_{\lbrace S(\mathbf X) \geqslant \gamma \rbrace} \right] = \int \mathbf I_{\lbrace S(\mathbf X) \geqslant \gamma \rbrace} f(\mathbf{x;u}) \, d\mathbf x ,
+l = \mathbb P(S(\mathbf X) \geqslant \gamma) = \mathbb E \left[ \mathbf I_{\lbrace S(\mathbf X) \geqslant \gamma \rbrace} \right] = \int \mathbf I_{\lbrace S(\mathbf X) \geqslant \gamma \rbrace} f(\mathbf x ; \mathbf u) \, d\mathbf x ,
 $$
 
-where $$ S $$ : real-valued function, $$ \gamma $$ : threshold or level parameter, $$ \mathbf X \sim f(\cdot;\mathbf u) $$ : pdf parameterized by a finite-dim vector $$ \mathbb u $$ 
+where $$ S $$ : real-valued function, $$ \gamma $$ : threshold or level parameter, $$ \mathbf X \sim f(\cdot;\mathbf u) $$ : pdf parameterized by a finite-dim vector $$ \mathbf u $$ 
 
-Let $$ g $$ be another pdf s.t. $$ g(\mathbb x) = 0 \Rightarrow H(\mathbb x)f(\mathbb{x;u}) = 0 \ \forall \mathbb x $$ . Using the pdf $$ g $$ , we can represent $$ l $$ as
-
-$$
-l = \int \frac{f(\mathbf{x;u}) \mathbf I_{\lbrace S(\mathbf x) \geqslant \gamma \rbrace}}{g(\mathbf x)} g(\mathbf x) \, d \mathbf x = \mathbb E \left[ \frac{f(\mathbf{X;u}) \mathbf I_{\lbrace S(\mathbf X) \geqslant \gamma \rbrace}}{g(\mathbf X)} \right] , \quad \mathbf X \sim g .
-$$
-
-With independent random vectors $$ \mathbf{X_1, \ldots X_N \underset{\mathrm{iid}}{\sim} g $$ , then
+Let $$ g $$ be another pdf s.t. $$ g(\mathbf x) = 0 \Rightarrow H(\mathbf x)f(\mathbf x; \mathbf u) = 0 \ \forall \mathbf x $$ . Using the pdf $$ g $$ , we can represent $$ l $$ as
 
 $$
-\hat{l} = \frac{1}{N} \sim_{k=1}^N \mathbf I_{\lbrace S(\mathbf X_k) \geqslant \gamma \rbrace} \frac{f(\mathbf X_k;\mathbf u)}{g(\mathbf X_k)} 
+l = \int \frac{f(\mathbf x; \mathbf u) \mathbf I_{\lbrace S(\mathbf x) \geqslant \gamma \rbrace}}{g(\mathbf x)} g(\mathbf x) \, d \mathbf x = \mathbb E \left[ \frac{f(\mathbf X; \mathbf u) \mathbf I_{\lbrace S(\mathbf X) \geqslant \gamma \rbrace}}{g(\mathbf X)} \right] , \quad \mathbf X \sim g .
 $$
 
-is an unbiased estimator of $$ l $$ : a so-called *importance sampling estimator*. The optimal importance sampling pdf (that is, the pdf $$ g^* $$ for which the variance of $$ \hat{l} $$ is minimal is given as $$
+With independent random vectors $$ \mathbf{X_1, \ldots, X_N} \underset{\mathrm{iid}}{\sim} g $$ , then
+
+$$
+\hat{l} = \frac{1}{N} \sum_{k=1}^N \mathbf I_{\lbrace S(\mathbf X_k) \geqslant \gamma \rbrace} \frac{f(\mathbf X_k;\mathbf u)}{g(\mathbf X_k)} 
+$$
+
+is an unbiased estimator of $$ l $$ : a so-called *importance sampling estimator*. The optimal importance sampling pdf (that is, the pdf $$ g^* $$ for which the variance of $$ \hat{l} $$ is minimal is given as $$ g^* (\mathbf x) = f(\mathbf x; \mathbf u) \mathbf I_{\lbrace S(\mathbf x) \geqslant \gamma \rbrace} / l $$ . However, **as $$ l $$ is unknown**, CE method choose the importance sampling pdf $$ g $$ from within the parametric class of pdfs $$ \lbrace f(\cdot;\mathbf v), \mathbf v \in \mathcal V \rbrace $$ s.t. the KL divergence between $$ g^* $$ and $$ g $$ is minimal. 
 
 ### PETS algorithm summary
 
