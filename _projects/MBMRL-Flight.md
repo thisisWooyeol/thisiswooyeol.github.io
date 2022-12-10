@@ -188,8 +188,8 @@ is an unbiased estimator of $$ l $$ : a so-called *importance sampling estimator
 $$
 \begin{align*}
 \mathbf v^* &= \underset{\mathbf v}{\mathrm{argmin}} \mathcal D(g^* , f(\cdot; \mathbf v)) \\
-&= \underset{\mathbf v}{\mathrm{argmin}} \int g^* (mathbf x) \mathrm{ln}\ \frac{g^* (\mathbf x)}{f(\mathbf x;\mathbf v)} \, d \mathbf x \\
-&= \underset{\mathbf v}{\mathrm{argmax}} \int g^* (mathbf x) \mathrm{ln}\ f(\mathbf x;\mathbf v) \, d \mathbf x \\
+&= \underset{\mathbf v}{\mathrm{argmin}} \int g^* (\mathbf x) \mathrm{ln}\ \frac{g^* (\mathbf x)}{f(\mathbf x;\mathbf v)} \, d \mathbf x \\
+&= \underset{\mathbf v}{\mathrm{argmax}} \int g^* (\mathbf x) \mathrm{ln}\ f(\mathbf x;\mathbf v) \, d \mathbf x \\
 &= \underset{\mathbf v}{\mathrm{argmax}} \int \frac{f(\mathbf x; \mathbf u) \mathbf I_{\lbrace S(\mathbf x) \geqslant \gamma \rbrace}}{g(\mathbf x)}  \mathrm{ln}\ f(\mathbf x;\mathbf v) \, d \mathbf x \\
 &= \underset{\mathbf v}{\mathrm{argmax}} \mathbb E_{\mathbf u} \left[ \mathbf I_{\lbrace S(\mathbf X) \geqslant \gamma \rbrace}  \mathrm{ln}\ f(\mathbf X;\mathbf v) \right] \\
 &= \underset{\mathbf v}{\mathrm{argmax}} \mathbb E_{\mathbf w} \left[ \mathbf I_{\lbrace S(\mathbf X) \geqslant \gamma \rbrace}  \mathrm{ln}\ f(\mathbf X;\mathbf v) \frac{f(\mathbf X;\mathbf u)}{f(\mathbf X;\mathbf w)} \right],
@@ -199,10 +199,39 @@ $$
 where $$ \mathbf w $$ is any reference parameter. This $$ \mathbf v^* $$ can be estimated via the stochastic sampling:
 
 $$
-\hat{\mathbf v} = \underset{\mathbf v}{\mathrm{argmax}} = \frac{1}{N} \sum_{k=1}^N I_{\lbrace S(\mathbf X_k) \geqslant \gamma \rbrace} frac{f(\mathbf X_k;\mathbf u)}{f(\mathbf X_k;\mathbf w)} \mathrm{ln}\ f(\mathbf X_k;\mathbf v),
+\hat{\mathbf v} = \underset{\mathbf v}{\mathrm{argmax}} = \frac{1}{N} \sum_{k=1}^N \mathbf I_{\lbrace S(\mathbf X_k) \geqslant \gamma \rbrace} \frac{f(\mathbf X_k;\mathbf u)}{f(\mathbf X_k;\mathbf w)} \mathrm{ln}\ f(\mathbf X_k;\mathbf v),
 $$
 
-where $$ \mathbf{X_1, \ldots, X_N} \underset{\mathrm{iid}}{\sim} f(\cdot;\mathbf w) $$ . The optimal parameter $$ \hat{\mathbf v} $$ 
+where $$ \mathbf{X_1, \ldots, X_N} \underset{\mathrm{iid}}{\sim} f(\cdot;\mathbf w) $$ . The optimal parameter $$ \hat{\mathbf v} $$ can often be obtained in explicit form, in particular when the class of sampling distributions forms an *exponential family*. 
+
+For a rare-event probability $$ l $$ , most or all of the indicators $$ \mathbf I_{\lbrace S(\mathbf X) \geqslant \gamma \rbrace} $$ are zero, and the maximization problem become useless. In that case a **multi-level CE** procedure is used, where a sequence of reference parameters $$ \lbrace \hat{\mathbf v}_ t \rbrace $$ and levels $$ \lbrace \hat{\gamma}_ t \rbrace $$ is constructed with the goal that the former converges to $$ \mathbf v^* $$ and the latter to $$ \gamma $$ . The actual procedure is described in the following algorithm.
+
+**Algorithm A (CE Algorithm for Rare-Event Estimation)** *Given the sample size $$ N $$ and the rarity parameter $$ \varrho $$ , execute the following steps.
+
+1. *Define $$ \hat{\mathbf v}_ 0 = \mathbf u $$ . Let $$ N^e = \left \lceil \varrho N \right \rceil $$ . Set $$ t=1 $$ (iteration counter).*
+2. *Generate $$ \mathbf{X_1, \ldots, X_N} \underset{\mathrm{iid}}{\sim} f(\cdot;\hat{\mathbf v}_ {t-1}) $$ . Calculate $$ S_i = S(\mathbf X_i) \forall i $$ , and order these from smallest to largest: $$ S_{(1)} \leqslant \ldots \leqslant S_{(N)} $$ . Let $$ \hat{\gamma}_ t $$ be the sample $$ (1-\varrho)$$ -quantile of performances; that is, $$ \hat{\gamma}_ t = S_{(N-N^e+1)} $$ . If $$ \hat{\gamma}_ t > \gamma $$ , reset $$ \hat{\gamma}_ t $$ to $$ \gamma $$ .*
+3. *Use the* **same** *sample $$ \mathbf{X_1, \ldots, X_N} $$ to solve the stochastic program*:
+  
+  $$
+  \hat{\mathbf v}_ t = \underset{\mathbf v}{\mathrm{argmax}} = \frac{1}{N} \sum_{k=1}^N \mathbf I_{\lbrace S(\mathbf X_k) \geqslant \hat{\gamma}_ t \rbrace} \frac{f(\mathbf X_k;\mathbf u)}{f(\mathbf X_k;\hat{\mathbf v}_ {t-1})} \mathrm{ln}\ f(\mathbf X_k;\mathbf v).
+  $$
+  
+4. *If $$ \hat{\gamma}_ t < \gamma $$ , set $$ t = t+1 $$ and reiterate from Step 2; otherwise, proceed with Step 5.*
+5. *Let $$ T=t $$ be the final iteration counter. Generate $$ \mathbf{X_1, \ldots, X_N} \underset{\mathrm{iid}}{\sim} f(\cdot;\hat{\mathbf v}_ T) $$ and estimate $$ l $$ via importance sampling:
+
+  $$
+  \hat{l} = \frac{1}{N} \sum_{k=1}^N \mathbf I_{\lbrace S(\mathbf X_k) \geqslant \gamma \rbrace} \frac{f(\mathbf X_k;\mathbf u)}{f(\mathbf X_k;\hat{\mathbf v}_ T)}.
+  $$
+  
+<br/>
+
+**Cross-Entropy Method for Optimization**
+
+The estimation algorithm above leads naturally to a simple optimization heuristic.
+
+
+<br/>
+<br/>
 
 ### PETS algorithm summary
 
