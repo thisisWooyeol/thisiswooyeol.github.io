@@ -277,7 +277,7 @@ scholar:
   style: apa
   locale: en
 
-  source: /assets/bibliography/
+  source: /_bibliography/
   bibliography: papers.bib
   bibliography_template: bib
   # Note: if you have latex math in your bibtex, the latex filter
