@@ -2,13 +2,13 @@
 layout: about
 title: about
 permalink: /
-subtitle: <strong> When something is important enough, you do it even if the odds are not in your favor. </strong> - Elon Musk -
+subtitle: <strong><em> When something is important enough, you do it even if the odds are not in your favor. </em></strong> - Elon Musk -
 
 profile:
   align: right
   image: prof_pic.jpg
   image_circular: false # crops the image to make it circular
-  address: >
+  more_info: >
     <p> wooyeol0519 at snu dot ac dot kr </p>
     <a href="https://thisiswooyeol.github.io/assets/pdf/WooyeolLee_CV.pdf" target="_blank"><p> Download Wooyeol Lee's CV </p></a>
 
@@ -17,6 +17,8 @@ latest_posts: false  # includes a list of the newest posts
 selected_papers: false # includes a list of papers marked as "selected={true}"
 social: true  # includes social icons at the bottom of the page
 ---
+
+<br>
 
 Hi there👋 This is Wooyeol Lee!
 
