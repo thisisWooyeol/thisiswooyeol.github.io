@@ -262,7 +262,7 @@ jekyll-archives:
     tag: '/blog/tag/:name/'
     category: '/blog/category/:name/'
 
-display_tags: ['formatting', 'images', 'links', 'math', 'code'] # these tags will be displayed on the front page of your blog
+display_tags: ['formatting', 'images', 'links', 'math', 'code'] # these tags will be displayed on the front page of your blog # TODO Change display_tags to display_categories
 display_categories: ['blockquotes'] # these categories will be displayed on the front page of your blog
 
 # -----------------------------------------------------------------------------
@@ -277,7 +277,7 @@ scholar:
   style: apa
   locale: en
 
-  source: /_bibliography/
+  source: /assets/bibliography/
   bibliography: papers.bib
   bibliography_template: bib
   # Note: if you have latex math in your bibtex, the latex filter
@@ -360,7 +360,7 @@ jekyll-diagrams:
 # -----------------------------------------------------------------------------
 
 enable_google_analytics:    true  # enables google analytics
-enable_cronitor_analytics: true  # enables cronitor RUM analytics
+enable_cronitor_analytics: false  # enables cronitor RUM analytics
 enable_google_verification: true  # enables google site verification
 enable_bing_verification:   true  # enables bing site verification
 enable_masonry:             true   # enables automatic project cards arrangement

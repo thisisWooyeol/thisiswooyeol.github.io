@@ -6,7 +6,8 @@ description: Review on "Reinforcement Learning with Deep Energy-Based Policies"
 tags: 
 categories: papers review
 img: assets/img/SoftQLearning/softqlearning.PNG
-giscus_comments: true
+giscus_comments: true   # ! TODO: change _layout/page.html or _layout/post.html to able to use comment system on project page
+                        # ! TODO: Maybe it will be far more easy to enable _layout/page.html to use comment system
 related_posts: false
 toc:
   sidebar: left
