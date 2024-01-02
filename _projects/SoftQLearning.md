@@ -1,10 +1,15 @@
 ---
-layout: page
+layout: post
 title: Soft Q-Learning
+date: 2022-11-21 12:29:00-0400
 description: Review on "Reinforcement Learning with Deep Energy-Based Policies"
+tags: 
+categories: papers review
 img: assets/img/SoftQLearning/softqlearning.PNG
-importance: 1
-category: papers review
+giscus_comments: true
+related_posts: false
+toc:
+  sidebar: left
 ---
 
 # TL;DR:
