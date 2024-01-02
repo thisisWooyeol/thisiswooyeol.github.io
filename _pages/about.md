@@ -10,7 +10,7 @@ profile:
   image_circular: false # crops the image to make it circular
   more_info: >
     <p> wooyeol0519 at snu dot ac dot kr </p>
-    <a href="https://thisiswooyeol.github.io/assets/pdf/WooyeolLee_CV.pdf" target="_blank"><p> Download Wooyeol Lee's CV </p></a>
+    <a href="https://thisiswooyeol.github.io/assets/pdf/WooyeolLee_CV.pdf" target="_blank"><p> -> Download Wooyeol Lee's CV <- </p></a>
 
 news: true  # includes a list of news items
 latest_posts: false  # includes a list of the newest posts
