@@ -7,14 +7,13 @@ tags:
 category: papers review
 importance: 1
 img: assets/img/SoftQLearning/softqlearning.PNG
-giscus_comments: true   # ! TODO: change _layout/page.html or _layout/post.html to able to use comment system on project page
-                        # ! TODO: Maybe it will be far more easy to enable _layout/page.html to use comment system
+giscus_comments: true
 related_posts: false
 toc:
   sidebar: left
 ---
 
-# TL;DR:
+## TL;DR:
 - A method for **learning expressive energy-based policies for continuous states and actions**
 - Apply the method to learning **maximum entropy policies**
 - Used **amortized Sten variational gradient descent** to obtain complex multimodal policies
@@ -28,7 +27,7 @@ toc:
 
 --------
 
-# Preliminaries
+## Preliminaries
 <br/>
 
 ### Maxmimum Entropy Reinforcement Learning
@@ -113,7 +112,7 @@ How to prove thm 2.: check Appendix A.2.
 <br/>
 
 -------
-# Training Expressive Energy-Based Models via Soft Q-Learning
+## Training Expressive Energy-Based Models via Soft Q-Learning
 <br/>
 
 ### Soft Q-Iteration
@@ -214,7 +213,7 @@ Details of updating policy parameters are described in Appendix C.1.
 <br/>
 
 -------
-# Experiments
+## Experiments
 **What to Figure Out ?**
 1. Does their soft Q-learning method **accurately capture a multi-modal policy distribution?**
 2. Can soft Q-learning with energy-based policies **aid exploration for complex tasks that require tracking multiple modes?**
