@@ -4,7 +4,8 @@ title: Soft Q-Learning
 date: 2022-11-21 12:29:00-0400
 description: Review on "Reinforcement Learning with Deep Energy-Based Policies"
 tags: 
-categories: papers review
+category: papers review
+importance: 1
 img: assets/img/SoftQLearning/softqlearning.PNG
 giscus_comments: true   # ! TODO: change _layout/page.html or _layout/post.html to able to use comment system on project page
                         # ! TODO: Maybe it will be far more easy to enable _layout/page.html to use comment system
