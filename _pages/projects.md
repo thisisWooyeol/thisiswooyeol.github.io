@@ -6,7 +6,7 @@ description: A growing collection of my cool projects.
 nav: true
 nav_order: 3
 display_categories: [personal projects, papers review]
-horizontal: true
+horizontal: false
 ---
 
 <!-- pages/projects.md -->
@@ -19,7 +19,7 @@ horizontal: true
   {%- assign sorted_projects = categorized_projects | sort: "importance" %}
   <!-- Generate cards for each project -->
   {% if page.horizontal -%}
-  <div class="container">
+  <div class="container" style="grid-auto-rows:1fr">
     <div class="row row-cols-2">
     {%- for project in sorted_projects -%}
       {% include projects_horizontal.html %}
