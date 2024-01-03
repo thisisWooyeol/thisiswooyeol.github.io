@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Soft Q-Learning
-date: 2022-11-21 12:29:00-0400
+date: 2022-10-30 17:00:00+0900
 description: Review on "Reinforcement Learning with Deep Energy-Based Policies"
 tags: 
 category: papers review

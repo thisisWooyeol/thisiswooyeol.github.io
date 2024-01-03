@@ -1,13 +1,19 @@
 ---
-layout: page
+layout: post
 title: PEARL
+date: 2022-11-16 18:00:00 +0900
 description: Review on "Efficient Off-Policy Meta-Reinforcement Learning via Probabilistic Context Variables"
-img: assets/img/PEARL/PEARL-thumbnail.PNG
-importance: 4
+tags:
 category: papers review
+importance: 4
+img: assets/img/PEARL/PEARL-thumbnail.PNG
+giscus_comments: true
+related_posts: false
+toc:
+    sidebar: left
 ---
 
-# TL;DR:
+## TL;DR:
 - PEARL decouples the problems of **inferring the task** and **solving it**, allowing for **off-policy meta-learning** while minimizing mismatch between train and test context distributions.
 - With **posterior sampling on latent context variable** on which the policy is conditioned, PEARL can conduct **temporally extended exploration** to adapt unseen tasks rapidly.
 - **Permutation-invariant encoder** for the latent context variable allows decomposing a trajectory into a collection of single transitions.
@@ -20,7 +26,7 @@ category: papers review
 
 --------
 
-# Introduction
+## Introduction
 <br/>
 
 ### Meta-RL problems
@@ -46,7 +52,7 @@ Probabilistic embeddings for actor-critic RL (PEARL) achieves state-of-the-art r
 
 -------
 
-# Related Work
+## Related Work
 <br/>
 
 ### Meta-learning
@@ -97,7 +103,7 @@ $$
 
 -------
 
-# Problem Statement
+## Problem Statement
 <br/>
 
 - Assume a distribution of tasks $$ p(\mathcal T) $$ , where each task is a MDP.
@@ -111,7 +117,7 @@ $$
 
 -------
 
-# Probabilistic Latent Context
+## Probabilistic Latent Context
 <br/>
 
 ### Modeling and Learning Latent Contexts
@@ -205,7 +211,7 @@ Modeling the latent context as probabilistic allows us to make use of posterior 
 
 -------
 
-# Off-Policy Meta-Reinforcement Learning
+## Off-Policy Meta-Reinforcement Learning
 <br/>
 
 There has been two challenges to design off-policy meta-RL algorithms:
@@ -263,7 +269,7 @@ where $$ \bar{V} $$ is a target network and $$ \bar{z} $$ indicates that gradien
 
 -------
 
-# Experiments
+## Experiments
 <br/>
 
 ### Sample Efficiency and Performance
@@ -356,6 +362,3 @@ PEARL uses 20-100x fewer samples during meta-training than previous meta-RL appr
 <br/>
 <br/>
 
--------
-
-# Discussion

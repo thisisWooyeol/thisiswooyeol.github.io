@@ -1,13 +1,19 @@
 ---
-layout: page
+layout: post
 title: MBMRL for Flight
+date: 2022-12-08 19:49:00 +0900
 description: Review on "Model-Based Meta-Reinforcement Learning for Flight with Suspended Payloads"
-img: assets/img/MBMRL-Flight/MBMRL-Flight-thumbnail.PNG
-importance: 6
+tags:
 category: papers review
+importance: 6
+img: assets/img/MBMRL-Flight/MBMRL-Flight-thumbnail.PNG
+giscus_comments: true
+related_posts: false
+toc:
+  sidebar: left
 ---
 
-TL;DR:
+## TL;DR:
 - Proposed a **meta-learning approach** that "learns how to learn" **models of various payloads** that a priori unknown physical properties vary dynamics.
 - By **augmenting the dynamic model with stochastic latent variables**, the authors infused meta-learning approach into MBRL.
 - **Usage of unknown latent variables** leads to outperforming results compared to pure model-based methods.
@@ -20,7 +26,7 @@ TL;DR:
 
 --------
 
-# Introduction
+## Introduction
 <br/>
 
 ### Task definition
@@ -59,7 +65,7 @@ A **predictive dynamics model** which is **augmented with stochastic latent vari
 
 --------
 
-# Related Work
+## Related Work
 <br/>
 
 **Controlling Aerial Vehicles**
@@ -89,7 +95,7 @@ A **predictive dynamics model** which is **augmented with stochastic latent vari
 
 --------
 
-# Preliminaries: PETS Algorithm
+## Preliminaries: PETS Algorithm
 <br/>
 
 Model-based reinforcement learning estimates the underlying dynamics from data by training a dynamics model $$ p_\theta(s_{t+1} \mid s_t, a_t) $$ via maximum likelihood
@@ -283,7 +289,7 @@ Now the overall PETS algorithm can be summarized in Algorithm 1.
 
 --------
 
-# Model-Based Meta-Learning For Quadcopter Payload Transport
+## Model-Based Meta-Learning For Quadcopter Payload Transport
 <br/>
 
 <div class="row justify-content-center">
@@ -436,7 +442,7 @@ The overall training and test time graphical models are summarized in Figure 4.
 
 --------
 
-# Experimental Evaluation
+## Experimental Evaluation
 <br/>
 
 **Aims of Experiments**

@@ -1,13 +1,19 @@
 ---
-layout: page
+layout: post
 title: Soft Actor-Critic
+date: 2022-11-05 13:48:00+0900
 description: Review on "Soft Actor-Critic; Off-Policy Maximum Entropy Deep RL with a Stochastic Actor"
-img: assets/img/SoftActorCritic/SAC-comparative-eval.PNG
-importance: 2
+tags:
 category: papers review
+importance: 2
+img: assets/img/SoftActorCritic/SAC-comparative-eval.PNG
+giscus_comments: true
+related_posts: false
+toc:
+    sidebar: left
 ---
 
-# TL;DR:
+## TL;DR:
 - Soft Actor-Critic; **an off-policy actor-critic deep RL algorithm** based on the **maximum entropy reinforcement learning framework**
 - SAC achieves SOTA performance on a range of continuous control benchmark tests, outperforming prior on-policy and off-policy method.
 - SAC is very **stable** in contrast to other off-policy algorithms.
@@ -17,7 +23,7 @@ category: papers review
 
 --------
 
-# Introduction
+## Introduction
 <br/>
 
 ### Challenges on Model-free deep reinforcement learning (RL) algorithms
@@ -43,7 +49,7 @@ Although the soft Q-learning algorithm has a value function and actor network, *
 <br/>
 
 -------
-# Preliminaries
+## Preliminaries
 <br/>
 
 ### Maximum Entropy Reinforcement Learning
@@ -63,7 +69,7 @@ The temperature parameter $$ \alpha $$ determines the relative importance of the
 <br/>
 
 -------
-# From Soft Policy Iteration to Soft Actor-Critic
+## From Soft Policy Iteration to Soft Actor-Critic
 <br/>
 
 ### Derivation of Soft Policy Iteration
@@ -217,7 +223,7 @@ The complete algorithm is described in Algorithm 1.
 <br/>
 
 -------
-# Experiments
+## Experiments
 The goal of experimental evaluation is comparing the **sample complexity** and **stability** of SAC with prior on/off-policy deep RL algorithms on continuous control tasks. DDPG, PPO, SQL, and TD3 are used for comparison, where exploration noise of DDPG and PPO is turned off and only the mean action for SAC is used in evaluation rollouts. (remove any stochasticity and noise of algorithm in order for the algorithms can fully exploit their knowledge)
 
 <br/>

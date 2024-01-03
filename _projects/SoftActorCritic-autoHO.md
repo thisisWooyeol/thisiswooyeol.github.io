@@ -1,13 +1,19 @@
 ---
-layout: page
+layout: post
 title: Soft actor-critic with auto H.O.
+date: 2022-11-06 14:48:00+0900
 description: Review on "Soft Actor-Critic Algorithms and Applications"
-img: assets/img/SoftActorCritic-HO/SAC-ver2-background.PNG
-importance: 3
+tags:
 category: papers review
+importance: 3
+img: assets/img/SoftActorCritic-HO/SAC-ver2-background.PNG
+giscus_comments: true
+related_posts: false
+toc:
+    sidebar: left
 ---
 
-# TL;DR:
+## TL;DR:
 - Based on the idea of [`Soft Actor-Critic`](https://thisiswooyeol.github.io/projects/SoftActorCritic/), this paper includes a constrained formulation that **automatically tunes the temperature hyperparameter.**
 - Revised version of soft actor-critic also shows **state-of-the-art performance in sample-efficiency and asymptotic performance** while retaining the benefits of entropy maximization and stability **without any environment specific hyperparameter tuning.**
 - Soft actor-critic is **robust and sample efficient enough for robotic tasks learned directly in the real world**, such as locomotion and dexterous manipulation.
@@ -23,7 +29,7 @@ This review only deals with automating entropy adjustment part of the paper. If 
 
 --------
 
-# Automating Entropy Adjustment for Maximum Entropy RL
+## Automating Entropy Adjustment for Maximum Entropy RL
 <br/>
 
 Previous soft actor-critic learns maximum entropy policies of a given temperature. Instead of requiring the user to set the temperature manually, we can **automate** this process by **a constrained optimization problem** where the average entropy of the policy is constrained, while the entropy at different states can vary. The **dual** to this constrained optimization leads to the soft actor-critic updates, along with an additional update for the **dual variable**, which plays the role of the temperature. At first, this paper derive the update for finite horizon case, and then derive an approximation for stationary policies by dropping the time dependencies from the policy, soft Q-function, and the temperature.
@@ -110,7 +116,7 @@ $$
 
 --------
 
-# Practical Algorithm
+## Practical Algorithm
 <br/>
 
 The complete algorithm is described in Algorithm 1.
@@ -138,7 +144,7 @@ $$
 
 --------
 
-# Experiment
+## Experiment
 <br/>
 
 ### Simulated Benchmarks
@@ -200,7 +206,7 @@ This task represents one of the most complex robotic manipulation tasks **learne
 
 --------
 
-# Discussion
+## Discussion
 <br/>
 
 - For the rllab humanoid task, the result of SAC with learned temperature highly **oscillates** compared with SAC with fixed temperature. Doesn't it mean automatic temperature tuning is brittle to harder task? 
