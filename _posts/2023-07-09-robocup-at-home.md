@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Team TidyBoy-DSPL Triumphs at RoboCup@Home 2023!
-date: 2023-07-10 16:00:00+0900
+date: 2023-07-09 16:00:00+0900
 description: 
 tags: robocup
 categories:
