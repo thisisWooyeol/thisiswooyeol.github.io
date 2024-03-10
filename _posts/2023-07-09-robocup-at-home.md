@@ -1,10 +1,11 @@
 ---
 layout: post
 title: Team TidyBoy-DSPL Triumphs at RoboCup@Home 2023!
-date: 2023-07-10 16:00:00+0900
+date: 2023-07-09 16:00:00+0900
 description: 
 tags: robocup
 categories:
+thumbnail: /assets/img/RoboCup/tidyboy-on-stage.jpg
 giscus_comments: true
 related_posts: false
 ---
@@ -21,6 +22,8 @@ Congratulations to Team TidyBoy and a big thank you to all the supporters who ch
 
 For more details, check out the [official news article](https://example.com/news-article).
 
+<br/>
+<br/>
 
 Additionally, here is a picture of all the teams that participated in RoboCup 2023:
 ![RoboCup All Teams](/assets/img/RoboCup/robocup2023.jpg)
