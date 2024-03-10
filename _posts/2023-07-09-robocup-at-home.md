@@ -11,7 +11,7 @@ related_posts: false
 ---
 
 <div class="row justify-content-center">
-    <div class="col-8">
+    <div class="col-12">
         {% include figure.html path="assets/img/RoboCup/tidyboy-on-stage.jpg" title="Team TidyBoy Winning Moment" class="img-fluid" %}
     </div>
 </div>
@@ -31,7 +31,7 @@ For more details, check out the [official news article](https://example.com/news
 
 Additionally, here is a picture of all the teams that participated in RoboCup 2023:
 <div class="row justify-content-center">
-    <div class="col-8">
+    <div class="col-12">
         {% include figure.html path="assets/img/RoboCup/robocup2023.jpg" title="All teams in robocup" class="img-fluid" %}
     </div>
 </div>
