@@ -1,1 +1,1 @@
-This is the source code to Jon Barron's public academic website: https://jonbarron.info/. Feel free to clone this code for your own personal use.
+This codebase is built on top of the original code for Jon Barron's public academic website: https://jonbarron.info/. It has been modified and extended to create a new personal academic website for Wooyeol Lee.
