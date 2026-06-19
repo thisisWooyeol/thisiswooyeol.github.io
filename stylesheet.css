@@ -1,3 +1,8 @@
+/*
+  =====================================================================================================================
+  Fonts
+  =====================================================================================================================
+*/
 /* latin-ext */
 @font-face {
   font-family: "Lato";
@@ -95,21 +100,14 @@
     U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-a {
-  color: #1772d0;
-  text-decoration: none;
-}
+/*
+  =====================================================================================================================
+  Base / Global
+  =====================================================================================================================
+*/
 
-a:focus,
-a:hover {
-  color: #f09228;
-  text-decoration: none;
-}
-
-highlight-accepted {
-  color: #ef5c05;
-  text-decoration: none;
-  font-style: italic;
+* {
+  box-sizing: border-box;
 }
 
 body,
@@ -140,6 +138,39 @@ h2 {
   font-weight: 700;
 }
 
+/*
+  =====================================================================================================================
+  Links / Inline Highlights
+  =====================================================================================================================
+*/
+
+a {
+  color: #1772d0;
+  text-decoration: none;
+}
+
+a:focus,
+a:hover {
+  color: #f09228;
+  text-decoration: none;
+}
+
+highlight-accepted {
+  color: #ef5c05;
+  text-decoration: none;
+  font-style: italic;
+}
+
+span.highlight {
+  background-color: #ffffd0;
+}
+
+/*
+  =====================================================================================================================
+  Profile / Intro
+  =====================================================================================================================
+*/
+
 .name {
   padding-top: 20px;
   padding-bottom: 20px;
@@ -149,39 +180,134 @@ h2 {
   font-weight: 700;
 }
 
-.one {
-  width: 160px;
-  height: 160px;
+/*
+  =====================================================================================================================
+  Research / Paper List
+  =====================================================================================================================
+*/
+
+.paper-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.paper-entry {
+  display: grid;
+  grid-template-columns: minmax(0, 30%) minmax(0, 1fr);
+  column-gap: 16px;
+  align-items: stretch;
+  padding: 16px;
+}
+
+.paper-thumb {
   position: relative;
+  width: 100%;
+  min-height: 0;
+  overflow: hidden;
+  background-color: #f4f4f4;
 }
 
-.two {
-  width: 160px;
-  height: 160px;
+.paper-image {
   position: absolute;
-  transition: opacity 0.2s ease-in-out;
-  -moz-transition: opacity 0.2s ease-in-out;
-  -webkit-transition: opacity 0.2s ease-in-out;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.fade {
-  transition: opacity 0.2s ease-in-out;
-  -moz-transition: opacity 0.2s ease-in-out;
-  -webkit-transition: opacity 0.2s ease-in-out;
+.paper-image--isac {
+  object-position: 42% 50%;
 }
 
-span.highlight {
-  background-color: #ffffd0;
+.paper-image--ace {
+  object-position: 50% 46%;
 }
 
-.colored-box {
-  color: black;
-  padding: 20px;
-  display: inline-block;
-  border-radius: 10px;
+.paper-image--trace {
+  object-position: 50% 47%;
 }
 
-/* Lightbox styles */
+.paper-content {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.paper-title-link {
+  display: block;
+  line-height: 1.25;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.paper-authors,
+.paper-venue,
+.paper-links {
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
+.paper-authors {
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.paper-description {
+  margin: 8px 0 0;
+  line-height: 1.35;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+/*
+  =====================================================================================================================
+  Responsive
+  =====================================================================================================================
+*/
+
+@media (min-width: 641px) {
+  body > table {
+    min-width: 760px;
+  }
+}
+
+@media (max-width: 640px) {
+  body {
+    margin: 0;
+  }
+
+  body > table,
+  body > table table {
+    width: 100% !important;
+    min-width: 0;
+    max-width: 100% !important;
+    table-layout: fixed;
+  }
+
+  .paper-entry {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 10px;
+    padding: 16px;
+  }
+
+  .paper-thumb {
+    min-height: auto;
+  }
+
+  .paper-image {
+    position: static;
+    height: auto;
+  }
+}
+
+/*
+  =====================================================================================================================
+  Image Zoom / Lightbox
+  =====================================================================================================================
+*/
+
 #lightbox {
   display: none;
   position: fixed;
@@ -232,7 +358,6 @@ span.highlight {
   opacity: 0.8;
 }
 
-/* Animation */
 #lightbox-content {
   animation-name: zoom;
   animation-duration: 0.6s;
