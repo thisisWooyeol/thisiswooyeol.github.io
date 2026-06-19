@@ -45,7 +45,13 @@ class CollaboratorManager {
 
 // Initialize when DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
-  new CollaboratorManager();
+  const collaboratorManager = new CollaboratorManager();
+
+  window.addEventListener("publications:rendered", () => {
+    collaboratorManager.updateCollaboratorLinks();
+    collaboratorManager.restoreHashScroll();
+  });
+
   window.addEventListener("load", () => {
     if (!window.location.hash) return;
 

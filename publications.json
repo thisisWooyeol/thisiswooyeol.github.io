@@ -1,0 +1,111 @@
+{
+  "publications": [
+    {
+      "id": "isac",
+      "title": "ISAC: Training-Free Instance-to-Semantic Attention Control for Improving Multi-Instance Generation",
+      "image": {
+        "src": "images/isac.jpg",
+        "alt": "isac",
+        "className": "paper-image--isac"
+      },
+      "authors": [
+        { "collaborator": "sanghyun_jo", "suffix": "*†" },
+        { "name": "Wooyeol Lee", "strong": true, "suffix": "*" },
+        { "collaborator": "ziseok_lee", "suffix": "*" },
+        { "collaborator": "jonghyun_choi" },
+        { "collaborator": "jaesik_park" },
+        { "collaborator": "kyungsu_kim", "suffix": "†" }
+      ],
+      "venue": {
+        "text": "ECCV 2026",
+        "tag": "em"
+      },
+      "links": [
+        {
+          "label": "paper",
+          "url": "https://arxiv.org/abs/2505.20935"
+        },
+        {
+          "label": "project page",
+          "url": "https://shjo-april.github.io/ISAC/"
+        }
+      ],
+      "description": "Explicitly guiding T2I diffusion models to follow the instance-to-semantic hierarchy, where the model first establishes vivid instance layouts and then refines semantic details, is essential for effective multi-instance generation."
+    },
+    {
+      "id": "ace",
+      "title": "On the Collapse of Generative Paths: A Criterion and Correction for Diffusion Steering",
+      "image": {
+        "src": "images/ace.jpg",
+        "alt": "ace",
+        "className": "paper-image--ace"
+      },
+      "authors": [
+        { "collaborator": "ziseok_lee", "suffix": "*" },
+        { "collaborator": "minyeong_hwang", "suffix": "*" },
+        { "name": "Wooyeol Lee", "strong": true },
+        { "collaborator": "sanghyun_jo" },
+        { "collaborator": "jihyung_ko" },
+        { "collaborator": "youngbin_park" },
+        { "collaborator": "jaemun_choi" },
+        { "collaborator": "eunho_yang", "suffix": "†" },
+        { "collaborator": "kyungsu_kim", "suffix": "†" }
+      ],
+      "venue": {
+        "text": "ICML 2026",
+        "tag": "em"
+      },
+      "links": [
+        {
+          "label": "paper",
+          "url": "https://arxiv.org/abs/2512.10339"
+        },
+        {
+          "label": "code",
+          "url": "https://github.com/ziseoklee/ACE"
+        },
+        {
+          "label": "project page",
+          "url": "https://ziseoklee.github.io/projects/ACE/"
+        }
+      ],
+      "description": "Ratio-of-densities steering in diffusion models breaks via Marginal Path Collapse. We introduce ACE, a provably stable correction that prevents collapse, cuts error >5x, and enables reliable molecular design."
+    },
+    {
+      "id": "trace",
+      "title": "TRACE: Your Diffusion Model is Secretly an Instance Edge Detector",
+      "image": {
+        "src": "images/trace.png",
+        "alt": "trace",
+        "className": "paper-image--trace"
+      },
+      "authors": [
+        { "collaborator": "sanghyun_jo", "suffix": "*" },
+        { "collaborator": "ziseok_lee", "suffix": "*" },
+        { "name": "Wooyeol Lee", "strong": true },
+        { "collaborator": "jonghyun_choi" },
+        { "collaborator": "jaesik_park", "suffix": "†" },
+        { "collaborator": "kyungsu_kim", "suffix": "†" }
+      ],
+      "venue": {
+        "text": "ICLR 2026 Oral",
+        "tag": "highlight-accepted"
+      },
+      "links": [
+        {
+          "label": "paper",
+          "url": "https://openreview.net/pdf?id=BjElYlJKMj"
+        },
+        {
+          "label": "code",
+          "url": "https://github.com/shjo-april/TRACE"
+        },
+        {
+          "label": "project page",
+          "url": "https://shjo-april.github.io/TRACE/"
+        }
+      ],
+      "description": "Diffusion models, capable of generating multiple instances, are secretly powerful annotators for instance segmentation. TRACE turns pretrained diffusion models into annotation-free instance edge generators for instance and panoptic segmentation."
+    }
+  ]
+}

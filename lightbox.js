@@ -1,16 +1,17 @@
 // Get the lightbox
 var lightbox = document.getElementById("lightbox");
 
-// Get the image and insert it inside the lightbox
 var lightboxImg = document.getElementById("lightbox-content");
-var images = document.getElementsByClassName("zoomable-image");
 
-for (var i = 0; i < images.length; i++) {
-  images[i].onclick = function () {
+// Open dynamically rendered zoomable images in the lightbox
+document.addEventListener("click", function (event) {
+  var image = event.target.closest(".zoomable-image");
+
+  if (image) {
     lightbox.style.display = "block";
-    lightboxImg.src = this.src;
-  };
-}
+    lightboxImg.src = image.src;
+  }
+});
 
 // Get the <span> element that closes the lightbox
 var span = document.getElementById("lightbox-close");

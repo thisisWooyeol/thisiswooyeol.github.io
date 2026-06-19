@@ -66,90 +66,7 @@
           data scaling for biomolecular world models.
         </p>
       </section>
-      <div class="paper-list">
-        <article class="paper-entry" id="isac">
-          <div class="paper-thumb">
-            <img src="images/isac.jpg" alt="isac" class="zoomable-image paper-image paper-image--isac" />
-          </div>
-          <div class="paper-content">
-            <a href="#isac" class="paper-title-link">
-              <span class="papertitle"
-                >ISAC: Training-Free Instance-to-Semantic Attention Control for Improving Multi-Instance Generation
-              </span>
-            </a>
-            <div class="paper-authors">
-              <span data-collaborator="sanghyun_jo"></span>*†, <strong>Wooyeol Lee</strong>*,
-              <span data-collaborator="ziseok_lee"></span>*, <span data-collaborator="jonghyun_choi"></span>,
-              <span data-collaborator="jaesik_park"></span>, <span data-collaborator="kyungsu_kim"></span>†
-            </div>
-            <div class="paper-venue"><em>ECCV 2026</em></div>
-            <div class="paper-links">
-              <a href="https://arxiv.org/abs/2505.20935">paper</a> /
-              <a href="https://shjo-april.github.io/ISAC/">project page</a>
-            </div>
-            <p class="paper-description">
-              Explicitly guiding T2I diffusion models to follow the instance-to-semantic hierarchy, where the model
-              first establishes vivid instance layouts and then refines semantic details, is essential for effective
-              multi-instance generation.
-            </p>
-          </div>
-        </article>
-        <article class="paper-entry" id="ace">
-          <div class="paper-thumb">
-            <img src="images/ace.jpg" alt="ace" class="zoomable-image paper-image paper-image--ace" />
-          </div>
-          <div class="paper-content">
-            <a href="#ace" class="paper-title-link">
-              <span class="papertitle"
-                >On the Collapse of Generative Paths: A Criterion and Correction for Diffusion Steering</span
-              >
-            </a>
-            <div class="paper-authors">
-              <span data-collaborator="ziseok_lee"></span>*, <span data-collaborator="minyeong_hwang"></span>*,
-              <strong>Wooyeol Lee</strong>, <span data-collaborator="sanghyun_jo"></span>,
-              <span data-collaborator="jihyung_ko"></span>, <span data-collaborator="youngbin_park"></span>,
-              <span data-collaborator="jaemun_choi"></span>, <span data-collaborator="eunho_yang"></span>†,
-              <span data-collaborator="kyungsu_kim"></span>†
-            </div>
-            <div class="paper-venue"><em>ICML 2026</em></div>
-            <div class="paper-links">
-              <a href="https://arxiv.org/abs/2512.10339">paper</a> /
-              <a href="https://github.com/ziseoklee/ACE">code</a> /
-              <a href="https://ziseoklee.github.io/projects/ACE/">project page</a>
-            </div>
-            <p class="paper-description">
-              Ratio-of-densities steering in diffusion models breaks via Marginal Path Collapse. We introduce ACE, a
-              provably stable correction that prevents collapse, cuts error >5x, and enables reliable molecular design.
-            </p>
-          </div>
-        </article>
-        <article class="paper-entry" id="trace">
-          <div class="paper-thumb">
-            <img src="images/trace.png" alt="trace" class="zoomable-image paper-image paper-image--trace" />
-          </div>
-          <div class="paper-content">
-            <a href="#trace" class="paper-title-link">
-              <span class="papertitle">TRACE: Your Diffusion Model is Secretly an Instance Edge Detector</span>
-            </a>
-            <div class="paper-authors">
-              <span data-collaborator="sanghyun_jo"></span>*, <span data-collaborator="ziseok_lee"></span>*,
-              <strong>Wooyeol Lee</strong>, <span data-collaborator="jonghyun_choi"></span>,
-              <span data-collaborator="jaesik_park"></span>†, <span data-collaborator="kyungsu_kim"></span>†
-            </div>
-            <div class="paper-venue"><highlight-accepted>ICLR 2026 Oral</highlight-accepted></div>
-            <div class="paper-links">
-              <a href="https://openreview.net/pdf?id=BjElYlJKMj">paper</a> /
-              <a href="https://github.com/shjo-april/TRACE">code</a> /
-              <a href="https://shjo-april.github.io/TRACE/">project page</a>
-            </div>
-            <p class="paper-description">
-              Diffusion models, capable of generating multiple instances, are secretly powerful annotators for instance
-              segmentation. TRACE turns pretrained diffusion models into annotation-free instance edge generators for
-              instance and panoptic segmentation.
-            </p>
-          </div>
-        </article>
-      </div>
+      <div id="publication-list" class="paper-list"></div>
       <footer class="wide-text-block">
         <p class="wide-text-block__text">
           Website template from
@@ -165,6 +82,7 @@
       <img id="lightbox-content" />
     </div>
 
+    <script src="publications.js"></script>
     <script src="lightbox.js"></script>
   </body>
 </html>
