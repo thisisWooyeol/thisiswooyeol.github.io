@@ -199,6 +199,50 @@ span.highlight {
   font-weight: 700;
 }
 
+.bio {
+  display: grid;
+  grid-template-areas:
+    "name photo"
+    "content photo";
+  grid-template-columns: 63% 37%;
+  align-items: start;
+  width: 100%;
+}
+
+.bio-name {
+  grid-area: name;
+}
+
+.bio-content {
+  grid-area: content;
+}
+
+.bio-photo-frame {
+  grid-area: photo;
+}
+
+.bio-name,
+.bio-content,
+.bio-photo-frame {
+  padding: 16px;
+}
+
+.bio-name,
+.bio-links {
+  text-align: center;
+}
+
+.bio-text {
+  text-align: justify;
+}
+
+.bio-photo {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  object-fit: cover;
+}
+
 /*
   =====================================================================================================================
   Research / Paper List
@@ -304,6 +348,19 @@ span.highlight {
     min-width: 0;
     max-width: 100% !important;
     table-layout: fixed;
+  }
+
+  .bio {
+    grid-template-areas:
+      "name"
+      "photo"
+      "content";
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bio-photo {
+    width: min(70%, 260px);
+    margin: 0 auto;
   }
 
   .paper-entry {
