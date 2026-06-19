@@ -256,6 +256,15 @@ span.highlight {
   =====================================================================================================================
 */
 
+.publication {
+  width: 100%;
+}
+
+.publication__intro,
+.publication__list {
+  width: 100%;
+}
+
 .paper-list {
   display: flex;
   flex-direction: column;
