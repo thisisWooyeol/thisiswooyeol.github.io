@@ -25,158 +25,139 @@
   </head>
 
   <body>
-    <table
-      style="
-        width: 100%;
-        max-width: 800px;
-        border: 0px;
-        border-spacing: 0px;
-        border-collapse: separate;
-        margin-right: auto;
-        margin-left: auto;
-      "
-    >
-      <tbody>
-        <tr style="padding: 0px">
-          <td style="padding: 0px">
-            <section class="bio">
-              <p class="name bio-name">Wooyeol Lee</p>
-              <div class="bio-content">
-                <p class="bio-text">
-                  I am a first-year MS/Ph.D. student in the Department of Biomedical Sciences at Seoul National
-                  University in South Korea. Building upon my undergraduate foundation in computer science, I am
-                  continuing my research at the
-                  <a href="https://aibl.snu.ac.kr/">Artificial Intelligence & Biomedical Informatics Lab</a>, advised by
-                  Prof. <a href="https://aibl.snu.ac.kr/team/pi-information">Kyungsu Kim</a>.
-                </p>
-                <p class="bio-text">
-                  My research is driven by the ultimate vision of developing a comprehensive
-                  <em>biomolecular world model</em>. Recognizing that the critical bottleneck in this domain is data, my
-                  primary focus is on resolving the challenges of <em>data scaling</em>. I focus on the acquisition,
-                  processing, and utilization of massive-scale, high-quality structural biology data. To build this
-                  robust data foundation, I am actively exploring advanced technologies, including Cryo-EM, to push the
-                  boundaries of structurally conditioned protein design and generative AI.
-                </p>
-                <p class="bio-links">
-                  <a href="mailto:wooyeol0519@snu.ac.kr">Email</a>
-                  &nbsp;/&nbsp;
-                  <a href="https://drive.google.com/file/d/1a3c83AHmkS0gEjvvQQQZKmw4nX8Si2gl/view?usp=drive_link">CV</a>
-                  &nbsp;/&nbsp;
-                  <a href="https://github.com/thisiswooyeol/">Github</a>
-                  &nbsp;/&nbsp;
-                  <a href="https://scholar.google.com/citations?hl=en&user=y2rIfCkAAAAJ">Scholar</a>
-                  &nbsp;/&nbsp;
-                  <a href="https://www.linkedin.com/in/wooyeol-lee-8933b9230/">LinkedIn</a>
-                </p>
-              </div>
-              <div class="bio-photo-frame">
-                <img class="bio-photo" alt="profile photo" src="images/WooyeolLee.jpg?v=20251103" />
-              </div>
-            </section>
-            <section class="wide-text-block wide-text-block--section-intro">
-              <h2>Research</h2>
-              <p class="wide-text-block__text wide-text-block__text--justify">
-                My research focuses on advancing generative AI, with a core emphasis on macromolecular design and
-                achieving data scaling for biomolecular world models.
-              </p>
-            </section>
-            <div class="paper-list">
-              <article class="paper-entry" id="isac">
-                <div class="paper-thumb">
-                  <img src="images/isac.jpg" alt="isac" class="zoomable-image paper-image paper-image--isac" />
-                </div>
-                <div class="paper-content">
-                  <a href="#isac" class="paper-title-link">
-                    <span class="papertitle"
-                      >ISAC: Training-Free Instance-to-Semantic Attention Control for Improving Multi-Instance
-                      Generation
-                    </span>
-                  </a>
-                  <div class="paper-authors">
-                    <span data-collaborator="sanghyun_jo"></span>*†, <strong>Wooyeol Lee</strong>*,
-                    <span data-collaborator="ziseok_lee"></span>*, <span data-collaborator="jonghyun_choi"></span>,
-                    <span data-collaborator="jaesik_park"></span>, <span data-collaborator="kyungsu_kim"></span>†
-                  </div>
-                  <div class="paper-venue"><em>ECCV 2026</em></div>
-                  <div class="paper-links">
-                    <a href="https://arxiv.org/abs/2505.20935">paper</a> /
-                    <a href="https://shjo-april.github.io/ISAC/">project page</a>
-                  </div>
-                  <p class="paper-description">
-                    Explicitly guiding T2I diffusion models to follow the instance-to-semantic hierarchy, where the
-                    model first establishes vivid instance layouts and then refines semantic details, is essential for
-                    effective multi-instance generation.
-                  </p>
-                </div>
-              </article>
-              <article class="paper-entry" id="ace">
-                <div class="paper-thumb">
-                  <img src="images/ace.jpg" alt="ace" class="zoomable-image paper-image paper-image--ace" />
-                </div>
-                <div class="paper-content">
-                  <a href="#ace" class="paper-title-link">
-                    <span class="papertitle"
-                      >On the Collapse of Generative Paths: A Criterion and Correction for Diffusion Steering</span
-                    >
-                  </a>
-                  <div class="paper-authors">
-                    <span data-collaborator="ziseok_lee"></span>*, <span data-collaborator="minyeong_hwang"></span>*,
-                    <strong>Wooyeol Lee</strong>, <span data-collaborator="sanghyun_jo"></span>,
-                    <span data-collaborator="jihyung_ko"></span>, <span data-collaborator="youngbin_park"></span>,
-                    <span data-collaborator="jaemun_choi"></span>, <span data-collaborator="eunho_yang"></span>†,
-                    <span data-collaborator="kyungsu_kim"></span>†
-                  </div>
-                  <div class="paper-venue"><em>ICML 2026</em></div>
-                  <div class="paper-links">
-                    <a href="https://arxiv.org/abs/2512.10339">paper</a> /
-                    <a href="https://github.com/ziseoklee/ACE">code</a> /
-                    <a href="https://ziseoklee.github.io/projects/ACE/">project page</a>
-                  </div>
-                  <p class="paper-description">
-                    Ratio-of-densities steering in diffusion models breaks via Marginal Path Collapse. We introduce ACE,
-                    a provably stable correction that prevents collapse, cuts error >5x, and enables reliable molecular
-                    design.
-                  </p>
-                </div>
-              </article>
-              <article class="paper-entry" id="trace">
-                <div class="paper-thumb">
-                  <img src="images/trace.png" alt="trace" class="zoomable-image paper-image paper-image--trace" />
-                </div>
-                <div class="paper-content">
-                  <a href="#trace" class="paper-title-link">
-                    <span class="papertitle">TRACE: Your Diffusion Model is Secretly an Instance Edge Detector</span>
-                  </a>
-                  <div class="paper-authors">
-                    <span data-collaborator="sanghyun_jo"></span>*, <span data-collaborator="ziseok_lee"></span>*,
-                    <strong>Wooyeol Lee</strong>, <span data-collaborator="jonghyun_choi"></span>,
-                    <span data-collaborator="jaesik_park"></span>†, <span data-collaborator="kyungsu_kim"></span>†
-                  </div>
-                  <div class="paper-venue"><highlight-accepted>ICLR 2026 Oral</highlight-accepted></div>
-                  <div class="paper-links">
-                    <a href="https://openreview.net/pdf?id=BjElYlJKMj">paper</a> /
-                    <a href="https://github.com/shjo-april/TRACE">code</a> /
-                    <a href="https://shjo-april.github.io/TRACE/">project page</a>
-                  </div>
-                  <p class="paper-description">
-                    Diffusion models, capable of generating multiple instances, are secretly powerful annotators for
-                    instance segmentation. TRACE turns pretrained diffusion models into annotation-free instance edge
-                    generators for instance and panoptic segmentation.
-                  </p>
-                </div>
-              </article>
+    <main class="page">
+      <section class="bio">
+        <p class="name bio-name">Wooyeol Lee</p>
+        <div class="bio-content">
+          <p class="bio-text">
+            I am a first-year MS/Ph.D. student in the Department of Biomedical Sciences at Seoul National University in
+            South Korea. Building upon my undergraduate foundation in computer science, I am continuing my research at
+            the <a href="https://aibl.snu.ac.kr/">Artificial Intelligence & Biomedical Informatics Lab</a>, advised by
+            Prof. <a href="https://aibl.snu.ac.kr/team/pi-information">Kyungsu Kim</a>.
+          </p>
+          <p class="bio-text">
+            My research is driven by the ultimate vision of developing a comprehensive
+            <em>biomolecular world model</em>. Recognizing that the critical bottleneck in this domain is data, my
+            primary focus is on resolving the challenges of <em>data scaling</em>. I focus on the acquisition,
+            processing, and utilization of massive-scale, high-quality structural biology data. To build this robust
+            data foundation, I am actively exploring advanced technologies, including Cryo-EM, to push the boundaries of
+            structurally conditioned protein design and generative AI.
+          </p>
+          <p class="bio-links">
+            <a href="mailto:wooyeol0519@snu.ac.kr">Email</a>
+            &nbsp;/&nbsp;
+            <a href="https://drive.google.com/file/d/1a3c83AHmkS0gEjvvQQQZKmw4nX8Si2gl/view?usp=drive_link">CV</a>
+            &nbsp;/&nbsp;
+            <a href="https://github.com/thisiswooyeol/">Github</a>
+            &nbsp;/&nbsp;
+            <a href="https://scholar.google.com/citations?hl=en&user=y2rIfCkAAAAJ">Scholar</a>
+            &nbsp;/&nbsp;
+            <a href="https://www.linkedin.com/in/wooyeol-lee-8933b9230/">LinkedIn</a>
+          </p>
+        </div>
+        <div class="bio-photo-frame">
+          <img class="bio-photo" alt="profile photo" src="images/WooyeolLee.jpg?v=20251103" />
+        </div>
+      </section>
+      <section class="wide-text-block wide-text-block--section-intro">
+        <h2>Research</h2>
+        <p class="wide-text-block__text wide-text-block__text--justify">
+          My research focuses on advancing generative AI, with a core emphasis on macromolecular design and achieving
+          data scaling for biomolecular world models.
+        </p>
+      </section>
+      <div class="paper-list">
+        <article class="paper-entry" id="isac">
+          <div class="paper-thumb">
+            <img src="images/isac.jpg" alt="isac" class="zoomable-image paper-image paper-image--isac" />
+          </div>
+          <div class="paper-content">
+            <a href="#isac" class="paper-title-link">
+              <span class="papertitle"
+                >ISAC: Training-Free Instance-to-Semantic Attention Control for Improving Multi-Instance Generation
+              </span>
+            </a>
+            <div class="paper-authors">
+              <span data-collaborator="sanghyun_jo"></span>*†, <strong>Wooyeol Lee</strong>*,
+              <span data-collaborator="ziseok_lee"></span>*, <span data-collaborator="jonghyun_choi"></span>,
+              <span data-collaborator="jaesik_park"></span>, <span data-collaborator="kyungsu_kim"></span>†
             </div>
-            <footer class="wide-text-block">
-              <p class="wide-text-block__text">
-                Website template from
-                <a href="https://github.com/jonbarron/jonbarron.github.io">Jon Barron's</a> website. I appreciate his
-                work in creating such a clean and simple design.
-              </p>
-            </footer>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            <div class="paper-venue"><em>ECCV 2026</em></div>
+            <div class="paper-links">
+              <a href="https://arxiv.org/abs/2505.20935">paper</a> /
+              <a href="https://shjo-april.github.io/ISAC/">project page</a>
+            </div>
+            <p class="paper-description">
+              Explicitly guiding T2I diffusion models to follow the instance-to-semantic hierarchy, where the model
+              first establishes vivid instance layouts and then refines semantic details, is essential for effective
+              multi-instance generation.
+            </p>
+          </div>
+        </article>
+        <article class="paper-entry" id="ace">
+          <div class="paper-thumb">
+            <img src="images/ace.jpg" alt="ace" class="zoomable-image paper-image paper-image--ace" />
+          </div>
+          <div class="paper-content">
+            <a href="#ace" class="paper-title-link">
+              <span class="papertitle"
+                >On the Collapse of Generative Paths: A Criterion and Correction for Diffusion Steering</span
+              >
+            </a>
+            <div class="paper-authors">
+              <span data-collaborator="ziseok_lee"></span>*, <span data-collaborator="minyeong_hwang"></span>*,
+              <strong>Wooyeol Lee</strong>, <span data-collaborator="sanghyun_jo"></span>,
+              <span data-collaborator="jihyung_ko"></span>, <span data-collaborator="youngbin_park"></span>,
+              <span data-collaborator="jaemun_choi"></span>, <span data-collaborator="eunho_yang"></span>†,
+              <span data-collaborator="kyungsu_kim"></span>†
+            </div>
+            <div class="paper-venue"><em>ICML 2026</em></div>
+            <div class="paper-links">
+              <a href="https://arxiv.org/abs/2512.10339">paper</a> /
+              <a href="https://github.com/ziseoklee/ACE">code</a> /
+              <a href="https://ziseoklee.github.io/projects/ACE/">project page</a>
+            </div>
+            <p class="paper-description">
+              Ratio-of-densities steering in diffusion models breaks via Marginal Path Collapse. We introduce ACE, a
+              provably stable correction that prevents collapse, cuts error >5x, and enables reliable molecular design.
+            </p>
+          </div>
+        </article>
+        <article class="paper-entry" id="trace">
+          <div class="paper-thumb">
+            <img src="images/trace.png" alt="trace" class="zoomable-image paper-image paper-image--trace" />
+          </div>
+          <div class="paper-content">
+            <a href="#trace" class="paper-title-link">
+              <span class="papertitle">TRACE: Your Diffusion Model is Secretly an Instance Edge Detector</span>
+            </a>
+            <div class="paper-authors">
+              <span data-collaborator="sanghyun_jo"></span>*, <span data-collaborator="ziseok_lee"></span>*,
+              <strong>Wooyeol Lee</strong>, <span data-collaborator="jonghyun_choi"></span>,
+              <span data-collaborator="jaesik_park"></span>†, <span data-collaborator="kyungsu_kim"></span>†
+            </div>
+            <div class="paper-venue"><highlight-accepted>ICLR 2026 Oral</highlight-accepted></div>
+            <div class="paper-links">
+              <a href="https://openreview.net/pdf?id=BjElYlJKMj">paper</a> /
+              <a href="https://github.com/shjo-april/TRACE">code</a> /
+              <a href="https://shjo-april.github.io/TRACE/">project page</a>
+            </div>
+            <p class="paper-description">
+              Diffusion models, capable of generating multiple instances, are secretly powerful annotators for instance
+              segmentation. TRACE turns pretrained diffusion models into annotation-free instance edge generators for
+              instance and panoptic segmentation.
+            </p>
+          </div>
+        </article>
+      </div>
+      <footer class="wide-text-block">
+        <p class="wide-text-block__text">
+          Website template from
+          <a href="https://github.com/jonbarron/jonbarron.github.io">Jon Barron's</a> website. I appreciate his work in
+          creating such a clean and simple design.
+        </p>
+      </footer>
+    </main>
 
     <!-- Lightbox -->
     <div id="lightbox">

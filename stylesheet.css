@@ -171,6 +171,13 @@ span.highlight {
   =====================================================================================================================
 */
 
+.page {
+  width: 100%;
+  max-width: 800px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
 .wide-text-block {
   width: 100%;
   padding: 16px;
@@ -332,7 +339,7 @@ span.highlight {
 */
 
 @media (min-width: 641px) {
-  body > table {
+  .page {
     min-width: 760px;
   }
 }
@@ -342,12 +349,10 @@ span.highlight {
     margin: 0;
   }
 
-  body > table,
-  body > table table {
+  .page {
     width: 100% !important;
     min-width: 0;
     max-width: 100% !important;
-    table-layout: fixed;
   }
 
   .bio {
