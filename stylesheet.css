@@ -199,6 +199,7 @@ span.highlight {
   column-gap: 16px;
   align-items: stretch;
   padding: 16px;
+  scroll-margin-top: 16px;
 }
 
 .paper-thumb {
