@@ -8,7 +8,7 @@ class PublicationList {
     if (!this.container) return;
 
     try {
-      const response = await fetch("./publications.json");
+      const response = await fetch("./data/publications.json");
       const data = await response.json();
       this.render(data.publications || []);
       window.dispatchEvent(new CustomEvent("publications:rendered"));

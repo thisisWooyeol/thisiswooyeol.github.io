@@ -6,7 +6,7 @@ class CollaboratorManager {
 
   async loadCollaborators() {
     try {
-      const response = await fetch("./collaborators.json");
+      const response = await fetch("./data/collaborators.json");
       const data = await response.json();
       this.collaborators = data.collaborators;
       this.updateCollaboratorLinks();
