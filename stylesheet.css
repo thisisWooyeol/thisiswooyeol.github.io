@@ -1,3 +1,8 @@
+/*
+  =====================================================================================================================
+  Fonts
+  =====================================================================================================================
+*/
 /* latin-ext */
 @font-face {
   font-family: "Lato";
@@ -95,25 +100,14 @@
     U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-a {
-  color: #1772d0;
-  text-decoration: none;
-}
-
-a:focus,
-a:hover {
-  color: #f09228;
-  text-decoration: none;
-}
+/*
+  =====================================================================================================================
+  Base / Global
+  =====================================================================================================================
+*/
 
 * {
   box-sizing: border-box;
-}
-
-highlight-accepted {
-  color: #ef5c05;
-  text-decoration: none;
-  font-style: italic;
 }
 
 body,
@@ -144,11 +138,53 @@ h2 {
   font-weight: 700;
 }
 
-@media (min-width: 641px) {
-  body > table {
-    min-width: 760px;
-  }
+/*
+  =====================================================================================================================
+  Links / Inline Highlights
+  =====================================================================================================================
+*/
+
+a {
+  color: #1772d0;
+  text-decoration: none;
 }
+
+a:focus,
+a:hover {
+  color: #f09228;
+  text-decoration: none;
+}
+
+highlight-accepted {
+  color: #ef5c05;
+  text-decoration: none;
+  font-style: italic;
+}
+
+span.highlight {
+  background-color: #ffffd0;
+}
+
+/*
+  =====================================================================================================================
+  Profile / Intro
+  =====================================================================================================================
+*/
+
+.name {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin: 0;
+  font-family: "Lato", Verdana, Helvetica, sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+}
+
+/*
+  =====================================================================================================================
+  Research / Paper List
+  =====================================================================================================================
+*/
 
 .paper-list {
   display: flex;
@@ -225,6 +261,18 @@ h2 {
   text-justify: inter-word;
 }
 
+/*
+  =====================================================================================================================
+  Responsive
+  =====================================================================================================================
+*/
+
+@media (min-width: 641px) {
+  body > table {
+    min-width: 760px;
+  }
+}
+
 @media (max-width: 640px) {
   body {
     margin: 0;
@@ -254,48 +302,12 @@ h2 {
   }
 }
 
-.name {
-  padding-top: 20px;
-  padding-bottom: 20px;
-  margin: 0;
-  font-family: "Lato", Verdana, Helvetica, sans-serif;
-  font-size: 40px;
-  font-weight: 700;
-}
+/*
+  =====================================================================================================================
+  Image Zoom / Lightbox
+  =====================================================================================================================
+*/
 
-.one {
-  width: 160px;
-  height: 160px;
-  position: relative;
-}
-
-.two {
-  width: 160px;
-  height: 160px;
-  position: absolute;
-  transition: opacity 0.2s ease-in-out;
-  -moz-transition: opacity 0.2s ease-in-out;
-  -webkit-transition: opacity 0.2s ease-in-out;
-}
-
-.fade {
-  transition: opacity 0.2s ease-in-out;
-  -moz-transition: opacity 0.2s ease-in-out;
-  -webkit-transition: opacity 0.2s ease-in-out;
-}
-
-span.highlight {
-  background-color: #ffffd0;
-}
-
-.colored-box {
-  color: black;
-  padding: 20px;
-  display: inline-block;
-  border-radius: 10px;
-}
-
-/* Lightbox styles */
 #lightbox {
   display: none;
   position: fixed;
@@ -346,7 +358,6 @@ span.highlight {
   opacity: 0.8;
 }
 
-/* Animation */
 #lightbox-content {
   animation-name: zoom;
   animation-duration: 0.6s;
