@@ -2,7 +2,7 @@
   "publications": [
     {
       "id": "isac",
-      "title": "ISAC: Training-Free Instance-to-Semantic Attention Control for Improving Multi-Instance Generation",
+      "title": "ISAC: Training-Free Instance-to-Semantic Attention Control for Multi-Instance Generation",
       "image": {
         "src": "images/isac.jpg",
         "alt": "isac",
@@ -24,6 +24,10 @@
         {
           "label": "paper",
           "url": "https://arxiv.org/abs/2505.20935"
+        },
+        {
+          "label": "code",
+          "url": "https://github.com/shjo-april/ISAC"
         },
         {
           "label": "project page",
