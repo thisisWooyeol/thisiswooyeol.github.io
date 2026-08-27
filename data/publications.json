@@ -34,7 +34,7 @@
           "url": "https://shjo-april.github.io/ISAC/"
         }
       ],
-      "description": "Explicitly guiding T2I diffusion models to follow the instance-to-semantic hierarchy, where the model first establishes vivid instance layouts and then refines semantic details, is essential for effective multi-instance generation."
+      "description": "ISAC first stabilizes class-agnostic instance layouts exposed by self-attention, then binds cross-attention semantics within each instance. This training-free strategy naturally follows the structure-before-semantics dynamics shared across diffusion backbones, improving count fidelity and semantic separation in multi-instance generation."
     },
     {
       "id": "ace",
