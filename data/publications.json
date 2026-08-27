@@ -4,7 +4,7 @@
       "id": "isac",
       "title": "ISAC: Training-Free Instance-to-Semantic Attention Control for Multi-Instance Generation",
       "image": {
-        "src": "images/isac.jpg",
+        "src": "projects/isac/assets/thumbnail_isac.jpg",
         "alt": "isac",
         "className": "paper-image--isac"
       },
@@ -40,7 +40,7 @@
       "id": "ace",
       "title": "On the Collapse of Generative Paths: A Criterion and Correction for Diffusion Steering",
       "image": {
-        "src": "images/ace.jpg",
+        "src": "projects/ace/assets/thumbnail_ace.jpg",
         "alt": "ace",
         "className": "paper-image--ace"
       },
@@ -79,7 +79,7 @@
       "id": "trace",
       "title": "TRACE: Your Diffusion Model is Secretly an Instance Edge Detector",
       "image": {
-        "src": "images/trace.png",
+        "src": "projects/trace/assets/thumbnail_trace.png",
         "alt": "trace",
         "className": "paper-image--trace"
       },
