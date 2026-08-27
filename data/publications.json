@@ -32,6 +32,10 @@
         {
           "label": "project page",
           "url": "https://shjo-april.github.io/ISAC/"
+        },
+        {
+          "label": "poster",
+          "url": "projects/isac/assets/poster_isac.pdf"
         }
       ],
       "description": "ISAC first stabilizes class-agnostic instance layouts exposed by self-attention, then binds cross-attention semantics within each instance. This training-free strategy naturally follows the structure-before-semantics dynamics shared across diffusion backbones, improving count fidelity and semantic separation in multi-instance generation."
