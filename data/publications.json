@@ -1,6 +1,36 @@
 {
   "publications": [
     {
+      "id": "surfspec",
+      "title": "SurfSpec: Enhancing Off-Target-Agnostic Specificity by Bounding Pocket-Ligand Geometric Mismatch",
+      "image": {
+        "src": "projects/surfspec/assets/thumbnail_surfspec.jpg",
+        "alt": "surfspec",
+        "className": "paper-image--surfspec"
+      },
+      "authors": [
+        { "collaborator": "minyeong_hwang", "suffix": "*" },
+        { "collaborator": "yoorim_gang", "suffix": "*" },
+        { "collaborator": "ziseok_lee" },
+        { "name": "Wooyeol Lee", "strong": true },
+        { "collaborator": "youngbin_park" },
+        { "collaborator": "jaemun_choi" },
+        { "collaborator": "kyungsu_kim" },
+        { "collaborator": "eunho_yang" }
+      ],
+      "venue": {
+        "text": "NeurIPS 2026 Workshop on GenAI for Health",
+        "tag": "em"
+      },
+      "links": [
+        {
+          "label": "paper",
+          "url": "https://arxiv.org/abs/2609.02963"
+        }
+      ],
+      "description": "SurfSpec is an off-target-agnostic lead optimization framework that iteratively grows ligands toward under-occupied regions of the target pocket surface."
+    },
+    {
       "id": "isac",
       "title": "ISAC: Training-Free Instance-to-Semantic Attention Control for Multi-Instance Generation",
       "image": {
