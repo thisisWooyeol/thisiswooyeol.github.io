@@ -31,6 +31,37 @@
       "description": "SurfSpec is an off-target-agnostic lead optimization framework that iteratively grows ligands toward under-occupied regions of the target pocket surface."
     },
     {
+      "id": "rcpt",
+      "title": "Risk-Calibrated Proposal Transport for Finite-Particle Diffusion Steering",
+      "image": {
+        "src": "projects/rcpt/assets/thumbnail_rcpt.jpg",
+        "alt": "rcpt",
+        "className": "paper-image--rcpt"
+      },
+      "authors": [
+        { "collaborator": "ziseok_lee", "suffix": "†" },
+        { "collaborator": "jaehyeon_kim" },
+        { "collaborator": "seungwon_kim" },
+        { "collaborator": "seunghyun_moon", "suffix": "†" },
+        { "collaborator": "haneul_choi" },
+        { "name": "Wooyeol Lee", "strong": true },
+        { "collaborator": "donghyun_koh" },
+        { "collaborator": "minhyeong_lee", "suffix": "†" },
+        { "collaborator": "kyungsu_kim", "suffix": "†" }
+      ],
+      "venue": {
+        "text": "NeurIPS 2026 Workshop on AI for Stochastic Dynamics (STODY)",
+        "tag": "em"
+      },
+      "links": [
+        {
+          "label": "paper",
+          "url": "https://arxiv.org/abs/2610.04171"
+        }
+      ],
+      "description": "RCPT makes diffusion steering reliable with few particles by detecting and shrinking overfit proposal updates, improving transport, molecular quality, and particle diversity while recovering full steering when data are sufficient."
+    },
+    {
       "id": "isac",
       "title": "ISAC: Training-Free Instance-to-Semantic Attention Control for Multi-Instance Generation",
       "image": {
