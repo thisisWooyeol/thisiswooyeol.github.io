@@ -15,8 +15,8 @@
         { "name": "Wooyeol Lee", "strong": true },
         { "collaborator": "youngbin_park" },
         { "collaborator": "jaemun_choi" },
-        { "collaborator": "kyungsu_kim" },
-        { "collaborator": "eunho_yang" }
+        { "collaborator": "kyungsu_kim", "suffix": "†" },
+        { "collaborator": "eunho_yang", "suffix": "†" }
       ],
       "venue": {
         "text": "NeurIPS 2026 Workshop on GenAI for Health",
